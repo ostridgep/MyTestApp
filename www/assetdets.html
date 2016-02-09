@@ -1,0 +1,236 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<title>MyJobs - Login</title>
+<script src="resources/sap-ui-core.js" type="text/javascript"
+	id="sap-ui-bootstrap" data-sap-ui-libs="sap.m,sap.ui.commons"
+	data-sap-ui-theme="sap_bluecrystal">
+	
+</script>
+<script type="text/javascript" src="cordova.js"></script>
+<script src="myresources/js/html5sql.js"></script>  
+<script src="myresources/js/bqsync.js"></script>
+<script src="myresources/js/MyJobsDB.js"></script>
+<script src="myresources/js/MyJobsUtils.js"></script>
+
+<style>
+.KeyPad .sapMBtn {
+	  margin: 5px;
+	  width: 60px !important;
+	}
+
+	.KeyPad .sapMVBox {
+	  border: 1px solid #aaa;
+	  background-color: rgba(200, 200, 200, 0.3);;
+	  width: 220px
+	}
+
+	.KeyPad .sapMHBox {
+	  margin-left: 5px;
+	}
+</style>
+<script type="text/javascript">
+
+
+
+html5sql.openDatabase("com.pjo.myjobsbackfill","myjobsbackfill", 5*1024*1024);	
+//createDB();
+//outputLogToDB();
+
+
+
+var page  = new sap.m.Page('homePage',{
+	title:"MyJobs",    
+	footer:new sap.m.Bar (
+			{
+				id : 'master-footer',
+
+				
+			contentMiddle: [				       		new sap.m.Button({
+      			 text:"Convert XML",
+      			
+      				 press: [ function(){
+      					
+      					convertXML()
+      						}]
+      			 })],
+
+			}),
+    content: 	[
+      			new sap.ui.layout.form.SimpleForm({
+    				minWidth : 800,
+    				maxContainerCols : 1,
+    				content : 	[							
+								
+								
+    							]
+     				})
+             	 
+             	 
+             	 
+             	 
+             	 
+             	 
+             	 
+              	
+				],
+    enableScrolling:false,showNavButton: "{device>/isPhone}" });
+var TotalSites=0;
+var app = new sap.m.App();
+var xmltoop="<ASSET_EXTRACT>"
+app.setInitialPage(page.getId());	
+	
+
+
+page.placeAt("body");
+$(function() {
+})
+function convertXML(){
+
+	 $.ajax({
+		    type: "GET",
+		    url: "/AssetFiles/T2_MPLT_ESVN.XML",
+		    dataType: "xml",
+		    success: function (xml) {    
+		       xmlDoc=xml 
+		      BuildAssetSites("ESVN");
+		      $.ajax({
+    		    type: "GET",
+      		    url: "/AssetFiles/T2_MPLT_LSVM.XML",
+      		    dataType: "xml",
+      		    success: function (xml) {    
+      		       xmlDoc=xml 
+      		      BuildAssetSites("LSVM");
+      		       console.log("done")
+      		      $.ajax({
+		         		    type: "GET",
+		         		    url: "/AssetFiles/T2_MPLT_LSVS.XML",
+		         		    dataType: "xml",
+		         		    success: function (xml) {    
+		         		       xmlDoc=xml 
+		         		      BuildAssetSites("LSVS");
+		         		      $.ajax({
+				         		    type: "GET",
+				         		    url: "/AssetFiles/T2_MPLT_NSVE.XML",
+				         		    dataType: "xml",
+				         		    success: function (xml) {    
+				         		       xmlDoc=xml 
+				         		      BuildAssetSites("NSVE");
+				         		      $.ajax({
+						         		    type: "GET",
+						         		    url: "/AssetFiles/T2_MPLT_NSVM.XML",
+						         		    dataType: "xml",
+						         		    success: function (xml) {    
+						         		       xmlDoc=xml 
+						         		      BuildAssetSites("NSVM");
+						         		      $.ajax({
+								         		    type: "GET",
+								         		    url: "/AssetFiles/T2_MPLT_NSVW.XML",
+								         		    dataType: "xml",
+								         		    success: function (xml) {    
+								         		       xmlDoc=xml 
+								         		      BuildAssetSites("NSVW");
+								         		      $.ajax({
+										         		    type: "GET",
+										         		    url: "/AssetFiles/T2_MPLT_RSVM.XML",
+										         		    dataType: "xml",
+										         		    success: function (xml) {    
+										         		       xmlDoc=xml 
+										         		      BuildAssetSites("RSVM");
+										         		      $.ajax({
+												         		    type: "GET",
+												         		    url: "/AssetFiles/T2_MPLT_RSVN.XML",
+												         		    dataType: "xml",
+												         		    success: function (xml) {    
+												         		       xmlDoc=xml 
+												         		      BuildAssetSites("RSVN");
+												         		      xmltoop+='</ASSET_EXTRACT>'
+												         		      alert("TotalSites="+TotalSites)
+												         		 	opfile()
+												         			
+												         		    }    
+												         		       
+												         		});
+										         		      
+										         		    }    
+										         		       
+										         		});
+								         		      
+								         		    }    
+								         		       
+								         		});
+						         		      
+						         		    }    
+						         		       
+						         		});
+				         		    }    
+				         		       
+				         		});
+		         		    }    
+		         		       
+		         		});
+      		    }    
+      		       
+      		});
+		    }    
+		       
+		});
+}
+function BuildAssetSites(sitename){
+	
+	sites=[]
+	
+
+
+   
+   $(xmlDoc).find('ASSET_EXTRACT ASSET').each(function(){
+          
+          var text= $(this).attr('SITE');
+           if ($.inArray(text, sites)===-1){
+               sites.push(text);
+           }
+})
+for (n=0; n < sites.length; n++){
+	console.log(n)
+	xmltoop+='<ASSET PLAN_PLANT="ESAM" MTCE_PLANT="'+sitename+'" SITE="'+sites[n]+'"/>'
+}
+alert(xmltoop)	
+alert(sitename+" "+sites.length)
+TotalSites+=sites.length
+
+
+}
+function opfile(){
+	window.open(makeTextFile(xmltoop))	
+}
+
+var textFile = null,
+makeTextFile = function (text) {
+  var data = new Blob([text], {type: 'text/plain'});
+
+  // If we are replacing a previously generated file we need to
+  // manually revoke the object URL to avoid memory leaks.
+  if (textFile !== null) {
+    window.URL.revokeObjectURL(textFile);
+  }
+
+  textFile = window.URL.createObjectURL(data);
+
+  // returns a URL you can use as a href
+  return textFile;
+};
+
+////////////////////////////////////////////////////
+
+       
+
+</script>
+</head>
+<body id="body" class="sapUiBody">
+<script></script>
+</body>
+<script>
+//alert(  "useragent:"+navigator.useragent+"vendor:"+navigator.vendor)
+</script>
+</html>

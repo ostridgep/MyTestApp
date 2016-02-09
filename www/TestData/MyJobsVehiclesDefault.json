@@ -1,0 +1,131 @@
+{"vehicle":[
+
+
+    {
+"level":"1",
+"sequence":"0 ",
+"equipment":"000000000001016444",
+"vehicle":"UNKNOWN",
+"description":"UNKNOWN VEHICLES GENERIC EQUIPMENT",
+"mpoint":"",
+"mpointdesc":"",
+"mpointLongtext":"",
+"partner":""},
+
+
+
+    {
+"level":"2",
+"sequence":"1 ",
+"equipment":"000000000001016444",
+"vehicle":"UNKNOWN",
+"description":"UNKNOWN VEHICLES GENERIC EQUIPMENT",
+"mpoint":"000000069891",
+"mpointdesc":"Vehicle free from visual defects?",
+"mpointLongtext":"Please use the checklist sticker or call up the full check via the full check button",
+"partner":""},
+
+
+
+    {
+"level":"2",
+"sequence":"2 ",
+"equipment":"000000000001016444",
+"vehicle":"UNKNOWN",
+"description":"UNKNOWN VEHICLES GENERIC EQUIPMENT",
+"mpoint":"000000069892",
+"mpointdesc":"Tax/MOT/Service displayed/in date?",
+"mpointLongtext":"Chack the tax disc on the screen and the next service due sticker in the cab",
+"partner":""},
+
+
+
+    {
+"level":"2",
+"sequence":"3 ",
+"equipment":"000000000001016444",
+"vehicle":"UNKNOWN",
+"description":"UNKNOWN VEHICLES GENERIC EQUIPMENT",
+"mpoint":"000000069893",
+"mpointdesc":"Is the horn working?",
+"mpointLongtext":"Beep",
+"partner":""},
+
+
+
+    {
+"level":"2",
+"sequence":"4 ",
+"equipment":"000000000001016444",
+"vehicle":"UNKNOWN",
+"description":"UNKNOWN VEHICLES GENERIC EQUIPMENT",
+"mpoint":"000000069894",
+"mpointdesc":"Do the tyres meet company requirements?",
+"mpointLongtext":"Check tread depth, cuts, bulges and damage, check visual inflation daily and pressures weekly",
+"partner":""},
+
+
+
+    {
+"level":"2",
+"sequence":"5 ",
+"equipment":"000000000001016444",
+"vehicle":"UNKNOWN",
+"description":"UNKNOWN VEHICLES GENERIC EQUIPMENT",
+"mpoint":"000000069895",
+"mpointdesc":"Wheels secure & nut indicators aligned?",
+"mpointLongtext":"Check wheel nuts and wheel nut indicator alignment if fitted",
+"partner":""},
+
+
+
+    {
+"level":"2",
+"sequence":"6 ",
+"equipment":"000000000001016444",
+"vehicle":"UNKNOWN",
+"description":"UNKNOWN VEHICLES GENERIC EQUIPMENT",
+"mpoint":"000000069896",
+"mpointdesc":"Are all lights clean and working?",
+"mpointLongtext":"Check headlights, sidelights, brake and reversing lights, indicators, hazard warning and other mandatory lights",
+"partner":""},
+
+
+
+    {
+"level":"2",
+"sequence":"7 ",
+"equipment":"000000000001016444",
+"vehicle":"UNKNOWN",
+"description":"UNKNOWN VEHICLES GENERIC EQUIPMENT",
+"mpoint":"000000069897",
+"mpointdesc":"Are windscreen wipers/washers working?",
+"mpointLongtext":"Check wiper blade condition and washer bottle level",
+"partner":""},
+
+
+
+    {
+"level":"2",
+"sequence":"8 ",
+"equipment":"000000000001016444",
+"vehicle":"UNKNOWN",
+"description":"UNKNOWN VEHICLES GENERIC EQUIPMENT",
+"mpoint":"000000069898",
+"mpointdesc":"Are all fluid levels within req'd range?",
+"mpointLongtext":"Check oil, coolant, brake and clutch fluid levels",
+"partner":""},
+
+
+{
+"level":"99",
+"sequence":"",
+"equipment":"",
+"vehicle":"",
+"description":"",
+"mpoint":"",
+"mpointdesc":"",
+"mpointLongtext":"",
+"partner":""}
+]
+}

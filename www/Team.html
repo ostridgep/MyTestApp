@@ -1,0 +1,824 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Access-Control-Allow-Origin" content="*"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<title>MyJobs - Team</title>
+<script src="resources/sap-ui-core.js" type="text/javascript"
+	id="sap-ui-bootstrap" data-sap-ui-libs="sap.m,sap.ui.commons"
+	data-sap-ui-theme="sap_bluecrystal">
+	
+</script>
+
+
+<script src="myresources/js/buildDetails.js"></script>
+<script src="myresources/js/html5sql.js"></script>  
+<script src="myresources/js/bgsync.js"></script>
+<script src="myresources/js/MyJobsDB.js"></script>
+<script src="myresources/js/MyJobsUtils.js"></script>
+<script type="text/javascript">
+function loadScript(src,callback){
+	  
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    if(callback)script.onload=callback;
+    document.getElementsByTagName("head")[0].appendChild(script);
+    script.src = src;
+  }
+loadScript('http://maps.googleapis.com/maps/api/js?sensor=false',
+        function(){
+	
+	});
+html5sql.openDatabase("com.pjo.myjobsbackfill","myjobsbackfill", 5*1024*1024);	
+
+var currentStatus;
+var firstNotification="";
+var selectedMess=""
+var EmployeeID = localStorage.getItem("EmployeeID")
+var detailFooter = new sap.m.Bar({
+		contentRight : [
+						
+						]
+		
+	})
+
+var formMap = new sap.m.Dialog("dlgMap",{
+    title:"Location",
+   
+    horizontalScrolling:true,
+    verticalScrolling:true,
+    modal: true,
+    contentWidth:"1em",
+    buttons: [
+  
+
+
+					new sap.m.Button( {
+					    text: "Close",
+					    icon:"sap-icon://sys-cancel",
+					    type: sap.m.ButtonType.Reject,
+					    tap: [ function(oEvt) {		  
+							 
+					    	formMap.close()} ]   
+					}),
+					
+					],					
+    content:[
+
+            ],
+            contentWidth:"95%",
+            contentHeight: "85%",
+      beforeOpen:function(){
+    	  formMap.addContent(new 		sap.ui.core.HTML({
+			content: ' <div id="map_canvas" style="height:350px;"></div>'
+
+
+		}))
+
+      },
+      afterOpen:function(){  
+    	  initializeMap();
+    	  document.getElementById('map_canvas').style.height=document.getElementById("dlgMap").offsetHeight-130+"px";
+	  } ,
+	  beforeClose:function(){
+		  formMap.destroyContent();
+	  }
+	
+	 })
+var formNewMessage = new sap.m.Dialog("dlgCreateMessage",{
+    title:"Create Message",
+    modal: true,
+    contentWidth:"1em",
+    buttons: [
+					new sap.m.Button( {
+					    text: "Send",
+					    tap: [ function(oEvt) {		  
+							CreateTheMessage(); 
+							formNewMessage.close()
+							  } ]
+					   
+					}),   
+					new sap.m.Button( {
+					    text: "Cancel",
+					    tap: [ function(oEvt) {		  
+							 
+					    	formNewMessage.close()} ]   
+					})
+					],					
+    content:[
+ 			new sap.ui.layout.form.SimpleForm({
+				minWidth : 1024,
+				maxContainerCols : 2,
+				content : [
+
+								new sap.m.Label({text:"To"}),
+								new sap.m.Select('createTo',{
+									
+									items: [
+										
+									]
+
+
+								}),
+			
+								
+								new sap.m.Label({text:"Subject"}),
+								new sap.m.Input("createSubject",{ type: sap.m.InputType.Input}),
+							
+								new sap.m.Label({text:"Message"}),
+								new sap.m.TextArea("createMessage",{ rows: 5}),
+				                  
+							]
+ 					})
+
+            ]
+	 })
+var formViewMessage = new sap.m.Dialog("dlgMessage",{
+    title:"Message",
+    modal: true,
+    contentWidth:"1em",
+    buttons: [
+   
+					new sap.m.Button( {
+					    text: "OK",
+					    tap: [ function(oEvt) {		  
+							setRead()
+					    	formViewMessage.close()} ]   
+					})
+					],					
+    content:[
+ 			new sap.ui.layout.form.SimpleForm({
+				minWidth : 1024,
+				maxContainerCols : 2,
+				content : [
+
+								new sap.m.Label('messageType',{text:""}),
+								new sap.m.Input("messageTo",{ type: sap.m.InputType.Input}),
+								
+								new sap.m.Label({text:"Subject"}),
+								new sap.m.Input("messageSubject",{ type: sap.m.InputType.Input}),
+							
+								new sap.m.Label({text:"Message"}),
+								new sap.m.TextArea("messageMessage",{ rows: 5}),
+				                  
+							]
+ 					})
+
+            ]
+	 })
+
+var messageFooter = new sap.m.Bar (
+		{			
+
+				contentMiddle : [
+									new sap.m.Button("Create", {
+					   					text: "Create",
+					   					icon: "sap-icon://email",
+					  					 press: [ function(){
+					  						prepareCreateMessage()
+					  						formNewMessage.open(); 
+					  						
+					  							}]
+										 })
+								]
+		})	
+
+var standardList  = new sap.m.List(
+		  {
+			  //items:standardListItem,
+			  itemPress:[function(oEvt) {		  
+				  buildDetailsContent(oEvt.getParameter("listItem").getId());
+				 
+				  oSplitApp.to("detail")}],
+			  mode:sap.m.ListMode.SingleSelectMaster
+		  });
+
+
+
+
+function buildMenu(){
+	var rcvcnt = 0;
+	var sndcnt = 0;
+	var syscnt = 0;
+
+	html5sql.process("SELECT * FROM MyMessages",
+	 function(transaction, results, rowsArray){
+			
+			n=0;
+			while(n < rowsArray.length){
+				if(rowsArray[n].msgfromid == 'SENTMSG'  ){
+					sndcnt++;
+				}else if(rowsArray[n].type == 'MYJOBSSYSMSG'  ){
+					syscnt++;
+				}else{
+					rcvcnt++;
+				}
+				n++;
+			}
+
+
+
+			standardList.addItem(
+					  new sap.m.ObjectListItem("ReceivedMessages",
+						  {
+					  title:"Received Messages",
+					  number:rcvcnt, 
+					  tooltip: 'Received Messages',
+			          icon: "sap-icon://email",
+					
+					  type:sap.m.ListType.Active,
+
+				
+						  })
+					  );
+			standardList.addItem(
+					  new sap.m.ObjectListItem("SentMessages",
+						  {
+					  title:"Sent Messages",
+					  number:sndcnt, 
+					  tooltip: 'Sent Messages',
+			        icon: "sap-icon://forward",
+					
+					  type:sap.m.ListType.Active,
+
+				
+						  })
+					  );
+			standardList.addItem(
+					  new sap.m.ObjectListItem("SystemMessages",
+						  {
+					  title:"System Messages",
+					  number:syscnt, 
+					  tooltip: 'System Messages',
+			        icon: "sap-icon://alert",
+					
+					  type:sap.m.ListType.Active,
+
+				
+						  })
+					  );
+			standardList.addItem(
+					  new sap.m.ObjectListItem("AddressBook",
+						  {
+					  title:"Address Book",
+					  
+					  tooltip: 'Address Book',
+			      icon: "sap-icon://contacts",
+					
+					  type:sap.m.ListType.Active,
+
+				
+						  })
+					  );
+			standardList.addItem(
+					  new sap.m.ObjectListItem("Team",
+						  {
+					  title:"Team",
+					  
+					  tooltip: 'Team Location',
+			    icon: "sap-icon://account",
+					
+					  type:sap.m.ListType.Active,
+
+				
+						  })
+					  );
+			oMasterPage.addContent(standardList)
+					  
+
+	 },
+	 function(error, statement){
+		
+	 }        
+	);
+
+
+
+	
+
+
+
+
+
+}
+
+
+
+
+function buildDetailsContent(type){
+	
+	if(type=="ReceivedMessages"){
+		buildReceivedTable();
+	}else 	if(type=="SentMessages"){
+		buildSentTable();
+	}else 	if(type=="SystemMessages"){
+		buildSystemTable();
+	}else 	if(type=="AddressBook"){
+		buildAddressBookTable();
+	}else 	if(type=="Team"){
+		formMap.open();
+	}
+}
+
+function buildReceived(){	
+	var tableReceived =	new sap.m.Table("ReceivedTable",{
+		visible: true,
+		itemPress:[function(oEvt) {			  
+				     prepareDisplayMessage(oEvt.getParameter("listItem").getId())
+					}
+			  
+			 ],
+
+		columns:[
+
+		         new sap.m.Column({header: new sap.m.Label({text:"Date"}),
+		        	 hAlign: 'Left',width: '20%', minScreenWidth : "" , demandPopin: false}),
+		         new sap.m.Column({header: new sap.m.Label({text:"From"}),
+		        	 hAlign: 'Left',width: '30%',minScreenWidth : "" , demandPopin: true}),
+		         new sap.m.Column({header: new sap.m.Label({text:"Subject"}),
+		        	 hAlign: 'Left',width: '50%',minScreenWidth : "" , demandPopin: true })       	                         
+	      	     ]
+	})
+return tableReceived
+}
+function buildReceivedTable(){	
+	var msgFlag=""
+	opTable=sap.ui.getCore().getElementById('ReceivedTable');
+	opTable.destroyItems();
+	html5sql.process("SELECT * FROM MyMessages where msgfromid <> 'SENTMSG' and type <> 'MYJOBSSYSMSG' ;",
+			 function(transaction, results, rowsArray){
+				var n = 0;			
+
+				while (n < rowsArray.length) {	
+					if(rowsArray[n].state=="0"){
+						 msgFlag="sap-icon://email"
+					
+					}else{
+						msgFlag="sap-icon://email-read"
+					}
+					opTable.addItem (new sap.m.ColumnListItem('RECEIVED:'+rowsArray[n].id,{
+						type: "Active",
+						icon: msgFlag,
+						cells : 
+							[
+							
+							new sap.m.Text({text: rowsArray[n].date+" "+rowsArray[n].time}),
+				            new sap.m.Text({text: rowsArray[n].msgfromname}),						
+				            new sap.m.Text({text: rowsArray[n].msgsubject})   
+					 		]
+						}))
+					n++;
+				 }
+				sap.ui.getCore().getElementById('ReceivedTable').setVisible(true);
+				sap.ui.getCore().getElementById('SentTable').setVisible(false);
+				sap.ui.getCore().getElementById('SystemTable').setVisible(false);
+				sap.ui.getCore().getElementById('AddressTable').setVisible(false)
+				oDetailPage.setFooter(messageFooter)
+				oDetailPage.setTitle("Received Messages")
+			 },
+			 function(error, statement){
+				 //outputLogToDB(); 
+			 }        
+			);	
+}
+function buildSent(){
+	var tableSent =	new sap.m.Table("SentTable",{
+		visible: false,
+		itemPress:[function(oEvt) {			  
+				     prepareDisplayMessage(oEvt.getParameter("listItem").getId())
+					}
+			  
+			 ],
+
+		columns:[
+
+		         new sap.m.Column({header: new sap.m.Label({text:"Date"}),
+		        	 hAlign: 'Left',width: '20%', minScreenWidth : "" , demandPopin: false}),
+		         new sap.m.Column({header: new sap.m.Label({text:"To"}),
+		        	 hAlign: 'Left',width: '30%',minScreenWidth : "" , demandPopin: true}),
+		         new sap.m.Column({header: new sap.m.Label({text:"Subject"}),
+		        	 hAlign: 'Left',width: '50%',minScreenWidth : "" , demandPopin: true })       	                         
+	      	     ]
+	})
+	return tableSent
+}
+function buildSentTable(){
+	opTable=sap.ui.getCore().getElementById('SentTable');
+	opTable.destroyItems();
+	html5sql.process("SELECT * FROM MyMessages  where msgfromid = 'SENTMSG'  ;",
+			 function(transaction, results, rowsArray){
+				var n = 0;				
+				
+				while (n < rowsArray.length) {			
+					opTable.addItem(new sap.m.ColumnListItem('SENT:'+rowsArray[n].id,{
+						type: "Active",
+						cells : 
+							[
+							new sap.m.Text({text: rowsArray[n].date+" "+rowsArray[n].time}),
+				            new sap.m.Text({text: rowsArray[n].msgtoname}),						
+				            new sap.m.Text({text: rowsArray[n].msgsubject})   
+					 		]
+						}))
+					n++;
+				 }
+				sap.ui.getCore().getElementById('ReceivedTable').setVisible(false);
+				sap.ui.getCore().getElementById('SentTable').setVisible(true);
+				sap.ui.getCore().getElementById('SystemTable').setVisible(false);
+				sap.ui.getCore().getElementById('AddressTable').setVisible(false)
+				oDetailPage.setFooter(messageFooter)
+				oDetailPage.setTitle("Sent Messages")
+			 },
+			 function(error, statement){
+				 //outputLogToDB(); 
+			 }        
+			);	
+}
+function buildSystem(){
+	var tableSystem =	new sap.m.Table("SystemTable",{
+		visible: false,
+		itemPress:[function(oEvt) {			  
+				     prepareDisplayMessage(oEvt.getParameter("listItem").getId())
+					}
+			  
+			 ],
+
+		columns:[
+		         new sap.m.Column({header: new sap.m.Label({text:"Date"}),
+		        	 hAlign: 'Left',width: '20%', minScreenWidth : "" , demandPopin: false}),
+		         new sap.m.Column({header: new sap.m.Label({text:"From"}),
+		        	 hAlign: 'Left',width: '30%',minScreenWidth : "" , demandPopin: true}),
+		         new sap.m.Column({header: new sap.m.Label({text:"Subject"}),
+		        	 hAlign: 'Left',width: '50%',minScreenWidth : "" , demandPopin: true })       	                         
+	      	     ]
+	})
+	return tableSystem
+}
+function buildSystemTable(){
+	opTable=sap.ui.getCore().getElementById('SystemTable');
+	opTable.destroyItems();
+	html5sql.process("SELECT * FROM MyMessages  where type = 'MYJOBSSYSMSG'  ;",
+			 function(transaction, results, rowsArray){
+				var n = 0;
+				
+				while (n < rowsArray.length) {			
+					opTable.addItem(new sap.m.ColumnListItem('SYSTEM:'+rowsArray[n].id,{
+						type: "Active",
+						cells : 
+							[
+							new sap.m.Text({text: rowsArray[n].date+" "+rowsArray[n].time}),
+				            new sap.m.Text({text: rowsArray[n].msgfromid}),						
+				            new sap.m.Text({text: rowsArray[n].msgsubject})   
+					 		]
+						}))
+					n++;
+				 }
+				sap.ui.getCore().getElementById('ReceivedTable').setVisible(false);
+				sap.ui.getCore().getElementById('SentTable').setVisible(false);
+				sap.ui.getCore().getElementById('SystemTable').setVisible(true);
+				sap.ui.getCore().getElementById('AddressTable').setVisible(false)
+
+				oDetailPage.setFooter(messageFooter)
+				oDetailPage.setTitle("System Messages")
+			 },
+			 function(error, statement){
+				 //outputLogToDB(); 
+			 }        
+			);	
+}
+function buildAddressBook(){
+
+	var tableAddressBook =	new sap.m.Table("AddressTable",{
+		visible: false,
+		itemPress:[function(oEvt) {			  
+				     prepareDisplayMessage(oEvt.getParameter("listItem").getId())
+					}
+			  
+			 ],
+
+		columns:[
+		         new sap.m.Column({header: new sap.m.Label({text:"id"}),
+		        	 hAlign: 'Left',width: '20%', minScreenWidth : "" , demandPopin: false}),
+		         new sap.m.Column({header: new sap.m.Label({text:"Name"}),
+		        	 hAlign: 'Left',width: '40%',minScreenWidth : "" , demandPopin: true}),
+		         new sap.m.Column({header: new sap.m.Label({text:"Telephone"}),
+		        	 hAlign: 'Left',width: '40%',minScreenWidth : "" , demandPopin: true })       	                         
+	      	     ]
+	})
+	return tableAddressBook
+}
+function buildAddressBookTable(){
+	opTable=sap.ui.getCore().getElementById('AddressTable');
+	opTable.destroyItems();
+	html5sql.process("SELECT * FROM MyRefUsers  ;",
+			 function(transaction, results, rowsArray){
+				var n = 0;
+				
+				
+				while (n < rowsArray.length) {			
+					opTable.addItem(new sap.m.ColumnListItem('ADDRESSBOOK:'+rowsArray[n].id,{
+						type: "Active",
+						cells : 
+							[
+					        new sap.m.Text({text: rowsArray[n].userid}),
+							new sap.m.Text({text: rowsArray[n].firstname+" "+rowsArray[n].lastname}),					
+				            new sap.m.Text({text: rowsArray[n].telno})   
+					 		]
+						}))
+					n++;
+				 }
+				sap.ui.getCore().getElementById('ReceivedTable').setVisible(false);
+				sap.ui.getCore().getElementById('SentTable').setVisible(false);
+				sap.ui.getCore().getElementById('SystemTable').setVisible(false);
+				sap.ui.getCore().getElementById('AddressTable').setVisible(true)
+				oDetailPage.setFooter(detailFooter)
+				oDetailPage.setTitle("Address Book")
+			 },
+			 function(error, statement){
+				 //outputLogToDB(); 
+			 }        
+			);	
+}
+function setCounts()
+{
+	var rcvcnt = 0;
+	var sndcnt = 0;
+	var syscnt = 0;
+	
+	html5sql.process("SELECT * FROM MyMessages",
+	 function(transaction, results, rowsArray){
+			
+			n=0;
+			while(n < rowsArray.length){
+				if(rowsArray[n].msgfromid == 'SENTMSG'  ){
+					sndcnt++;
+				}else if(rowsArray[n].msgfromid == 'SYSTEM'  ){
+					syscnt++;
+				}else{
+					rcvcnt++;
+				}
+				n++;
+			}
+
+			sap.ui.getCore().getElementById("ReceivedMessages").setNumber(rcvcnt);
+			sap.ui.getCore().getElementById("SentMessages").setNumber(sndcnt);
+			sap.ui.getCore().getElementById("SystemMessages").setNumber(syscnt);
+
+
+
+	 },
+	 function(error, statement){
+		 alert("err1"+error)
+	 }        
+	);
+}
+
+function initializeMap() {
+
+   
+    var map = new google.maps.Map(document.getElementById('map_canvas'), {
+        zoom: 9,
+        center: new google.maps.LatLng(52.5202507,
+                -1.6350539999999683),
+        mapTypeId: google.maps.MapTypeId.ROADMAP
+    });
+
+    var LocsA = [
+                 [
+                     52.5202507,
+                     -1.6350539999999683,
+                     'Charley Farley',
+                     'images/van1.gif'
+             		
+                 ],
+                 [
+                     52.45962636383875,
+                     -1.7538436728515308,
+                     'Slarty Bartfast',
+                     'images/van1.gif'
+                 ],
+                 [
+                     52.184308275501834,
+                     -2.2125228720702808,
+                     'Jimmy Hendrix',
+                     'images/van1.gif'
+                 ]
+             ];
+
+
+    //declare marker call it 'i'
+    var marker, i;
+
+    //declare infowindow
+    var infowindow = new google.maps.InfoWindow();
+
+    //add marker to each locations
+    for (i = 0; i < LocsA.length; i++) {
+        marker = new google.maps.Marker({
+        	icon: LocsA[i][3],
+            position: new google.maps.LatLng(LocsA[i][0], LocsA[i][1]),
+            map: map,
+        });
+
+        //click function to marker, pops up infowindow
+        google.maps.event.addListener(marker, 'click', (function(marker, i) {
+            return function() {
+                infowindow.setContent(LocsA[i][2]);
+                infowindow.open(map, marker);
+            }
+        })(marker, i));
+    }
+    //google.maps.event.addDomListener(window, 'load', initialize);
+}
+
+function initialize(lat, lon)
+{
+    
+
+    currentPosition = new google.maps.LatLng(lat, lon);
+
+    map = new google.maps.Map(document.getElementById('map_canvas'), {
+       zoom: 15,
+       center: currentPosition,
+       mapTypeId: google.maps.MapTypeId.ROADMAP
+     });
+
+   // directionsDisplay.setMap(map);
+
+     var currentPositionMarker = new google.maps.Marker({
+        position: currentPosition,
+        map: map,
+        title: "Current position"
+    });
+
+    var infowindow = new google.maps.InfoWindow();
+    google.maps.event.addListener(currentPositionMarker, 'click', function() {
+        infowindow.setContent("Current position: latitude: " + lat +" longitude: " + lon);
+        infowindow.open(map, currentPositionMarker);
+    });
+}
+function prepareDisplayMessage(tid){
+	
+	res=tid.split(":")
+	var mtype=res[0]
+	var id = res[1]
+	selectedMess=id;
+	var	SQLStatement='Select * from MyMessages where id = "'+id+'"'
+
+
+	html5sql.process(SQLStatement,
+	function(transaction, results, rowsArray){
+
+		sap.ui.getCore().getElementById("messageSubject").setValue(rowsArray[0].msgsubject)
+		sap.ui.getCore().getElementById("messageMessage").setValue(unescape(rowsArray[0].msgtext))
+
+		if(mtype=="SENT"){
+			sap.ui.getCore().getElementById("messageType").setText('To')
+			sap.ui.getCore().getElementById("messageTo").setValue(rowsArray[0].msgtoname)
+		
+		}else{
+			sap.ui.getCore().getElementById("messageType").setText('From')
+			sap.ui.getCore().getElementById("messageTo").setValue(rowsArray[0].msgfromname)
+			
+		}
+		
+	formViewMessage.open()
+	},
+	function(error, statement){		
+
+		
+	}        
+	);
+
+}	
+function prepareCreateMessage(){
+	html5sql.process("SELECT * FROM MyRefUsers  ;",
+			 function(transaction, results, rowsArray){
+				var n = 0;
+				var opTable = sap.ui.getCore().getElementById('createTo');
+				opTable.removeAllItems();
+				while (n < rowsArray.length) {
+					
+			
+					opTable.addItem (
+						new sap.ui.core.Item({
+							key: rowsArray[n].userid,
+							text: rowsArray[n].firstname+" "+rowsArray[n].lastname
+						}))
+						
+					n++;
+				 }
+
+			 },
+			 function(error, statement){
+				 //outputLogToDB(); 
+			 }        
+			);	
+}
+function CreateTheMessage()
+{
+
+		SQLStatement='INSERT INTO MyMessages (type, date, time, msgfromid, msgfromname, msgid, expirydate,  msgtoid, msgtoname, msgsubject, msgtext, state) VALUES ( '+ 
+							  '"MYJOBS",'+
+							  '"'+getDate()+'",'+
+							  '"'+getTime()+'",'+
+							  '"SENTMSG",'+
+							  '"SENTMSG",'+
+							  '"0",'+
+							  '"00000000",'+
+							  '"'+sap.ui.getCore().byId("createTo").getSelectedItem().getKey()+'",'+
+							  '"'+sap.ui.getCore().byId("createTo").getSelectedItem().getText()+'",'+
+							  '"'+sap.ui.getCore().byId("createSubject").getValue()+'",'+
+							  '"'+sap.ui.getCore().byId("createMessage").getValue()+'",'+
+							  '"NEW");'
+
+		html5sql.process(SQLStatement,
+			 function(transaction, results, rowsArray){
+			if(oDetailPage.getTitle()=="Sent Messages"){
+				buildDetailsContent("SentMessages")
+			}
+				
+			
+				setCounts()
+				
+			 },
+			 function(error, statement){		
+				//alert("err-"+statement)
+			
+			 }        
+			);
+		
+}
+	var oDetailPage = new sap.m.Page(
+			"detail",
+			{
+				title : "",
+				footer: messageFooter,
+				content : [buildReceived(),buildSent(),buildSystem(),buildAddressBook(),buildReceivedTable()],
+				showNavButton: true,
+					 
+					 navButtonPress: function() {				                  
+						window.location.reload()
+					 }
+			}).addStyleClass("sapUiStdPage");
+
+
+	//create first master page
+
+	var oMasterPage = new sap.m.Page(
+			"master",
+			{
+				 headerContent : new sap.m.Button({
+                     icon: "sap-icon://home",
+                     press : function() {
+                    	 window.location.href="Home.html"
+                     }
+}),
+				title : "My Team",
+				
+				content : [
+				          
+				           ],
+				showNavButton: "{device>/isPhone}" ,
+				footer  : new sap.m.Bar (
+						{
+							id : 'master-footer',
+
+							contentLeft : [
+
+								]
+						})			 
+
+			});
+	
+	
+	
+	
+	//create SplitApp()
+	var oSplitApp = new sap.m.SplitApp({
+		detailPages: [oDetailPage],
+		masterPages: [oMasterPage],
+		initialDetail: "detail",
+		initialMaster: "master",
+		afterMasterOpen: function(){
+			jQuery.sap.log.info("master is opened");
+		},
+		afterMasterClose: function(){
+			jQuery.sap.log.info("master is closed");
+		}
+	});
+
+	if(jQuery.device.is.tablet || jQuery.device.is.desktop){
+		oSplitApp.setDefaultTransitionNameDetail("fade");	
+	}
+
+	oSplitApp.placeAt("body");
+	$(function() {
+		buildMenu()
+	})
+
+
+</script>
+</head>
+<body id="body" class="sapUiBody">
+</body>
+</html>

@@ -1,0 +1,251 @@
+﻿<!DOCTYPE html>
+<html   xmlns="http://www.w3.org/1999/xhtml">
+    <!--<html xmlns="http://www.w3.org/1999/xhtml">-->
+    <head>
+        <link href="css/site.css" rel="stylesheet" />
+        <script src="js/jq.1.10.2.js"></script>
+        <script src="js/jqui.1.9.2.js"></script>
+        <script src="js/bs.3.1.1.js"></script>
+        <script src="js/functions.js"></script>
+        <link rel="stylesheet" href="css/bs.3.1.1.css" />
+        <link rel="stylesheet" href="css/jqui.1.9.2_smoothness.css" />
+        
+
+
+        <!--<script language="JavaScript">
+            $(document).ready(function () {
+                var thisURL = document.URL;
+                var urlArray = thisURL.split("?");
+                var cleanArray = urlArray[1].split("&");
+
+                $.each(cleanArray, function (index, value) {
+                    var thisQS = value;
+                    var QSarray = thisQS.split("=");
+                    var thisValue = QSarray[index, 1];
+                    var thisProp = QSarray[index, 0];
+
+                    $('#' + thisProp + '').val(thisValue);
+                });
+            
+                //set headers for W-orker & Func loc
+                $('#workorderlabel').text($('#workorder').val());
+                $('#functionallocationlabel').text($('#functionallocation').val().toUpperCase());
+            });
+        </script>-->
+
+
+        <title>Calibration Form</title>
+    </head>
+    <body>
+        <div class="container">
+        
+            <div class="well row" style="margin-top: 10px">
+                <div class="col-md-6">
+                    <div class="row">
+                        <a href="formsindex.html"><button class="btn btn-lg btn-info">Home</button></a>
+                    </div>
+                    <div class="row">
+                        <h1><b>Holiday Request</b></h1>
+                    </div>
+                </div>
+
+
+            </div>
+            
+            <form class="form-inline" method="get" id="MyJobsForm" action="ProcessForm.html">
+            <input id="FormName" name="FormName" value="HolidayRequest" hidden>
+                   <div class="well row">
+                        <table class="table table-bordered">
+                            
+                            <tr>
+                                <td width="25%"><label class="feedback-input" >Start Date</label></td>
+                                <td width="25%"><input type="text" class="feedback-input" placeholder="Start Date" id="startdate" readonly /></td>
+                                 <td width="25%"><label class="feedback-input" >End Date</label></td>
+                                <td width="25%"><input type="text" class="feedback-input" placeholder="End Date" id="enddate" readonly/></td></tr>
+                            <TR>
+								<td width="25%"><label class="feedback-input" >Duration</label></td>
+                                <td colspan=3><input type="number" class="feedback-input" placeholder="Duration" id="duration" /></td>
+                               </tr>
+                            <TR>
+                            <td><label class="feedback-input" >Reason</label></td>
+
+                            <td colspan=3><textarea rows="4" cols="80"></textarea></td>
+                            </tr>
+                        </table>
+                    </div>
+
+                           <input type="submit" name="Save" value="SEND"  id="Save" hidden />
+
+
+                </div>
+
+            </form>
+        </div>
+    
+    </body>
+
+    <script>
+        $(function () {
+        	 $("#startdate").datepicker({
+                 dateFormat: "dd/mm/yy"
+             });
+        	 $("#enddate").datepicker({
+                 dateFormat: "dd/mm/yy"
+             });
+
+            $('#addnewtestinstrumentrow').click(function () {
+                var rowCount = $('#addnewtestinstrumenttable tr').length;
+
+                addNewTestInstrumentRow(rowCount);
+            });
+
+            function addNewTestInstrumentRow(rowCount) {
+                $('#addnewtestinstrumenttable tr:last').after('<tr><td><input type="text" class="feedback-input-table" id="tisu' + rowCount + '" /></td><td><input type="text" class="feedback-input-table" id="sncdd' + rowCount + '" /></td></tr>');
+            }
+            
+            $('#addnewreadingrow').click(function () {
+                var rowCount = $('#addnewreadingtable tr').length;
+
+                addNewReadingRow(rowCount);
+            });
+
+            function addNewReadingRow(rowCount) {
+                $('#addnewreadingtable tr:last').after('<tr><td><input type="text" class="feedback-input-table" id="a' + rowCount + '" /></td><td><input type="text" class="feedback-input-table" id="b' + rowCount + '" /></td><td><input type="text" class="feedback-input-table" id="c' + rowCount + '" /></td>' +
+                    '<td><input type="text" class="feedback-input-table" id="d' + rowCount + '" /></td><td><input type="text" class="feedback-input-table" id="e' + rowCount + '" /></td><td><input type="text" class="feedback-input-table" id="f' + rowCount + '" /></td><td><input type="text" class="feedback-input-table" id="g' + rowCount + '" /></td>' +
+                    '<td><input type="text" class="feedback-input-table" id="h' + rowCount + '" /></td><td><input type="text" class="feedback-input-table" id="i' + rowCount + '" /></td><td><input type="text" class="feedback-input-table" id="j' + rowCount + '" /></td><td><input type="text" class="feedback-input-table" id="k' + rowCount + '" /></td>' +
+                    '<td><input type="text" class="feedback-input-table" id="l' + rowCount + '" /></td></tr>');
+            }
+
+
+            $("#datecompleted").datepicker({
+                dateFormat: "dd/mm/yy"
+            });
+
+            $(".btn-group > .btn").click(function () {
+                $(this).addClass("active").siblings().removeClass("active");
+                $(this).addClass("btn-primary").siblings().removeClass("btn-primary").addClass("btn-default");
+            });
+        
+            $('.cause').change(function () {
+                var modelObj = $(".root");
+                var otherValue = $(this).find('option:selected').attr('data-value');
+                var selector = "option[class=" + otherValue.toLowerCase() + "]";
+                modelObj.children().hide();
+                modelObj.children(selector).show();
+            });
+
+            function validateForm(form) {
+            	//Paul Changed following If
+                //if (form.shortcode.val().length != 6) {
+                  //  alert('Short Code must be 6 characters long');
+                //};
+                if ($("#shortcode").val().length != 6) {
+                    alert('Short Code must be 6 characters long');
+                };
+            }
+
+            $("#sendEmail1").on("click", function () {
+            	
+                validateForm($('#calibrationform'));
+
+
+                var sitename = $("#sitename").val();
+                var equipmentnumber = $("#equipmentnumber").val();
+                var shortcode = $("#shortcode").val();
+                var model = $("#model").val();
+                var itemdescription = $("#itemdescription").val();
+                var serialnumber = $("#serialnumber").val();
+                
+                var testinstrumenttablearray = [];
+                $('#addnewtestinstrumenttable tr').not(":first-child").each(function (i) {
+                    var value = $(this).find('td input').eq(0).val();
+                    var value1 = $(this).find('td input').eq(1).val();
+                    testinstrumenttablearray.push(['Test instrument / Standard used ', value, 'Serial number / Calibration due date ', value1]);
+                });
+
+                var instrumentspan = $("#instrumentspan").val();
+                var retransmission = $("#retransmission").val();
+                
+                var measurementtablearray = [];
+                $('#addnewreadingtable tr').slice(3).each(function (i) {
+                    var value = $(this).find('td input').eq(0).val();
+                    var value1 = $(this).find('td input').eq(1).val();
+                    var value2 = $(this).find('td input').eq(2).val();
+                    var value3 = $(this).find('td input').eq(3).val();
+                    var value4 = $(this).find('td input').eq(4).val();
+                    var value5 = $(this).find('td input').eq(5).val();
+                    var value6 = $(this).find('td input').eq(6).val();
+                    var value7 = $(this).find('td input').eq(7).val();
+                    var value8 = $(this).find('td input').eq(8).val();
+                    var value9 = $(this).find('td input').eq(9).val();
+                    var value10 = $(this).find('td input').eq(10).val();
+                    var value11 = $(this).find('td input').eq(11).val();
+                    measurementtablearray.push(['Units ', value, 'Test I/p (sim) ', value1, 'Req O/P (mA) ', value2, 'Reading (before) ', value3, 'Reading (after) ', value4, '% Error (before) ', value5, '% Error (after) ', value6, 'O/P (mA) ', value7, 'Test I/P (mA) ', value8, 'Loop Reading at OS (mA) ', value9, 'ARTS 2000 Reading (local ind) ', value10, 'ARTS 2000 % Error (%) ', value11]);
+                });
+
+                var instrumentwithintolerancepriortocalibration = $("#instrumentwithintolerancepriortocalibration  > .btn.active").html();
+                var ifnoabletocalibratewithintolerance = $("#ifnoabletocalibratewithintolerance  > .btn.active").html();
+                var analogueloopcheckedtooutstation = $("#analogueloopcheckedtooutstation  > .btn.active").html();
+                var alarmstestedorshutdownpanelactivated = $("#alarmstestedorshutdownpanelactivated  > .btn.active").html();
+                var linemanagerinformed = $("#linemanagerinformed  > .btn.active").html();
+
+                var datecompleted = $("#datecompleted").val();
+                var completedby = $("#completedby").val();
+                
+                var workorder = $('#workorder').val();
+                var functionallocation = $('#functionallocation').val();
+
+                var date = getDateTime();
+                var localStorageKeys = Object.keys(localStorage);
+                var id = parseInt(localStorageKeys[localStorageKeys.length - 1]) + 1;
+                
+                if (isNaN(id)){id = 1;}
+                localStorage.setItem(id, '{ "calibrationFormDetails" : [' +
+                    '{ "sitename":' + sitename +
+                    ', "equipmentnumber" :' + equipmentnumber +
+                    ', "shortcode" :' + shortcode +
+                    ', "model" :' + model +
+                    ', "itemdescription" :' + itemdescription +
+                    ', "serialnumber" :' + serialnumber +
+                    ', "testinstrumenttable" :' + testinstrumenttablearray +
+                    ', "instrumentspan" :' + instrumentspan +
+                    ', "retransmission" :' + retransmission +
+                    ', "measurementtable" :' + measurementtablearray +
+                    ', "instrumentwithintolerancepriortocalibration" :' + instrumentwithintolerancepriortocalibration +
+                    ', "ifnoabletocalibratewithintolerance" :' + ifnoabletocalibratewithintolerance +
+                    ', "analogueloopcheckedtooutstation" :' + analogueloopcheckedtooutstation +
+                    ', "alarmstestedorshutdownpanelactivated" :' + alarmstestedorshutdownpanelactivated +
+                    ', "linemanagerinformed" :' + linemanagerinformed +
+                    ', "datecompleted" :' + datecompleted +
+                    ', "completedby" :' + completedby +
+                    ', "workorder" :' + workorder +
+                    ', "functionallocation" :' + functionallocation +
+                    ', "submitdatetime" :' + date + '} ] }');
+
+                var emailBody = "Please can these calibration details be manaually entered into SAP \n \n " +
+                    "Work Order Number: " + workorder + "\n" +
+                    "Functional Location: " + functionallocation + "\n \n \n" +
+                    "Site Name: " + sitename + "\n" +
+                    "Equip Number: " + equipmentnumber + "\n" +
+                    "Model: " + model + "\n" +
+                    "Description: " + itemdescription + "\n" +
+                    "Serial Number: " + serialnumber + "\n \n" +
+                    "Test Insturment Table: " + testinstrumenttablearray + "\n \n" +
+                    "Instrument Span: " + instrumentspan + "\n" +
+                    "Re Transmition: " + retransmission + "\n \n" +
+                    "Measurement Table: " + measurementtablearray + "\n \n" +
+                    "Instrument Within Tolerance Prior To Calibration: " + instrumentwithintolerancepriortocalibration + "\n" +
+                    "Able to calibrate within tolerance: " + ifnoabletocalibratewithintolerance + "\n" +
+                    "Analogue loop checked to outstation: " + analogueloopcheckedtooutstation + "\n" +
+                    "alarms tested or shutdown panel activated: " + alarmstestedorshutdownpanelactivated + "\n" +
+                    "line manager informed: " + linemanagerinformed + "\n" +
+                    "date completed: " + datecompleted + "\n" +
+                    "completed by: " + completedby + "\n";
+               
+                window.open( "mailto:msadler@anglianwater.co.uk?subject=Calibration Feedback (Mobile POC)&body=" + encodeURIComponent(emailBody),target="_self")
+                window.location.href = "formsindex.html"
+            });
+
+        });
+    </script>
+</html>

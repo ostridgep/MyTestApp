@@ -1,0 +1,175 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Access-Control-Allow-Origin" content="*"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<title>MyJobs - Notifications</title>
+<script src="resources/sap-ui-core.js" type="text/javascript"
+	id="sap-ui-bootstrap" data-sap-ui-libs="sap.m,sap.ui.commons"
+	data-sap-ui-theme="sap_bluecrystal">
+	
+</script>
+
+
+<script src="myresources/js/html5sql.js"></script>  
+<script src="myresources/js/bgsync.js"></script>
+<script src="myresources/js/MyJobsDB.js"></script>
+<script src="myresources/js/MyJobsUtils.js"></script>
+<script src="myresources/js/Globals.js"></script>
+<script src="myresources/js/DlgForms.js"></script>
+<script src="myresources/js/NotificationFunctions.js"></script>
+<script type="text/javascript">
+html5sql.openDatabase("com.pjo.myjobsbackfill","myjobsbackfill", 5*1024*1024);	
+
+var standardList  = new sap.m.List(
+		  {
+			  //items:standardListItem,
+			  itemPress:[function(oEvt) {		  
+				  buildNotificationDetailsContent(oEvt.getParameter("listItem").getId());				 
+				  oSplitApp.to("detail")}],
+			  mode:sap.m.ListMode.SingleSelectMaster
+		  });
+
+	
+var firstEntry="none:-1";
+
+
+function buildNotifications(){
+var item;	
+var lStatus="";
+var StatusState="";
+var StatusIcon="";
+	SQLStatement="SELECT * from MyNotifications"
+html5sql.process(SQLStatement,
+		 function(transaction, results, rowsArray){
+
+			cnt = 0;
+			while (cnt<rowsArray.length){
+
+				item=rowsArray[cnt];
+				if(cnt==0){
+					firstNotification="notif:"+item.id
+				}
+				 res=(item.type).split(":");
+				 if(res.length>1){
+					 
+					 jobType=res[2]
+				 }else{
+					 jobType=item.type;
+				 }
+				standardList.addItem(
+						  new sap.m.ObjectListItem("notif:"+item.id,
+							  {
+						  title:item.shorttext,
+						  //number:item.type, 
+						  numberUnit:item.notifno,
+						
+						  type:sap.m.ListType.Active,
+					
+						  attributes: [
+						                new sap.m.ObjectAttribute( {
+						                    text: 'Start:'+formatDateTime1(item.startdate)
+						                }),
+						                new sap.m.ObjectAttribute( {
+						                    text: 'Type:'+jobType
+						                })
+						                ],
+						    firstStatus: [
+						                new sap.m.ObjectStatus( {
+						                    text: item.priority,
+						                    state:"Success"
+						                })
+						                ]
+					
+							  })
+						  );
+					  cnt++;
+			 }
+			oMasterPage.destroyContent()
+			oMasterPage.addContent(standardList);
+			buildNotificationDetailsContent(firstNotification)
+		 },
+		 function(error, statement){
+			 alert(error+statement)
+		 }        
+		);	
+cnt = 0;
+
+
+
+
+}
+
+
+	var oDetailPage = new sap.m.Page(
+			"detail",
+			{
+				title : "Notiofication Details",
+				content : [buildNotificationDetails(firstNotification),buildNotificationDetailsTabs()],
+				showNavButton: true,
+					 
+					 navButtonPress: function() {				                  
+						window.location.reload()
+					 }
+			}).addStyleClass("sapUiStdPage");
+
+
+	//create first master page
+
+	var oMasterPage = new sap.m.Page(
+			"master",
+			{
+				 headerContent : new sap.m.Button({
+                     icon: "sap-icon://home",
+                     press : function() {
+                    	 window.location.href="Home.html"
+                     }
+}),
+				title : "Notifications",
+				
+				content : [ buildNotifications()],
+				showNavButton: "{device>/isPhone}" ,
+				footer  : new sap.m.Bar (
+						{
+							id : 'master-footer',
+
+							contentLeft : [
+									/* new sap.m.Button("Add1", {
+					   					 text: "create",
+					  					 press: [ function(){
+					  						formNewNotif.open(); 
+					  						
+					  							}]
+										 }) */
+								]
+						})			 
+
+			});
+	
+	
+	
+	
+	//create SplitApp()
+	var oSplitApp = new sap.m.SplitApp({
+		detailPages: [oDetailPage],
+		masterPages: [oMasterPage],
+		initialDetail: "detail",
+		initialMaster: "master",
+		afterMasterOpen: function(){
+			jQuery.sap.log.info("master is opened");
+		},
+		afterMasterClose: function(){
+			jQuery.sap.log.info("master is closed");
+		}
+	});
+
+	if(jQuery.device.is.tablet || jQuery.device.is.desktop){
+		oSplitApp.setDefaultTransitionNameDetail("fade");	
+	}
+
+	oSplitApp.placeAt("body");
+</script>
+</head>
+<body id="body" class="sapUiBody">
+</body>
+</html>

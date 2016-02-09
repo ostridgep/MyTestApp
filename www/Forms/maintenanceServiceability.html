@@ -1,0 +1,1315 @@
+﻿<!DOCTYPE html>
+<html  manifest="cache.manifest" xmlns="http://www.w3.org/1999/xhtml">
+    <!--<html xmlns="http://www.w3.org/1999/xhtml">-->
+    <head>
+        <link href="css/site.css" rel="stylesheet" />
+        <script src="js/jq.1.10.2.js"></script>
+        <script src="js/jqui.1.9.2.js"></script>
+        <script src="js/bs.3.1.1.js"></script>
+        <script src="js/functions.js"></script>
+        <link rel="stylesheet" href="css/bs.3.1.1.css" />
+        <link rel="stylesheet" href="css/jqui.1.9.2_smoothness.css" />
+        
+
+        <!--<script language="JavaScript">
+            $(document).ready(function () {
+                var thisURL = document.URL;
+                var urlArray = thisURL.split("?");
+                var cleanArray = urlArray[1].split("&");
+
+                $.each(cleanArray, function (index, value) {
+                    var thisQS = value;
+                    var QSarray = thisQS.split("=");
+                    var thisValue = QSarray[index, 1];
+                    var thisProp = QSarray[index, 0];
+
+                    $('#' + thisProp + '').val(thisValue);
+                });
+
+                //set headers for W-orker & Func loc
+                $('#workorderlabel').text($('#workorder').val());
+                $('#functionallocationlabel').text($('#functionallocation').val().toUpperCase());
+
+            });
+        </script>-->
+
+
+        <title>Pumping Station Service</title>
+    </head>
+    <body>
+        <div class="container">
+            <div class="well row" style="margin-top: 10px">
+                <div class="col-md-7">
+                    <div class="row">
+                        <a href="formsindex.html"><button class="btn btn-lg btn-info">Home</button></a>
+                    </div>
+                    <div class="row">
+                        <h1><b>Pumping Station Servicability Form</b></h1>
+                    </div>
+                </div>
+                 <form class="form-inline" method="get" id="MyJobsForm" action="ProcessForm.html">
+            <div class="col-md-5">
+                <div class="row">
+				<input class="form-control" id="workorder" merge="orderno"  placeholder="Enter Work Order"/>
+                    <!--<label class="pull-right" id="workorderlabel"></label>-->
+                </div>
+                <div class="row">
+				<input class="form-control" id="functionallocation" merge="funcloc_desc"  placeholder="Enter Functional Location"/>
+                    <!--<label class="pull-right" id="functionallocationlabel"></label>-->
+                </div>
+            </div>
+
+            </div>
+            <div class="alert alert-danger"><p>All references to either further attention being required or non adequate function assessments must be supported with comments to clarify findings</p></div>
+            <div class="alert alert-danger"><p>All remedial or repair work should be carried out at the time of the Pumping Station Service where possible</p></div>
+            <div class="alert alert-danger"><p>The station should be left fully operational, with all equipment installed and left in auto & all panels left secured & locked</p></div>
+
+            
+            <input id="FormName" name="FormName" value="MaintenanceServiceabilityFeedback" hidden>
+                <div class="form-group">
+                    <div class="well row">
+                        <div class="col-md-6 col-sm-6">
+                            <input name="sitename" type="text" class="feedback-input" placeholder="Site Name" id="sitename" />
+                            <input name="shortcode" type="text" class="feedback-input" placeholder="Short Code" id="shortcode" />
+                            <input name="siteowner" type="text" class="feedback-input" placeholder="Site Owner" id="siteowner" />
+                        </div>
+
+                        <div class="col-md-6 col-sm-6">
+                            <input name="mtelectirical" type="text" class="feedback-input" placeholder="MT Electrical" id="mtelectirical" />
+                            <input name="mtmechanical" type="text" class="feedback-input" placeholder="MT Mechanical" id="mtmechanical" />
+                            <input name="datevisited" type="text" class="feedback-input" placeholder="Date Visited" id="datevisited" readonly/>
+                        </div>
+                    </div>
+
+                    <div class="well row">
+                        <div class="btn-group btn-toggle col-md-2 col-sm-3" id="tankeroverpump" style="margin-right: -14px">
+                            <button type="button" class="btn btn-lg btn-default">Yes</button>
+                            <button type="button" class="btn btn-lg btn-primary active">No</button>
+                        </div>
+                        <label type="text" class="feedback-input col-md-10 col-sm-9">Tanker/Over Pump Facility?</label>
+                        <div class="col-md-6 col-sm-6 hideOnLoad">
+                            <input name="tankeroverpumpsize" type="text" class="feedback-input" placeholder="Size" id="tankeroverpumpsize" />
+                        </div>
+                        <div class="col-md-6 col-sm-6 hideOnLoad">
+                            <input name="tankeroverpumplocation" type="text" class="feedback-input" placeholder="Location" id="tankeroverpumplocation" />
+                        </div>
+                    </div>
+                    <div class="well row">
+                        <div class="btn-group btn-toggle col-md-2 col-sm-3" id="generatorsocket" style="margin-right: -14px">
+                            <button type="button" class="btn btn-lg btn-default">Yes</button>
+                            <button type="button" class="btn btn-lg btn-primary active">No</button>
+                        </div>
+                        <label type="text" class="feedback-input col-md-10 col-sm-9">Generator Socket Installed?</label>
+                        <div class="col-md-6 col-sm-6 hideOnLoad">
+                            <input name="generatorsocketsize" type="text" class="feedback-input" placeholder="Size" id="generatorsocketsize" />
+                        </div>
+                        <div class="col-md-6 col-sm-6 hideOnLoad">
+                            <input name="generatorsockettype" type="text" class="feedback-input" placeholder="Type" id="generatorsockettype" />
+                        </div>
+                    </div>
+                    <div class="well row">
+
+                        <div class="col-md-7 col-sm-7">
+                            <select class="feedback-input" id="wetwelltype" name="wetwelltype">
+                                <option value="" disabled selected>Wet Well Type?</option>
+                                <option value="dry">Dry</option>
+                                <option value="wet">Wet</option>
+                            </select>
+                        </div>
+
+
+                        <div class="col-md-6 col-sm-6">
+                            <input name="wetwelltypetimerecordedbackup" type="text" class="feedback-input" placeholder="Time Recorded Backup" id="wetwelltypetimerecordedbackup" />
+                        </div>
+                        <div class="col-md-6 col-sm-6">
+                            <input name="wetwelltypetimerecordedhighwetwell" type="text" class="feedback-input" placeholder="Time Recorded High Wet Well" id="wetwelltypetimerecordedhighwetwell" />
+                        </div>
+
+                        <textarea name="wetwelltypenotes" type="text" class="feedback-input" placeholder="Comments" id="wetwelltypenotes" style="width: 97.5%; margin-left: 15px"></textarea>
+
+                    </div>
+                    <div class="well row">
+                        <div class="btn-group btn-toggle col-md-2 col-sm-3" id="externalpannelresets" style="margin-right: -14px">
+                            <button type="button" class="btn btn-lg btn-default">Yes</button>
+                            <button type="button" class="btn btn-lg btn-primary active">No</button>
+                        </div>
+                        <label type="text" class="feedback-input col-md-10 col-sm-9">External Panel Resets Installed?</label>
+                    </div>
+                    <div class="well row">
+                        <div class="btn-group btn-toggle col-md-2 col-sm-3" id="tankeraccess" style="margin-right: -14px">
+                            <button type="button" class="btn btn-lg btn-default">Yes</button>
+                            <button type="button" class="btn btn-lg btn-primary active">No</button>
+                        </div>
+                        <label type="text" class="feedback-input col-md-10 col-sm-9">Tanker Access?</label>
+                        <div class="col-md-6 col-sm-6 hideOnLoad">
+                            <input name="tankeraccessdischargelocation" type="text" class="feedback-input" placeholder="Discharge Location" id="tankeraccessdischargelocation" />
+                        </div>
+                        <textarea name="tankeraccessnotes" type="text" class="feedback-input hideOnLoad" placeholder="Comments" id="tankeraccessnotes" style="width: 97.5%; margin-left: 15px"></textarea>
+
+                    </div>
+                    <div class="well row">
+                        <div class="btn-group btn-toggle col-md-2 col-sm-3" id="overflowlocationaccessible" style="margin-right: -14px">
+                            <button type="button" class="btn btn-lg btn-default">Yes</button>
+                            <button type="button" class="btn btn-lg btn-primary active">No</button>
+                        </div>
+                        <label type="text" class="feedback-input col-md-10 col-sm-9">Overflow Location Accessible?</label>
+                        <textarea name="overflowlocationaccessiblenotes" type="text" class="feedback-input hideOnLoad" placeholder="Comments" id="overflowlocationaccessiblenotes" style="width: 97.5%; margin-left: 15px"></textarea>
+
+                    </div>
+                    <div class="well row">
+                        <div class="btn-group btn-toggle col-md-3 col-sm-5" id="pumpchangeover" style="margin-right: -14px">
+                            <button type="button" class="btn btn-lg btn-default">Auto</button>
+                            <button type="button" class="btn btn-lg btn-default">Manual</button>
+                            <button type="button" class="btn btn-lg btn-primary active">No</button>
+                        </div>
+                        <label type="text" class="feedback-input col-md-9 col-sm-7">Pump Changeover?</label>
+                        <textarea name="pumpchangeovernotes" type="text" class="feedback-input hideOnLoad" placeholder="Comments" id="pumpchangeovernotes" style="width: 97.5%; margin-left: 15px"></textarea>
+                    </div>
+                    <div class="well row">
+                        <div class="btn-group btn-toggle col-md-4 col-sm-6" id="mainlevelcontrols" style="margin-right: -14px">
+                            <button type="button" class="btn btn-lg btn-default">Float</button>
+                            <button type="button" class="btn btn-lg btn-default">Ultrasonic</button>
+                            <button type="button" class="btn btn-lg btn-default">Probe</button>
+                            <button type="button" class="btn btn-lg btn-primary active">No</button>
+                        </div>
+                        <label type="text" class="feedback-input col-md-8 col-sm-6">Main Level Controls?</label>
+                        <div class="col-md-4 col-sm-4 hideOnLoad">
+                            <input name="mainlevelcontrolsdutyassiststandby" type="text" class="feedback-input" placeholder="Duty/Assist/Standby" id="mainlevelcontrolsdutyassiststandby" />
+                        </div>
+                        <div class="col-md-4 col-sm-4 hideOnLoad">
+                            <input name="mainlevelcontrolsstartlevel" type="text" class="feedback-input" placeholder="Start Level" id="mainlevelcontrolsstartlevel" />
+                        </div>
+                        <div class="col-md-4 col-sm-4 hideOnLoad">
+                            <input name="mainlevelcontrolsstoplevel" type="text" class="feedback-input" placeholder="Stop Level" id="mainlevelcontrolsstoplevel" />
+                        </div>
+                    </div>
+                    <div class="well row">
+                        <div class="btn-group btn-toggle col-md-3 col-sm-5" id="backupcontrols" style="margin-right: -14px">
+                            <button type="button" class="btn btn-lg btn-default">Float</button>
+                            <button type="button" class="btn btn-lg btn-default">Probe</button>
+                            <button type="button" class="btn btn-lg btn-primary active">No</button>
+                        </div>
+                        <label type="text" class="feedback-input col-md-9 col-sm-7">Backup Controls?</label>
+                        <div class="col-md-6 col-sm-6 hideOnLoad">
+                            <input name="backupcontrolsstartlevel" type="text" class="feedback-input" placeholder="Start Level" id="backupcontrolsstartlevel" />
+                        </div>
+                        <div class="col-md-6 col-sm-6 hideOnLoad">
+                            <input name="backupcontrolsstoplevel" type="text" class="feedback-input" placeholder="Stop Level" id="backupcontrolsstoplevel" />
+                        </div>
+                    </div>
+                    <div class="well row">
+                        <div class="btn-group btn-toggle col-md-5 col-sm-8" id="wetwellprotection" style="margin-right: -14px">
+                            <button type="button" class="btn btn-lg btn-default">Inner Grids</button>
+                            <button type="button" class="btn btn-lg btn-default">Barriers</button>
+                            <button type="button" class="btn btn-lg btn-default">Protection</button>
+                            <button type="button" class="btn btn-lg btn-primary active">No</button>
+                        </div>
+                        <label type="text" class="feedback-input col-md-7 col-sm-4">Wet Well Protection?</label>
+                        <div class=" hideOnLoad col-md7 col-sm-7">
+                            <select class="feedback-input" id="wetwellprotectiontype" name="wetwellprotectiontype">
+                                <option value="" disabled selected>Type?</option>
+                                <option value="dwig">Dry Well Internal Gated</option>
+                                <option value="wwig">Wet Well Internal Gated</option>
+                                <option value="wwing">Wet Well Internal Non-Gated</option>
+                                <option value="dwlg">Dry Well Lifting Gated</option>
+                                <option value="wwlg">Wet Well Lifting Gated</option>
+                                <option value="plr">Portable Lifting Required</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6 col-sm-6 hideOnLoad">
+                            <textarea name="wetwellprotectionsefetynotes" type="text" class="feedback-input" placeholder="Wet Well Sefety Notes" id="wetwellprotectionsefetynotes"></textarea>
+                        </div>
+                        <div class="col-md-6 col-sm-6 hideOnLoad">
+                            <textarea name="wetwellprotectionwatercoursedetails" type="text" class="feedback-input" placeholder="Watercourse Details" id="wetwellprotectionwatercoursedetails"></textarea>
+                        </div>
+                    </div>
+                    <div class="well row">
+                        <div class="btn-group btn-toggle col-md-3 col-sm-5" id="chemicaldosing" style="margin-right: -14px">
+                            <button type="button" class="btn btn-lg btn-default">Auto</button>
+                            <button type="button" class="btn btn-lg btn-default">Manual</button>
+                            <button type="button" class="btn btn-lg btn-primary active">No</button>
+                        </div>
+                        <label type="text" class="feedback-input col-md-9 col-sm-7">Chemical Dosing?</label>
+                        <div class="col-md-6 col-sm-6 hideOnLoad">
+                            <input name="chemicaldosingproducttype" type="text" class="feedback-input" placeholder="Product Type" id="chemicaldosingproducttype" />
+                        </div>
+                        <div class="col-md-6 col-sm-6 hideOnLoad">
+                            <textarea name="chemicaldosingnotes" type="text" class="feedback-input" placeholder="Comments" id="chemicaldosingnotes"></textarea>
+                        </div>
+                    </div>
+                    <div class="well row" style="background-color: white">
+                        <div>
+                            <!-- Nav tabs -->
+                            <ul class="nav nav-tabs" role="tablist">
+                                <li role="presentation" class="active"><a href="#siteinformationtab" aria-controls="siteinformationtab" role="tab" data-toggle="tab">Site Information</a></li>
+                                <li role="presentation"><a href="#conditionassessments" aria-controls="conditionassessments" role="tab" data-toggle="tab">Condition</a></li>
+                                <li role="presentation"><a href="#functionassessments" aria-controls="functionassessments" role="tab" data-toggle="tab">Function</a></li>
+                                <li role="presentation"><a href="#otherchecks" aria-controls="otherchecks" role="tab" data-toggle="tab">Other Checks</a></li>
+                                <li role="presentation"><a href="#standardjobs" aria-controls="standardjobs" role="tab" data-toggle="tab">Standard Jobs</a></li>
+                            </ul>
+
+                            <!-- Tab panes -->
+                            <div class="tab-content">
+                                <div role="tabpanel" class="tab-pane active" id="siteinformationtab">
+                                    <div class="row well" style="background-color: whitesmoke; margin-top: 10px">
+                                        <div class="col-md-6 col-sm-6">
+                                            <select class="feedback-input" id="buildingtype" name="buildingtype">
+                                                <option value="" disabled selected>Building Type?</option>
+                                                <option value="none">None</option>
+                                                <option value="brick">Brick</option>
+                                                <option value="grp">GRP</option>
+                                                <option value="wik">Walk In/Kisok</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="row well" style="background-color: whitesmoke">
+                                        <div class="btn-group btn-toggle col-md-2 col-sm-3" id="dieselbulktank" style="margin-right: -14px">
+                                            <button type="button" class="btn btn-lg btn-default">Yes</button>
+                                            <button type="button" class="btn btn-lg btn-primary active">No</button>
+                                        </div>
+                                        <label type="text" class="feedback-input col-md-10 col-sm-9">Diesel Bulk Tank?</label>
+                                        <div class="col-md-6 col-sm-6 hideOnLoad">
+                                            <input name="dieselbulktankcapacity" type="text" class="feedback-input" placeholder="Capacity (ltrs)" id="dieselbulktankcapacity" />
+                                        </div>
+                                        <div class="col-md-6 col-sm-6 hideOnLoad">
+                                            <input name="dieselbulktankfuellevel" type="text" class="feedback-input" placeholder="Fuel Level" id="dieselbulktankfuellevel" />
+                                        </div>
+                                    </div>
+                                    <div class="row well" style="background-color: whitesmoke">
+                                        <div class="btn-group btn-toggle col-md-2 col-sm-3" id="guiderails" style="margin-right: -14px">
+                                            <button type="button" class="btn btn-lg btn-default">Yes</button>
+                                            <button type="button" class="btn btn-lg btn-primary active">No</button>
+                                        </div>
+                                        <label type="text" class="feedback-input col-md-10 col-sm-9">Guide Rails?</label>
+                                        <div class="col-md-6 col-sm-6 hideOnLoad">
+                                            <input name="guiderailssize" type="text" class="feedback-input" placeholder="Size" id="guiderailssize" />
+                                        </div>
+                                        <div class="col-md-6 col-sm-6 hideOnLoad">
+                                            <input name="guiderailstype" type="text" class="feedback-input" placeholder="Type" id="guiderailstype" />
+                                        </div>
+                                    </div>
+                                    <div class="row well" style="background-color: whitesmoke">
+                                        <div class="btn-group btn-toggle col-md-4 col-sm-7" id="pumplifttype" style="margin-right: -14px">
+                                            <button type="button" class="btn btn-lg btn-default">Iron</button>
+                                            <button type="button" class="btn btn-lg btn-default">Stainless</button>
+                                            <button type="button" class="btn btn-lg btn-default">Bluerope</button>
+                                            <button type="button" class="btn btn-lg btn-primary active">No</button>
+                                        </div>
+                                        <label type="text" class="feedback-input col-md-8 col-sm-5">Pump Lift Type?</label>
+                                    </div>
+                                    <div class="row well" style="background-color: whitesmoke">
+                                        <div class="col-md-6 col-sm-6">
+                                            <select class="feedback-input" id="pumptype" name="pumptype">
+                                                <option value="" disabled selected>Pump Type?</option>
+                                                <option value="DW">Dry Well</option>
+                                                <option value="WW">Wet Well</option>
+                                                <option value="PC">Progressive Cavity</option>
+                                                <option value="HS">Horizontal Spin</option>
+                                                <option value="VS">Vertical Spin</option>
+                                                <option value="VS">Axial Flow</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="row well" style="background-color: whitesmoke">
+                                        <div class="btn-group btn-toggle col-md-2 col-sm-3" id="chemicalstoragetank" style="margin-right: -14px">
+                                            <button type="button" class="btn btn-lg btn-default">Yes</button>
+                                            <button type="button" class="btn btn-lg btn-primary active">No</button>
+                                        </div>
+                                        <label type="text" class="feedback-input col-md-10 col-sm-9">Chemical Storage Tank Installed?</label>
+                                        <div class="col-md-6 col-sm-6 hideOnLoad">
+                                            <input name="chemicalstoragetankcapacity" type="text" class="feedback-input" placeholder="Capacity" id="chemicalstoragetankcapacity" />
+                                        </div>
+                                        <div class="col-md-6 col-sm-6 hideOnLoad">
+                                            <input name="chemicalstoragetanklevel" type="text" class="feedback-input" placeholder="Level" id="chemicalstoragetanklevel" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div role="tabpanel" class="tab-pane" id="conditionassessments">
+                                    <div class="row well" style="background-color: whitesmoke; margin-top: 10px">
+                                        <div class="alert alert-warning">Please carry out a condition assessment for all pumps/rising mains valves including security/fencing/building(strucure)/grounds maintenance and fitted spares</div>
+                                        <div class="col-md-6 col-sm-6">
+                                            <select class="feedback-input" id="conditionassessmenttype" name="conditionassessmenttype">
+                                                <option value="" disabled selected>Select Assessment Type</option>
+                                                <option>Pump</option>
+                                                <option>Sump Pump</option>
+                                                <option>Rising Main Valve</option>
+                                                <option>Other Valve</option>
+                                                <option>Panel</option>
+                                                <option>Wet Well</option>
+                                                <option>Wet Well Protection</option>
+                                                <option>Security</option>
+                                                <option>Fencing</option>
+                                                <option>Building</option>
+                                                <option>Grounds Maintenance</option>
+                                                <option>Pump Spares Fited</option>
+                                            </select>
+                                        </div>
+                                        <button type="button" class="btn btn-lg btn-primary" data-toggle="modal" data-target="#newAssessmentModal">Add Assemment</button>
+                                    </div>
+                                    <div class="row well" style="background-color: whitesmoke; margin-top: 10px">
+                                        <table id="conditionassessmenttable" class="table boardered" style="background-color: white">
+                                            <tr>
+                                                <th>Ref.</th>
+                                                <th>Number</th>
+                                                <th>Condition</th>
+                                                <th>Flow</th>
+                                                <th>Amps</th>
+                                                <th>Lift Needed?</th>
+                                                <th>Guide Rail Condition</th>
+                                                <th>NRV Condition</th>
+                                                <th>Suction Valve Condition</th>
+                                                <th>Delivery Valve Condition</th>
+                                            </tr>
+                                        
+                                       
+                                        </table>
+                                    </div>
+
+
+
+                                
+
+                                </div>
+                                <div role="tabpanel" class="tab-pane" id="functionassessments">
+                                    <div class="row well" style="background-color: whitesmoke">
+                                        <div class="col-md-6 col-sm-12">
+                                            <label type="text" class="feedback-input"><b>Function Assessment</b></label>
+                                        </div>
+                                        <div class="col-md-6 col-sm-12">
+                                            <label type="text" class="feedback-input"><b>Adequacy</b></label>
+                                        </div>
+
+                                        <div class="col-md-6 col-sm-12">
+                                            <label type="text" class="feedback-input col-md-4 col-sm-5">Inside Light</label>
+                                            <div class="btn-group btn-toggle col-md-8 col-sm-7" id="insidelightfunctionassessment" style="margin-right: -14px">
+                                                <button type="button" class="btn btn-lg btn-default">Working</button>
+                                                <button type="button" class="btn btn-lg btn-default">Not Working</button>
+                                                <button type="button" class="btn btn-lg btn-primary active">None</button>
+                                            </div>  
+                                        </div>
+
+                                        <div class="col-md-6 col-sm-12">
+                                            <label type="text" class="feedback-input col-md-4 col-sm-6">Inside Light</label>
+                                            <div class="btn-group btn-toggle col-md-8 col-sm-6" id="insidelightadequacy" style="margin-right: -14px">
+                                                <button type="button" class="btn btn-lg btn-default">Adequate</button>
+                                                <button type="button" class="btn btn-lg btn-primary active">Not Adequate</button>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="col-md-6 col-sm-12">
+                                            <label type="text" class="feedback-input col-md-4 col-sm-5">Outside Light</label>
+                                            <div class="btn-group btn-toggle col-md-8 col-sm-7" id="outsidelightfunctionassessment" style="margin-right: -14px">
+                                                <button type="button" class="btn btn-lg btn-default">Working</button>
+                                                <button type="button" class="btn btn-lg btn-default">Not Working</button>
+                                                <button type="button" class="btn btn-lg btn-primary active">None</button>
+                                            </div>  
+                                        </div>
+
+                                        <div class="col-md-6 col-sm-12">
+                                            <label type="text" class="feedback-input col-md-4 col-sm-6">Outside Light</label>
+                                            <div class="btn-group btn-toggle col-md-8 col-sm-6" id="outsidelightadequacy" style="margin-right: -14px">
+                                                <button type="button" class="btn btn-lg btn-default">Adequate</button>
+                                                <button type="button" class="btn btn-lg btn-primary active">Not Adequate</button>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="col-md-6 col-sm-12">
+                                            <label type="text" class="feedback-input col-md-4 col-sm-5">Generator</label>
+                                            <div class="btn-group btn-toggle col-md-8 col-sm-7" id="generatorfunctionassessment" style="margin-right: -14px">
+                                                <button type="button" class="btn btn-lg btn-default">Working</button>
+                                                <button type="button" class="btn btn-lg btn-default">Not Working</button>
+                                                <button type="button" class="btn btn-lg btn-primary active">None</button>
+                                            </div>  
+                                        </div>
+
+                                        <div class="col-md-6 col-sm-12">
+                                            <label type="text" class="feedback-input col-md-4 col-sm-6">Generator</label>
+                                            <div class="btn-group btn-toggle col-md-8 col-sm-6" id="generatoradequacy" style="margin-right: -14px">
+                                                <button type="button" class="btn btn-lg btn-default">Adequate</button>
+                                                <button type="button" class="btn btn-lg btn-primary active">Not Adequate</button>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-6 col-sm-12">
+                                            <label type="text" class="feedback-input col-md-4 col-sm-5">Chemical Dosing</label>
+                                            <div class="btn-group btn-toggle col-md-8 col-sm-7" id="chemicaldosingfunctionalassessment" style="margin-right: -14px">
+                                                <button type="button" class="btn btn-lg btn-default">Working</button>
+                                                <button type="button" class="btn btn-lg btn-default">Not Working</button>
+                                                <button type="button" class="btn btn-lg btn-primary active">None</button>
+                                            </div>  
+                                        </div>
+                                        
+                                        <div class="col-md-6 col-sm-12">
+                                            <label type="text" class="feedback-input col-md-4 col-sm-6">Chemical Dosing</label>
+                                            <div class="btn-group btn-toggle col-md-8 col-sm-6" id="chemicaldosingadequacy" style="margin-right: -14px">
+                                                <button type="button" class="btn btn-lg btn-default">Adequate</button>
+                                                <button type="button" class="btn btn-lg btn-primary active">Not Adequate</button>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="col-md-6 col-sm-12">
+                                            <label type="text" class="feedback-input col-md-3 col-sm-4">Davit</label>
+                                            <div class="btn-group btn-toggle col-md-9 col-sm-8" id="davitfunctionalassessment" style="margin-right: -14px">
+                                                <button type="button" class="btn btn-lg btn-default">In Date</button>
+                                                <button type="button" class="btn btn-lg btn-default">Out Date</button>
+                                                <button type="button" class="btn btn-lg btn-default">No Tag</button>
+                                                <button type="button" class="btn btn-lg btn-primary active">None</button>
+                                            </div>  
+                                        </div>
+                                        
+                                        <div class="col-md-6 col-sm-12">
+                                            <label type="text" class="feedback-input col-md-4 col-sm-6">Davit</label>
+                                            <div class="btn-group btn-toggle col-md-8 col-sm-6" id="davitadequacy" style="margin-right: -14px">
+                                                <button type="button" class="btn btn-lg btn-default">Adequate</button>
+                                                <button type="button" class="btn btn-lg btn-primary active">Not Adequate</button>
+                                            </div>
+                                        </div>
+                                    
+                                        <div class="col-md-6 col-sm-12">
+                                            <label type="text" class="feedback-input col-md-3 col-sm-4">Beam</label>
+                                            <div class="btn-group btn-toggle col-md-9 col-sm-8" id="beamfunctionalassessment" style="margin-right: -14px">
+                                                <button type="button" class="btn btn-lg btn-default">In Date</button>
+                                                <button type="button" class="btn btn-lg btn-default">Out Date</button>
+                                                <button type="button" class="btn btn-lg btn-default">No Tag</button>
+                                                <button type="button" class="btn btn-lg btn-primary active">None</button>
+                                            </div>  
+                                        </div>
+                                        
+                                        <div class="col-md-6 col-sm-12">
+                                            <label type="text" class="feedback-input col-md-4 col-sm-6">Beam</label>
+                                            <div class="btn-group btn-toggle col-md-8 col-sm-6" id="beamadequacy" style="margin-right: -14px">
+                                                <button type="button" class="btn btn-lg btn-default">Adequate</button>
+                                                <button type="button" class="btn btn-lg btn-primary active">Not Adequate</button>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="col-md-6 col-sm-12">
+                                            <label type="text" class="feedback-input col-md-3 col-sm-4">Elec Hoist</label>
+                                            <div class="btn-group btn-toggle col-md-9 col-sm-8" id="electrichoistfunctionalassessment" style="margin-right: -14px">
+                                                <button type="button" class="btn btn-lg btn-default">In Date</button>
+                                                <button type="button" class="btn btn-lg btn-default">Out Date</button>
+                                                <button type="button" class="btn btn-lg btn-default">No Tag</button>
+                                                <button type="button" class="btn btn-lg btn-primary active">None</button>
+                                            </div>  
+                                        </div>
+                                        
+                                        <div class="col-md-6 col-sm-12">
+                                            <label type="text" class="feedback-input col-md-4 col-sm-6">Elec Hoist</label>
+                                            <div class="btn-group btn-toggle col-md-8 col-sm-6" id="electrichoistadequacy" style="margin-right: -14px">
+                                                <button type="button" class="btn btn-lg btn-default">Adequate</button>
+                                                <button type="button" class="btn btn-lg btn-primary active">Not Adequate</button>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="col-md-6 col-sm-12">
+                                            <label type="text" class="feedback-input col-md-3 col-sm-4">Chain Hoist</label>
+                                            <div class="btn-group btn-toggle col-md-9 col-sm-8" id="chainhoistfunctionalassessment" style="margin-right: -14px">
+                                                <button type="button" class="btn btn-lg btn-default">In Date</button>
+                                                <button type="button" class="btn btn-lg btn-default">Out Date</button>
+                                                <button type="button" class="btn btn-lg btn-default">No Tag</button>
+                                                <button type="button" class="btn btn-lg btn-primary active">None</button>
+                                            </div>  
+                                        </div>
+                                        
+                                        <div class="col-md-6 col-sm-12">
+                                            <label type="text" class="feedback-input col-md-4 col-sm-6">Chain Hoist</label>
+                                            <div class="btn-group btn-toggle col-md-8 col-sm-6" id="chainhoistadequacy" style="margin-right: -14px">
+                                                <button type="button" class="btn btn-lg btn-default">Adequate</button>
+                                                <button type="button" class="btn btn-lg btn-primary active">Not Adequate</button>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="col-md-6 col-sm-12">
+                                            <label type="text" class="feedback-input col-md-3 col-sm-4">Lift Chain</label>
+                                            <div class="btn-group btn-toggle col-md-9 col-sm-8" id="liftingchainfunctionalassessment" style="margin-right: -14px">
+                                                <button type="button" class="btn btn-lg btn-default">In Date</button>
+                                                <button type="button" class="btn btn-lg btn-default">Out Date</button>
+                                                <button type="button" class="btn btn-lg btn-default">No Tag</button>
+                                                <button type="button" class="btn btn-lg btn-primary active">None</button>
+                                            </div>  
+                                        </div>
+                                        
+                                        <div class="col-md-6 col-sm-12">
+                                            <label type="text" class="feedback-input col-md-4 col-sm-6">Lift Chain</label>
+                                            <div class="btn-group btn-toggle col-md-8 col-sm-6" id="liftingchainadequacy" style="margin-right: -14px">
+                                                <button type="button" class="btn btn-lg btn-default">Adequate</button>
+                                                <button type="button" class="btn btn-lg btn-primary active">Not Adequate</button>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="col-md-6 col-sm-12">
+                                            <label type="text" class="feedback-input col-md-4 col-sm-6">Overload Lev</label>
+                                            <div class="btn-group btn-toggle col-md-8 col-sm-6" id="overlaodlevelfunctionalassessment" style="margin-right: -14px">
+                                                <button type="button" class="btn btn-lg btn-default">???</button>
+                                                <button type="button" class="btn btn-lg btn-primary active">None</button>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="col-md-6 col-sm-12">
+                                            <label type="text" class="feedback-input col-md-4 col-sm-6">Overload Lev</label>
+                                            <div class="btn-group btn-toggle col-md-8 col-sm-6" id="overlaodleveladequacy" style="margin-right: -14px">
+                                                <button type="button" class="btn btn-lg btn-default">Adequate</button>
+                                                <button type="button" class="btn btn-lg btn-primary active">Not Adequate</button>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="col-md-6 col-sm-12">
+                                            <label type="text" class="feedback-input col-md-4 col-sm-6">Fuse Size</label>
+                                            <div class="btn-group btn-toggle col-md-8 col-sm-6" id="fusesizefunctionalassessment" style="margin-right: -14px">
+                                                <button type="button" class="btn btn-lg btn-default">???</button>
+                                                <button type="button" class="btn btn-lg btn-primary active">None</button>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="col-md-6 col-sm-12">
+                                            <label type="text" class="feedback-input col-md-4 col-sm-6">Fuse Size</label>
+                                            <div class="btn-group btn-toggle col-md-8 col-sm-6" id="fusesizeadequacy" style="margin-right: -14px">
+                                                <button type="button" class="btn btn-lg btn-default">Adequate</button>
+                                                <button type="button" class="btn btn-lg btn-primary active">Not Adequate</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row well" style="background-color: whitesmoke">
+                                        <label type="text" class="feedback-input col-md-12 col-sm-12"><b>Telemetry Sensor (Screen)</b></label>
+                                        <div class="col-md-6 col-sm-7">
+                                            <div class="row" style="margin-top: 20px">
+                                                
+                                                <label type="text" class="feedback-input col-md-5 col-sm-3">Function</label>
+                                                <div class="btn-group btn-toggle col-md-7 col-sm-9" id="telemetrysensorfunctionalassessment" style="margin-right: -14px">
+                                                    <button type="button" class="btn btn-lg btn-default">Complete</button>
+                                                    <button type="button" class="btn btn-lg btn-primary active">Incomplete</button>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <label type="text" class="feedback-input col-md-5 col-sm-3">Adequacy</label>
+                                                <div class="btn-group btn-toggle col-md-7 col-sm-9" id="telemetrysensoradequacy" style="margin-right: -14px">
+                                                    <button type="button" class="btn btn-lg btn-default">Adequate</button>
+                                                    <button type="button" class="btn btn-lg btn-primary active">Not Adequate</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 col-sm-5">
+                                            <textarea name="telemetrysensornotes" type="text" class="feedback-input" placeholder="Comments" id="telemetrysensornotes" ></textarea>
+                                        </div>                                      
+                                    </div>
+                                    
+                                    <div class="row well" style="background-color: whitesmoke">
+                                        <label type="text" class="feedback-input col-md-12 col-sm-12"><b>Changed To Auto Pump Down 20:80 c/o For Run Hours</b></label>
+                                        <div class="col-md-6 col-sm-7">
+                                            <div class="row" style="margin-top: 20px">                  
+                                                <label type="text" class="feedback-input col-md-5 col-sm-3">Function</label>
+                                                <div class="btn-group btn-toggle col-md-7 col-sm-9" id="changedtopumpdownfunction" style="margin-right: -14px">
+                                                    <button type="button" class="btn btn-lg btn-default">Yes</button>
+                                                    <button type="button" class="btn btn-lg btn-primary active">No</button>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <label type="text" class="feedback-input col-md-5 col-sm-3">Adequacy</label>
+                                                <div class="btn-group btn-toggle col-md-7 col-sm-9" id="changedtopumpdownadequacy" style="margin-right: -14px">
+                                                    <button type="button" class="btn btn-lg btn-default">Adequate</button>
+                                                    <button type="button" class="btn btn-lg btn-primary active">Not Adequate</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 col-sm-5">
+                                            <textarea name="changedtopumpdownnotes" type="text" class="feedback-input" placeholder="Comments" id="changedtopumpdownnotes" ></textarea>
+                                        </div>                                   
+                                    </div>
+                                </div>
+                                <div role="tabpanel" class="tab-pane" id="otherchecks">
+                                    <div class="row well" style="background-color: whitesmoke; margin-top: 10px">
+                                        <div class="row" style="margin-left: 14px">
+                                            <label type="text" class="feedback-input col-md-4 col-sm-4">Circuit Diagrams Available</label>
+                                            <div class="btn-group btn-toggle col-md-7 col-sm-7" id="circutdiagramsavailable">
+                                                <button type="button" class="btn btn-lg btn-default">Yes</button>
+                                                <button type="button" class="btn btn-lg btn-primary active">No</button>
+                                            </div>  
+                                        </div>
+                                        <div class="row" style="margin-left: 14px">
+                                            <label type="text" class="feedback-input col-md-4 col-sm-4">Circuit Diagrams Correct</label>
+                                            <div class="btn-group btn-toggle col-md-7 col-sm-7" id="circutdiagramscorrect">
+                                                <button type="button" class="btn btn-lg btn-default">Yes</button>
+                                                <button type="button" class="btn btn-lg btn-primary active">No</button>
+                                            </div>
+                                        </div>
+
+                                        <div class="row" style="margin-left: 14px">
+                                            <label type="text" class="feedback-input col-md-4 col-sm-4">EAWR Records</label>
+                                            <div class="btn-group btn-toggle col-md-7 col-sm-7" id="eawrrecords">
+                                                <button type="button" class="btn btn-lg btn-default">In Date</button>
+                                                <button type="button" class="btn btn-lg btn-primary active">Out of Date</button>
+                                            </div>  
+                                        </div>
+
+                                        <div class="row" style="margin-left: 14px">
+                                            <label type="text" class="feedback-input col-md-4 col-sm-4">Wet Well Clean Records</label>
+                                            <div class="btn-group btn-toggle col-md-7 col-sm-7" id="wetwellcleanrecord">
+                                                <button type="button" class="btn btn-lg btn-default">In Log Book</button>
+                                                <button type="button" class="btn btn-lg btn-primary active">No Record</button>
+                                            </div>          
+                                        </div>
+
+                                        <div class="row" style="margin-left: 14px">
+                                            <label type="text" class="feedback-input col-md-4 col-sm-4">Ultrasonic Parameters</label>
+                                            <input name="ultrasonicparameters" type="text" class="feedback-input col-md-3 col-sm-3" style="margin-left: 14px" placeholder="Parameters" id="ultrasonicparameters" />
+                                        </div>
+                                        
+                                        <div class="row" style="margin-left: 14px">
+                                            <label type="text" class="feedback-input col-md-4 col-sm-4">Site Signage</label>
+                                            <div class="btn-group btn-toggle col-md-7 col-sm-7" id="sitesignange">
+                                                <button type="button" class="btn btn-lg btn-default">Correct</button>
+                                                <button type="button" class="btn btn-lg btn-primary active">Incorrect</button>
+                                            </div>  
+                                        </div>
+                                        
+                                        <div class="row" style="margin-left: 14px">
+                                            <label type="text" class="feedback-input col-md-4 col-sm-4">Key Box</label>
+                                            <div class="btn-group btn-toggle col-md-7 col-sm-7" id="keybox">
+                                                <button type="button" class="btn btn-lg btn-default">Fitted</button>
+                                                <button type="button" class="btn btn-lg btn-primary active">Missing</button>
+                                            </div>  
+                                        </div>
+                                        
+                                        <div class="row" style="margin-left: 14px">
+                                            <label type="text" class="feedback-input col-md-4 col-sm-4">Asset Data Updated?</label>
+                                            <div class="btn-group btn-toggle col-md-7 col-sm-7" id="assetdataupdated">
+                                                <button type="button" class="btn btn-lg btn-default">Correct On SAP</button>
+                                                <button type="button" class="btn btn-lg btn-default">Updated</button>
+                                                <button type="button" class="btn btn-lg btn-primary active">Not Updated</button>
+                                            </div>  
+                                        </div>
+                                        
+                                        <div class="row" style="margin-left: 14px">
+                                            <label type="text" class="feedback-input col-md-4 col-sm-4">Overflow Location Updated?</label>
+                                            <div class="btn-group btn-toggle col-md-7 col-sm-7" id="overflowlocationupdated">
+                                                <button type="button" class="btn btn-lg btn-default">Correct On GNET</button>
+                                                <button type="button" class="btn btn-lg btn-default">Updated</button>
+                                                <button type="button" class="btn btn-lg btn-primary active">Not Updated</button>
+                                            </div>  
+                                        </div>
+                                        
+                                        <div class="row" style="margin-left: 14px">
+                                            <label type="text" class="feedback-input col-md-4 col-sm-4">COSHH Records?</label>
+                                            <div class="btn-group btn-toggle col-md-7 col-sm-7" id="cosshrecords">
+                                                <button type="button" class="btn btn-lg btn-default"> On Site</button>
+                                                <button type="button" class="btn btn-lg btn-default">Missing</button>
+                                                <button type="button" class="btn btn-lg btn-primary active">Not Applicable</button>
+                                            </div>
+                                        </div>
+                                           
+                                    </div>
+
+                                </div>
+                                <div role="tabpanel" class="tab-pane" id="standardjobs">
+                                    <div class="row well" style="background-color: whitesmoke; margin-top: 10px">
+                                        <div class="alert alert-warning"><p>Assess station performance and if need pump lift - If performance assessment indicates complete the following SJN:</p></div>
+
+                                        <table id="standardjobstable" class="table boardered" style="background-color: white">
+                                            <tr>
+                                                <th>Standard Job Description</th>
+                                                <th>Number</th>
+                                                <th>Completion</th>
+                                                <th>Points Tested</th>
+                                                <th>Result of Sensor to Screen Test</th>
+                                            </tr>
+                                            <tr><td>Wet Well Submersible Pump Mechanical Service</td><td style="min-width:30px">217</td><td style="min-width:180px"><select class='feedback-input-table' id='completion217'><option>Not Complete</option><option>Complete</option><option>Not Applicable</option></select></td><td><input name='217PT' type='text' class='feedback-input-table' id='217PT'/></td><td><input name='217STS' type='text' class='feedback-input-table' id='217STS'/></td></tr>
+                                            <tr><td>Dry Well Submersible Pump Mechanical Service</td><td style="min-width:30px">469</td><td style="min-width:180px"><select class='feedback-input-table' id='completion469'><option>Not Complete</option><option>Complete</option><option>Not Applicable</option></select></td><td><input name='469PT' type='text' class='feedback-input-table' id='469PT'/></td><td><input name='469STS' type='text' class='feedback-input-table' id='469STS'/></td></tr>
+                                            <tr><td>Progressive Cavity Pump Mechanical Service</td><td style="min-width:30px">554</td><td style="min-width:180px"><select class='feedback-input-table' id='completion554'><option>Not Complete</option><option>Complete</option><option>Not Applicable</option></select></td><td><input name='554PT' type='text' class='feedback-input-table' id='554PT'/></td><td><input name='554STS' type='text' class='feedback-input-table' id='554STS'/></td></tr>
+                                            <tr><td>Vertical Spindle Pump Mechanical Service</td><td style="min-width:30px">213</td><td style="min-width:180px"><select class='feedback-input-table' id='completion213'><option>Not Complete</option><option>Complete</option><option>Not Applicable</option></select></td><td><input name='213PT' type='text' class='feedback-input-table' id='213PT'/></td><td><input name='213STS' type='text' class='feedback-input-table' id='213STS'/></td></tr>
+                                            <tr><td>Horizontal Spindle Pump Mechanical Service</td><td style="min-width:30px">212</td><td style="min-width:180px"><select class='feedback-input-table' id='completion212'><option>Not Complete</option><option>Complete</option><option>Not Applicable</option></select></td><td><input name='212PT' type='text' class='feedback-input-table' id='212PT'/></td><td><input name='212STS' type='text' class='feedback-input-table' id='212STS'/></td></tr>
+                                            <tr><td>Axial Flow Pump Operational Inspection</td><td style="min-width:30px">467</td><td style="min-width:180px"><select class='feedback-input-table' id='completion467'><option>Not Complete</option><option>Complete</option><option>Not Applicable</option></select></td><td><input name='467PT' type='text' class='feedback-input-table' id='467PT'/></td><td><input name='467STS' type='text' class='feedback-input-table' id='467STS'/></td></tr>
+                                            <tr><td>Lobe Pump Operational Inspection</td><td style="min-width:30px">550</td><td style="min-width:180px"><select class='feedback-input-table' id='completion550'><option>Not Complete</option><option>Complete</option><option>Not Applicable</option></select></td><td><input name='550PT' type='text' class='feedback-input-table' id='550PT'/></td><td><input name='550STS' type='text' class='feedback-input-table' id='550STS'/></td></tr>
+                                            <tr><td>Diaphragm Pump Mechanical Service</td><td style="min-width:30px">172</td><td style="min-width:180px"><select class='feedback-input-table' id='completion172'><option>Not Complete</option><option>Complete</option><option>Not Applicable</option></select></td><td><input name='172PT' type='text' class='feedback-input-table' id='172PT'/></td><td><input name='172STS' type='text' class='feedback-input-table' id='172STS'/></td></tr>
+                                            <tr><td>Peristaltic Pump Operational Inspection</td><td style="min-width:30px">468</td><td style="min-width:180px"><select class='feedback-input-table' id='completion468'><option>Not Complete</option><option>Complete</option><option>Not Applicable</option></select></td><td><input name='468PT' type='text' class='feedback-input-table' id='468PT'/></td><td><input name='468STS' type='text' class='feedback-input-table' id='468STS'/></td></tr>
+                                            <tr><td>Wet Well Operational Inspection</td><td style="min-width:30px">847</td><td style="min-width:180px"><select class='feedback-input-table' id='completion847'><option>Not Complete</option><option>Complete</option><option>Not Applicable</option></select></td><td><input name='847PT' type='text' class='feedback-input-table' id='847PT'/></td><td><input name='847STS' type='text' class='feedback-input-table' id='847STS'/></td></tr>
+                                            <tr><td>Dry Well Operational Inspection</td><td style="min-width:30px">817</td><td style="min-width:180px"><select class='feedback-input-table' id='completion817'><option>Not Complete</option><option>Complete</option><option>Not Applicable</option></select></td><td><input name='817PT' type='text' class='feedback-input-table' id='817PT'/></td><td><input name='817STS' type='text' class='feedback-input-table' id='817STS'/></td></tr>
+                                            <tr><td>Bund Operational Inspection</td><td style="min-width:30px">437</td><td style="min-width:180px"><select class='feedback-input-table' id='completion437'><option>Not Complete</option><option>Complete</option><option>Not Applicable</option></select></td><td><input name='437PT' type='text' class='feedback-input-table' id='437PT'/></td><td><input name='437STS' type='text' class='feedback-input-table' id='437STS'/></td></tr>
+                                            <tr><td>Fuel Tank Operational Inspection</td><td style="min-width:30px">177</td><td style="min-width:180px"><select class='feedback-input-table' id='completion177'><option>Not Complete</option><option>Complete</option><option>Not Applicable</option></select></td><td><input name='177PT' type='text' class='feedback-input-table' id='177PT'/></td><td><input name='177STS' type='text' class='feedback-input-table' id='177STS'/></td></tr>
+                                            <tr><td>Lubrication Pump Operational Inspection</td><td style="min-width:30px">444</td><td style="min-width:180px"><select class='feedback-input-table' id='completion444'><option>Not Complete</option><option>Complete</option><option>Not Applicable</option></select></td><td><input name='444PT' type='text' class='feedback-input-table' id='444PT'/></td><td><input name='444STS' type='text' class='feedback-input-table' id='444STS'/></td></tr>
+                                            <tr><td>Sump Pump Operational Inspection</td><td style="min-width:30px">016</td><td style="min-width:180px"><select class='feedback-input-table' id='completion016'><option>Not Complete</option><option>Complete</option><option>Not Applicable</option></select></td><td><input name='016PT' type='text' class='feedback-input-table' id='016PT'/></td><td><input name='016STS' type='text' class='feedback-input-table' id='016STS'/></td></tr>
+                                            <tr><td>Air Receiver Operational Inspection</td><td style="min-width:30px">134</td><td style="min-width:180px"><select class='feedback-input-table' id='completion134'><option>Not Complete</option><option>Complete</option><option>Not Applicable</option></select></td><td><input name='134PT' type='text' class='feedback-input-table' id='134PT'/></td><td><input name='134STS' type='text' class='feedback-input-table' id='134STS'/></td></tr>
+                                            <tr><td>Static Bar Screen Operational Inspection</td><td style="min-width:30px">640</td><td style="min-width:180px"><select class='feedback-input-table' id='completion640'><option>Not Complete</option><option>Complete</option><option>Not Applicable</option></select></td><td><input name='640PT' type='text' class='feedback-input-table' id='640PT'/></td><td><input name='640STS' type='text' class='feedback-input-table' id='640STS'/></td></tr>
+                                            <tr><td>Macerator Operational Inspection</td><td style="min-width:30px">631</td><td style="min-width:180px"><select class='feedback-input-table' id='completion631'><option>Not Complete</option><option>Complete</option><option>Not Applicable</option></select></td><td><input name='631PT' type='text' class='feedback-input-table' id='631PT'/></td><td><input name='631STS' type='text' class='feedback-input-table' id='631STS'/></td></tr>
+                                            <tr><td>Comminuter Mechanical Inspection</td><td style="min-width:30px">754</td><td style="min-width:180px"><select class='feedback-input-table' id='completion754'><option>Not Complete</option><option>Complete</option><option>Not Applicable</option></select></td><td><input name='754PT' type='text' class='feedback-input-table' id='754PT'/></td><td><input name='754STS' type='text' class='feedback-input-table' id='754STS'/></td></tr>
+                                            <tr><td>Disintegrator Mechanical Inspection</td><td style="min-width:30px">755</td><td style="min-width:180px"><select class='feedback-input-table' id='completion755'><option>Not Complete</option><option>Complete</option><option>Not Applicable</option></select></td><td><input name='755PT' type='text' class='feedback-input-table' id='755PT'/></td><td><input name='755STS' type='text' class='feedback-input-table' id='755STS'/></td></tr>
+                                            <tr><td>Gate Valve Operational Inspection</td><td style="min-width:30px">434</td><td style="min-width:180px"><select class='feedback-input-table' id='completion434'><option>Not Complete</option><option>Complete</option><option>Not Applicable</option></select></td><td><input name='434PT' type='text' class='feedback-input-table' id='434PT'/></td><td><input name='434STS' type='text' class='feedback-input-table' id='434STS'/></td></tr>
+                                            <tr><td>Reflux Valve Operational Inspection</td><td style="min-width:30px">446</td><td style="min-width:180px"><select class='feedback-input-table' id='completion446'><option>Not Complete</option><option>Complete</option><option>Not Applicable</option></select></td><td><input name='446PT' type='text' class='feedback-input-table' id='446PT'/></td><td><input name='446STS' type='text' class='feedback-input-table' id='446STS'/></td></tr>
+                                            <tr><td>Extractor Fan Operational Inspection</td><td style="min-width:30px">818</td><td style="min-width:180px"><select class='feedback-input-table' id='completion818'><option>Not Complete</option><option>Complete</option><option>Not Applicable</option></select></td><td><input name='818PT' type='text' class='feedback-input-table' id='818PT'/></td><td><input name='818STS' type='text' class='feedback-input-table' id='818STS'/></td></tr>
+                                            <tr><td>Emergency Overflow Functional Test</td><td style="min-width:30px">442</td><td style="min-width:180px"><select class='feedback-input-table' id='completion442'><option>Not Complete</option><option>Complete</option><option>Not Applicable</option></select></td><td><input name='442PT' type='text' class='feedback-input-table' id='442PT'/></td><td><input name='442STS' type='text' class='feedback-input-table' id='442STS'/></td></tr>
+                                            <tr><td>Float / Probe Level Operational Inspection</td><td style="min-width:30px">231</td><td style="min-width:180px"><select class='feedback-input-table' id='completion231'><option>Not Complete</option><option>Complete</option><option>Not Applicable</option></select></td><td><input name='231PT' type='text' class='feedback-input-table' id='231PT'/></td><td><input name='231STS' type='text' class='feedback-input-table' id='231STS'/></td></tr>
+                                            <tr><td>Flow Switch Functional Test</td><td style="min-width:30px">693</td><td style="min-width:180px"><select class='feedback-input-table' id='completion693'><option>Not Complete</option><option>Complete</option><option>Not Applicable</option></select></td><td><input name='693PT' type='text' class='feedback-input-table' id='693PT'/></td><td><input name='693STS' type='text' class='feedback-input-table' id='693STS'/></td></tr>
+                                            <tr><td>Low Pressure Switch Functional Test</td><td style="min-width:30px">376</td><td style="min-width:180px"><select class='feedback-input-table' id='completion376'><option>Not Complete</option><option>Complete</option><option>Not Applicable</option></select></td><td><input name='376PT' type='text' class='feedback-input-table' id='376PT'/></td><td><input name='376STS' type='text' class='feedback-input-table' id='376STS'/></td></tr>
+                                            <tr><td>High Pressure Switch Functional Test</td><td style="min-width:30px">375</td><td style="min-width:180px"><select class='feedback-input-table' id='completion375'><option>Not Complete</option><option>Complete</option><option>Not Applicable</option></select></td><td><input name='375PT' type='text' class='feedback-input-table' id='375PT'/></td><td><input name='375STS' type='text' class='feedback-input-table' id='375STS'/></td></tr>
+                                            <tr><td>Ultrasonic Level Monitor Operational Inspection</td><td style="min-width:30px">233</td><td style="min-width:180px"><select class='feedback-input-table' id='completion233'><option>Not Complete</option><option>Complete</option><option>Not Applicable</option></select></td><td><input name='233PT' type='text' class='feedback-input-table' id='233PT'/></td><td><input name='233STS' type='text' class='feedback-input-table' id='233STS'/></td></tr>
+                                            <tr><td>Flood Prevention Door Operational Inspection</td><td style="min-width:30px">292</td><td style="min-width:180px"><select class='feedback-input-table' id='completion292'><option>Not Complete</option><option>Complete</option><option>Not Applicable</option></select></td><td><input name='292PT' type='text' class='feedback-input-table' id='292PT'/></td><td><input name='292STS' type='text' class='feedback-input-table' id='292STS'/></td></tr>
+                                            <tr><td>Flood Prevention Gate Operational Inspection</td><td style="min-width:30px">293</td><td style="min-width:180px"><select class='feedback-input-table' id='completion293'><option>Not Complete</option><option>Complete</option><option>Not Applicable</option></select></td><td><input name='293PT' type='text' class='feedback-input-table' id='293PT'/></td><td><input name='293STS' type='text' class='feedback-input-table' id='293STS'/></td></tr>
+                                            <tr><td>Sewer Exit Point With Flap Valve Operational Inspection</td><td style="min-width:30px">146</td><td style="min-width:180px"><select class='feedback-input-table' id='completion146'><option>Not Complete</option><option>Complete</option><option>Not Applicable</option></select></td><td><input name='146PT' type='text' class='feedback-input-table' id='146PT'/></td><td><input name='146STS' type='text' class='feedback-input-table' id='146STS'/></td></tr>
+                                            <tr><td>Electricity Meter Operational Inspection</td><td style="min-width:30px">027</td><td style="min-width:180px"><select class='feedback-input-table' id='completion027'><option>Not Complete</option><option>Complete</option><option>Not Applicable</option></select></td><td><input name='027PT' type='text' class='feedback-input-table' id='027PT'/></td><td><input name='027STS' type='text' class='feedback-input-table' id='027STS'/></td></tr>
+                                            <tr><td>Electrical Regulator Electrical Inspection</td><td style="min-width:30px">502</td><td style="min-width:180px"><select class='feedback-input-table' id='completion502'><option>Not Complete</option><option>Complete</option><option>Not Applicable</option></select></td><td><input name='502PT' type='text' class='feedback-input-table' id='502PT'/></td><td><input name='502STS' type='text' class='feedback-input-table' id='502STS'/></td></tr>
+                                            <tr><td>Electrical Regulator Electrical Inspection</td><td style="min-width:30px">502</td><td style="min-width:180px"><select class='feedback-input-table' id='Select2'><option>Not Complete</option><option>Complete</option><option>Not Applicable</option></select></td><td><input name='502PT' type='text' class='feedback-input-table' id='Text1'/></td><td><input name='502STS' type='text' class='feedback-input-table' id='Text2'/></td></tr>
+                                            <tr><td>Starter Panel Electrical Inspection</td><td style="min-width:30px">378</td><td style="min-width:180px"><select class='feedback-input-table' id='completion378'><option>Not Complete</option><option>Complete</option><option>Not Applicable</option></select></td><td><input name='378PT' type='text' class='feedback-input-table' id='378PT'/></td><td><input name='378STS' type='text' class='feedback-input-table' id='378STS'/></td></tr>
+                                            <tr><td>Induction Motor Electrical Inspection</td><td style="min-width:30px">125</td><td style="min-width:180px"><select class='feedback-input-table' id='completion125'><option>Not Complete</option><option>Complete</option><option>Not Applicable</option></select></td><td><input name='125PT' type='text' class='feedback-input-table' id='125PT'/></td><td><input name='125STS' type='text' class='feedback-input-table' id='125STS'/></td></tr>
+                                            <tr><td>Changeover Unit Electrical Inspection</td><td style="min-width:30px">445</td><td style="min-width:180px"><select class='feedback-input-table' id='completion445'><option>Not Complete</option><option>Complete</option><option>Not Applicable</option></select></td><td><input name='445PT' type='text' class='feedback-input-table' id='445PT'/></td><td><input name='445STS' type='text' class='feedback-input-table' id='445STS'/></td></tr>
+                                            <tr><td>Fuse Switch Electrical Inspection</td><td style="min-width:30px">440</td><td style="min-width:180px"><select class='feedback-input-table' id='completion440'><option>Not Complete</option><option>Complete</option><option>Not Applicable</option></select></td><td><input name='440PT' type='text' class='feedback-input-table' id='440PT'/></td><td><input name='440STS' type='text' class='feedback-input-table' id='440STS'/></td></tr>
+                                            <tr><td>Isolator Electrical Inspection</td><td style="min-width:30px">441</td><td style="min-width:180px"><select class='feedback-input-table' id='completion441'><option>Not Complete</option><option>Complete</option><option>Not Applicable</option></select></td><td><input name='441PT' type='text' class='feedback-input-table' id='441PT'/></td><td><input name='441STS' type='text' class='feedback-input-table' id='441STS'/></td></tr>
+                                        </table>
+                                    </div>
+                                    <div class="row well" style="background-color: whitesmoke; margin-top: 10px">
+                                        <select class="feedback-input" id="assesssuitabilityofservicefrequency" name="assesssuitabilityofservicefrequency" style="margin-left: 14px; width: 97.5%">
+                                            <option value="" disabled selected>Assess suitability of service frequency?</option>
+                                            <option value="correctfrequency">Correct Frequency</option>
+                                            <option value="needsmorefrequest">Needs More Frequest</option>
+                                            <option value="needslessfrequest">Needs Less Frequest</option>
+                                        </select>
+                                        <div class="col-md-6 col-sm-m6">
+                                            
+                                            <select class="feedback-input" id="isrecorrect" name="isrecorrect">
+                                                <option value="" disabled selected>Is RE Correct?</option>
+                                                <option value="yescorrect">Yes Correct</option>
+                                                <option value="tooshort">Too Short</option>
+                                                <option value="toolong">Too Long</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-6 col-sm-m6">
+                                            <input name='whatshouldREbe' type='text' class='feedback-input-table' placeholder="What should the RE be?" id='whatshouldREbe'/>
+                                        </div>        
+                                        <textarea name="standardjobcomments" type="text" class="feedback-input" placeholder="Comments" id="standardjobcomments" style="width: 97.5%; margin-left: 15px"></textarea>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+
+                                <input type="submit" value="SEND" id="button-blue" hidden/>
+                               
+
+                    </div>
+
+            </form>
+        </div>
+
+        <div class="modal fade" id="newAssessmentModal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">Add New Assessment</h4>
+                    </div>
+                    <div class="modal-body">
+                        <form class="form-horizontal">
+                            <input type="hidden" class="form-control" id="assessmentref"/>
+                            <div class="form-group" id="assessmentpumpnumbergroup">
+                                <label for="assessmentpumpnumberlabel">Pump Number</label>
+                                <input type="text" class="form-control" id="assessmentpumpnumber" placeholder="Pump Number"/>
+                            </div>
+                            <div class="form-group" id="assessmentconditiongroup">
+                                <label for="assessmentconditionlabel">Condition</label>
+                                <input type="text" class="form-control" id="assessmentcondition" placeholder="Condition"/>
+                            </div>                      
+                            <div class="form-group" id="assessmentflowgroup">
+                                <label for="assessmentflowlabel">Flow</label>
+                                <input type="text" class="form-control" id="assessmentflow" placeholder="Flow"/>
+                            </div>                       
+                            <div class="form-group" id="assessmentampsgroup">
+                                <label for="assessmentampslabel">Amps</label>
+                                <input type="text" class="form-control" id="assessmentamps" placeholder="Amps"/>
+                            </div>                       
+                            <div class="form-group" id="assessmentliftneededgroup">
+                                <label for="assessmentliftneededlabel">Lift Needed?</label>
+                                <input type="text" class="form-control" id="assessmentliftneeded" placeholder="Lift Needed?"/>
+                            </div>
+                            <div class="form-group" id="assessmentguiderailconditiongroup">
+                                <label for="assessmentguiderailconditionlabel">Guide Rail Condition</label>
+                                <input type="text" class="form-control" id="assessmentguiderailcondition" placeholder="Guide Rail Condition"/>
+                            </div>
+                            <div class="form-group" id="assessmentnrvconditiongroup">
+                                <label for="assessmentnrvconditionlabel">NRV Condition</label>
+                                <input type="text" class="form-control" id="assessmentnrvcondition" placeholder="NRV Condition"/>
+                            </div>
+                            <div class="form-group" id="assessmentsuctionvalveconditiongroup">
+                                <label for="assessmentsuctionvalveconditionlabel">Suction Valve Condition</label>
+                                <input type="text" class="form-control" id="assessmentsuctionvalvecondition" placeholder="Suction Valve Condition"/>
+                            </div>
+                            <div class="form-group" id="assessmentdeliveryvalveconditiongroup">
+                                <label for="assessmentdeliveryvalveconditionlabel">Delivery Valve Condition</label>
+                                <input type="text" class="form-control" id="assessmentdeliveryvalvecondition" placeholder="Delivery Valve Condition"/>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button id="addassessment" type="button" class="btn btn-primary">Add</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    
+
+    </body>
+
+        <script>
+            $(function () {
+                $("#datevisited").datepicker({
+                    dateFormat: "dd/mm/yy"
+                });
+                
+                $('.hideOnLoad').hide();
+
+                $('#tankeroverpump, #generatorsocket, #tankeraccess, #overflowlocationaccessible, #pumpchangeover, #mainlevelcontrols, #backupcontrols, #wetwellprotection, #chemicaldosing, #dieselbulktank, #guiderails, #chemicalstoragetank').click(function () {
+                    showHidden($(this), $(this).find(' > .btn.active').html());
+                });
+
+                function showHidden(object, val) {
+                    if (val != 'No') {
+                        object.siblings().show();
+                    } else {
+                        object.siblings('.hideOnLoad').hide();
+                    }
+                }
+                
+                $('#addassessment').click(function () {
+                    addNewAssessment();
+                });
+        
+                function addNewAssessment() {
+
+                    var assessmentpumpnumber = $('#assessmentpumpnumber').val();
+                    var assessmentcondition = $('#assessmentcondition').val();
+                    var assessmentflow = $('#assessmentflow').val();
+                    var assessmentamps = $('#assessmentamps').val();
+                    var assessmentliftneeded = $('#assessmentliftneeded').val();
+                    var assessmentguiderailcondition = $('#assessmentguiderailcondition').val();
+                    var assessmentnrvcondition = $('#assessmentnrvcondition').val();
+                    var assessmentsuctionvalvecondition = $('#assessmentsuctionvalvecondition').val();
+                    var assessmentdeliveryvalvecondition = $('#assessmentdeliveryvalvecondition').val();
+
+                    var rownumber;
+                    $('#assessmenttable tr').each(function (i) {
+                        rownumber = i+1;
+                    });
+
+                    $('#assessmenttable tr:last').after('<tr><td>' + rownumber + '</td><td>' + assessmentpumpnumber + '</td><td>' + assessmentcondition + '</td><td>' + assessmentflow + '</td><td>' + assessmentamps + '</td><td>' + assessmentliftneeded + '</td><td>' + assessmentguiderailcondition + '</td><td>' + assessmentnrvcondition + '</td><td>' + assessmentsuctionvalvecondition + '</td><td>' + assessmentdeliveryvalvecondition + '</td></tr>');
+                
+                    $('#assessmentpumpnumber').val(null);
+                    $('#assessmentcondition').val(null);
+                    $('#assessmentflow').val(null);
+                    $('#assessmentamps').val(null);
+                    $('#assessmentliftneeded').val(null);
+                    $('#assessmentguiderailcondition').val(null);
+                    $('#assessmentnrvcondition').val(null);               
+                    $('#assessmentsuctionvalvecondition').val(null);
+                    $('#assessmentdeliveryvalvecondition').val(null);
+                }
+
+                $('#newAssessmentModal').on('shown.bs.modal', function () {
+                    $('#assessmentref').val($('#conditionassessmenttype').val());
+                    var assessref = $('#assessmentref').val();
+                    if (assessref != 'Pump') {
+                        $('#assessmentpumpnumbergroup').hide();
+                        $('#assessmentflowgroup').hide();
+                        $('#assessmentampsgroup').hide();
+                        $('#assessmentliftneededgroup').hide();
+                        $('#assessmentguiderailconditiongroup').hide();
+                        $('#assessmentnrvconditiongroup').hide();
+                        $('#assessmentsuctionvalveconditiongroup').hide();
+                        $('#assessmentdeliveryvalveconditiongroup').hide();
+                    }
+                });
+        
+                $('#newAssessmentModal').on('hide.bs.modal', function () {
+                    var assessref = $('#assessmentref').val();
+                    if (assessref != 'Pump') {
+                        $('#assessmentpumpnumbergroup').show();
+                        $('#assessmentflowgroup').show();
+                        $('#assessmentampsgroup').show();
+                        $('#assessmentliftneededgroup').show();
+                        $('#assessmentguiderailconditiongroup').show();
+                        $('#assessmentnrvconditiongroup').show();
+                        $('#assessmentsuctionvalveconditiongroup').show();
+                        $('#assessmentdeliveryvalveconditiongroup').show();
+                    }
+                });
+        
+                $('.cause').change(function () {
+                    var modelObj = $(".root");
+                    var otherValue = $(this).find('option:selected').attr('data-value');
+                    var selector = "option[class=" + otherValue.toLowerCase() + "]";
+                    modelObj.children().hide();
+                    modelObj.children(selector).show();
+                });
+
+                $(".btn-group > .btn").click(function () {
+                    $(this).addClass("active").siblings().removeClass("active");
+                    $(this).addClass("btn-primary").siblings().removeClass("btn-primary").addClass("btn-default");
+                });
+
+                $('form').submit(function () {
+                    alert($(this["options"]).val());
+                    return false;
+                });
+
+
+                $("#sendEmail").on("click", function () {
+                    //main page
+                    var sitename = $("#sitename").val();
+                    var shortcode = $("#shortcode").val();
+                    var siteowner = $("#siteowner").val();
+                    var mtelectirical = $("#mtelectirical").val();
+                    var mtmechanical = $("#mtmechanical").val();
+                    var datevisited = $("#datevisited").val();
+                    var tankeroverpump = $('#tankeroverpump > .btn.active').html();
+                    var tankeroverpumpsize = $("#tankeroverpumpsize").val();
+                    var tankeroverpumplocation = $("#tankeroverpumplocation").val();
+                    var generatorsocket = $('#generatorsocket > .btn.active').html();
+                    var generatorsocketsize = $("#generatorsocketsize").val();
+                    var generatorsockettype = $("#generatorsockettype").val();
+                    var wetwelltype = $("#wetwelltype").val();
+                    var wetwelltypetimerecordedbackup = $("#wetwelltypetimerecordedbackup").val();
+                    var wetwelltypetimerecordedhighwetwell = $("#wetwelltypetimerecordedhighwetwell").val();
+                    var wetwelltypenotes = $("#wetwelltypenotes").val();
+                    var externalpannelresets = $('#externalpannelresets > .btn.active').html();
+                    var tankeraccess = $('#tankeraccess > .btn.active').html();
+                    var tankeraccessdischargelocation = $("#tankeraccessdischargelocation").val();
+                    var tankeraccessnotes = $("#tankeraccessnotes").val();
+                    var overflowlocationaccessible = $('#overflowlocationaccessible > .btn.active').html();
+                    var overflowlocationaccessiblenotes = $("#overflowlocationaccessiblenotes").val();
+                    var pumpchangeover = $('#pumpchangeover > .btn.active').html();
+                    var pumpchangeovernotes = $("#pumpchangeovernotes").val();
+                    var mainlevelcontrols = $('#mainlevelcontrols > .btn.active').html();
+                    var mainlevelcontrolsdutyassiststandby = $("#mainlevelcontrolsdutyassiststandby").val();
+                    var mainlevelcontrolsstartlevel = $("#mainlevelcontrolsstartlevel").val();
+                    var mainlevelcontrolsstoplevel = $("#mainlevelcontrolsstoplevel").val();
+                    var backupcontrols = $('#backupcontrols > .btn.active').html();
+                    var backupcontrolsstartlevel = $("#backupcontrolsstartlevel").val();
+                    var backupcontrolsstoplevel = $("#backupcontrolsstoplevel").val();
+                    var wetwellprotection = $('#wetwellprotection > .btn.active').html();
+                    var wetwellprotectiontype = $("#wetwellprotectiontype").val();
+                    var wetwellprotectionsefetynotes = $("#wetwellprotectionsefetynotes").val();
+                    var wetwellprotectionwatercoursedetails = $("#wetwellprotectionwatercoursedetails").val();
+                    var chemicaldosing = $('#chemicaldosing > .btn.active').html();
+                    var chemicaldosingproducttype = $("#chemicaldosingproducttype").val();
+                    var chemicaldosingnotes = $("#chemicaldosingnotes").val();
+                
+                
+                    //siteinfo tab
+                    var buildingtype = $("#buildingtype").val();
+                    var dieselbulktank = $('#dieselbulktank > .btn.active').html();
+                    var dieselbulktankcapacity = $("#dieselbulktankcapacity").val();
+                    var dieselbulktankfuellevel = $("#dieselbulktankfuellevel").val();
+                    var guiderails = $('#guiderails > .btn.active').html();
+                    var guiderailssize = $("#guiderailssize").val();
+                    var guiderailstype = $("#guiderailstype").val();
+                    var pumplifttype = $('#pumplifttype > .btn.active').html();
+                    var pumptype = $("#pumptype").val();
+                    var chemicalstoragetank = $('#chemicalstoragetank > .btn.active').html();
+                    var chemicalstoragetankcapacity = $("#chemicalstoragetankcapacity").val();
+                    var chemicalstoragetanklevel = $("#chemicalstoragetanklevel").val();
+
+                    //Condition tab
+                    var conditionassessmentarray = [];
+                    $('#conditionassessmenttable tr').not(":first-child").each(function (i) {
+                        var value = $(this).find('td input').eq(0).val();
+                        var value1 = $(this).find('td input').eq(1).val();
+                        var value2 = $(this).find('td input').eq(2).val();
+                        var value3 = $(this).find('td input').eq(3).val();
+                        var value4 = $(this).find('td input').eq(4).val();
+                        var value5 = $(this).find('td input').eq(5).val();
+                        var value6 = $(this).find('td input').eq(6).val();
+                        var value7 = $(this).find('td input').eq(7).val();
+                        var value8 = $(this).find('td input').eq(8).val();
+                        var value9 = $(this).find('td input').eq(9).val();
+                        conditionassessmentarray.push(['Ref. ', value, 'Number ', value1, 'Condition ', value2, 'Flow ', value3, 'Amps ', value4, 'Lift Needed? ', value5, 'Guide Rail Condition ', value6, 'NRV Condition ', value7, 'Suction Valve Condition ', value8, 'Delivery Valve Condition ', value9]);
+                    });
+                
+                    //Function tab
+                    var insidelightfunctionassessment = $('#insidelightfunctionassessment > .btn.active').html();
+                    var insidelightadequacy = $('#insidelightadequacy > .btn.active').html();
+                    var outsidelightfunctionassessment = $('#outsidelightfunctionassessment > .btn.active').html();
+                    var outsidelightadequacy = $('#outsidelightadequacy > .btn.active').html();
+                    var generatorfunctionassessment = $('#generatorfunctionassessment > .btn.active').html();
+                    var generatoradequacy = $('#generatoradequacy > .btn.active').html();
+                    var chemicaldosingfunctionalassessment = $('#chemicaldosingfunctionalassessment > .btn.active').html();
+                    var chemicaldosingadequacy = $('#chemicaldosingadequacy > .btn.active').html();
+                    var davitfunctionalassessment = $('#davitfunctionalassessment > .btn.active').html();
+                    var davitadequacy = $('#davitadequacy > .btn.active').html();
+                    var beamfunctionalassessment = $('#beamfunctionalassessment > .btn.active').html();
+                    var beamadequacy = $('#beamadequacy > .btn.active').html();
+                    var electrichoistfunctionalassessment = $('#electrichoistfunctionalassessment > .btn.active').html();
+                    var electrichoistadequacy = $('#electrichoistadequacy > .btn.active').html();
+                    var chainhoistfunctionalassessment = $('#chainhoistfunctionalassessment > .btn.active').html();
+                    var chainhoistadequacy = $('#chainhoistadequacy > .btn.active').html();
+                    var liftingchainfunctionalassessment = $('#liftingchainfunctionalassessment > .btn.active').html();
+                    var liftingchainadequacy = $('#liftingchainadequacy > .btn.active').html();
+                    var overlaodlevelfunctionalassessment = $('#overlaodlevelfunctionalassessment > .btn.active').html();
+                    var overlaodleveladequacy = $('#overlaodleveladequacy > .btn.active').html();
+                    var fusesizefunctionalassessment = $('#fusesizefunctionalassessment > .btn.active').html();
+                    var fusesizeadequacy = $('#fusesizeadequacy > .btn.active').html();
+
+                    var telemetrysensorfunctionalassessment = $('#telemetrysensorfunctionalassessment > .btn.active').html();
+                    var telemetrysensoradequacy = $('#telemetrysensoradequacy > .btn.active').html();
+                    var telemetrysensornotes = $("#telemetrysensornotes").val();
+
+                    var changedtopumpdownfunction = $('#changedtopumpdownfunction > .btn.active').html();
+                    var changedtopumpdownadequacy = $('#changedtopumpdownadequacy > .btn.active').html();
+                    var changedtopumpdownnotes = $("#changedtopumpdownnotes").val();
+
+                    //Other checks tab
+                    var circutdiagramsavailable = $('#circutdiagramsavailable > .btn.active').html();
+                    var circutdiagramscorrect = $('#circutdiagramscorrect > .btn.active').html();
+                    var eawrrecords = $('#eawrrecords > .btn.active').html();
+                    var wetwellcleanrecord = $('#wetwellcleanrecord > .btn.active').html();
+                    var ultrasonicparameters = $("#ultrasonicparameters").val();
+                    var sitesignange = $('#sitesignange > .btn.active').html();
+                    var keybox = $('#keybox > .btn.active').html();
+                    var assetdataupdated = $('#assetdataupdated > .btn.active').html();
+                    var overflowlocationupdated = $('#overflowlocationupdated > .btn.active').html();
+                    var cosshrecords = $('#cosshrecords > .btn.active').html();
+
+                    //Standards tab
+                    var standardjobsarray = [];
+                    $('#standardjobstable tr').not(":first-child").each(function (i) {
+                        var value = $(this).find('td input').eq(0).val();
+                        var value1 = $(this).find('td input').eq(1).val();
+                        var value2 = $(this).find('td input').eq(2).val();
+                        var value3 = $(this).find('td input').eq(3).val();
+                        var value4 = $(this).find('td input').eq(4).val();
+                        standardjobsarray.push(['Description ', value, 'Number ', value1, 'Completion ', value2, 'Points Testsed ', value3, 'Results of sensor to screen test ', value4]);
+                    });
+                
+                    var assesssuitabilityofservicefrequency = $("#assesssuitabilityofservicefrequency").val();
+                    var isrecorrect = $("#isrecorrect").val();
+                    var whatshouldREbe = $("#whatshouldREbe").val();
+                    var standardjobcomments = $("#standardjobcomments").val();
+
+                    //basic info
+                    var workorder = $('#workorder').val();
+                    var functionallocation = $('#functionallocation').val();
+
+                    var date = getDateTime();
+                    var localStorageKeys = Object.keys(localStorage);
+                    var id = parseInt(localStorageKeys[localStorageKeys.length - 1]) + 1;
+                    if (isNaN(id)) { id = 1; }
+
+                    var formDetails = '{ "formDetails" : [' +
+                        '{ "sitename":' + sitename +
+                        ', "shortcode" :' + shortcode +
+                        ', "siteowner" :' + siteowner +
+                        ', "mtelectirical" :' + mtelectirical +
+                        ', "mtmechanical" :' + mtmechanical +
+                        ', "datevisited" :' + datevisited +
+                        ', "tankeroverpump" :' + tankeroverpump +
+                        ', "tankeroverpumpsize" :' + tankeroverpumpsize +
+                        ', "tankeroverpumplocation" :' + tankeroverpumplocation +
+                        ', "generatorsocket" :' + generatorsocket +
+                        ', "generatorsocketsize" :' + generatorsocketsize +
+                        ', "generatorsockettype" :' + generatorsockettype +
+                        ', "wetwelltype" :' + wetwelltype +
+                        ', "wetwelltypetimerecordedbackup" :' + wetwelltypetimerecordedbackup +
+                        ', "wetwelltypetimerecordedhighwetwell" :' + wetwelltypetimerecordedhighwetwell +
+                        ', "wetwelltypenotes" :' + wetwelltypenotes +
+                        ', "externalpannelresets" :' + externalpannelresets +
+                        ', "tankeraccess" :' + tankeraccess +
+                        ', "tankeraccessdischargelocation" :' + tankeraccessdischargelocation +
+                        ', "tankeraccessnotes" :' + tankeraccessnotes +
+                        ', "overflowlocationaccessible" :' + overflowlocationaccessible +
+                        ', "overflowlocationaccessiblenotes" :' + overflowlocationaccessiblenotes +
+                        ', "pumpchangeover" :' + pumpchangeover +
+                        ', "pumpchangeovernotes" :' + pumpchangeovernotes +
+                        ', "mainlevelcontrols" :' + mainlevelcontrols +
+                        ', "mainlevelcontrolsdutyassiststandby" :' + mainlevelcontrolsdutyassiststandby +
+                        ', "mainlevelcontrolsstartlevel" :' + mainlevelcontrolsstartlevel +
+                        ', "mainlevelcontrolsstoplevel" :' + mainlevelcontrolsstoplevel +
+                        ', "backupcontrols" :' + backupcontrols +
+                        ', "backupcontrolsstartlevel" :' + backupcontrolsstartlevel +
+                        ', "backupcontrolsstoplevel" :' + backupcontrolsstoplevel +
+                        ', "wetwellprotection" :' + wetwellprotection +
+                        ', "wetwellprotectiontype" :' + wetwellprotectiontype +
+                        ', "wetwellprotectionsefetynotes" :' + wetwellprotectionsefetynotes +
+                        ', "wetwellprotectionwatercoursedetails" :' + wetwellprotectionwatercoursedetails +
+                        ', "chemicaldosing" :' + chemicaldosing +
+                        ', "chemicaldosingproducttype" :' + chemicaldosingproducttype +
+                        ', "chemicaldosingnotes" :' + chemicaldosingnotes +
+                        ', "buildingtype" :' + buildingtype +
+                        ', "dieselbulktank" :' + dieselbulktank +
+                        ', "dieselbulktankcapacity" :' + dieselbulktankcapacity +
+                        ', "dieselbulktankfuellevel" :' + dieselbulktankfuellevel +
+                        ', "guiderails" :' + guiderails +
+                        ', "guiderailssize" :' + guiderailssize +
+                        ', "guiderailstype" :' + guiderailstype +
+                        ', "pumplifttype" :' + pumplifttype +
+                        ', "pumptype" :' + pumptype +
+                        ', "chemicalstoragetank" :' + chemicalstoragetank +
+                        ', "chemicalstoragetankcapacity" :' + chemicalstoragetankcapacity +
+                        ', "chemicalstoragetanklevel" :' + chemicalstoragetanklevel +
+                        ', "conditionassessmentarray" :' + conditionassessmentarray +
+                        ', "insidelightfunctionassessment" :' + insidelightfunctionassessment +
+                        ', "insidelightadequacy" :' + insidelightadequacy +
+                        ', "outsidelightfunctionassessment" :' + outsidelightfunctionassessment +
+                        ', "outsidelightadequacy" :' + outsidelightadequacy +
+                        ', "generatorfunctionassessment" :' + generatorfunctionassessment +
+                        ', "generatoradequacy" :' + generatoradequacy +
+                        ', "chemicaldosingfunctionalassessment" :' + chemicaldosingfunctionalassessment +
+                        ', "chemicaldosingadequacy" :' + chemicaldosingadequacy +
+                        ', "davitfunctionalassessment" :' + davitfunctionalassessment +
+                        ', "davitadequacy" :' + davitadequacy +
+                        ', "beamfunctionalassessment" :' + beamfunctionalassessment +
+                        ', "beamadequacy" :' + beamadequacy +
+                        ', "electrichoistfunctionalassessment" :' + electrichoistfunctionalassessment +
+                        ', "electrichoistadequacy" :' + electrichoistadequacy +
+                        ', "chainhoistfunctionalassessment" :' + chainhoistfunctionalassessment +
+                        ', "chainhoistadequacy" :' + chainhoistadequacy +
+                        ', "liftingchainfunctionalassessment" :' + liftingchainfunctionalassessment +
+                        ', "liftingchainadequacy" :' + liftingchainadequacy +
+                        ', "overlaodlevelfunctionalassessment" :' + overlaodlevelfunctionalassessment +
+                        ', "overlaodleveladequacy" :' + overlaodleveladequacy +
+                        ', "fusesizefunctionalassessment" :' + fusesizefunctionalassessment +
+                        ', "fusesizeadequacy" :' + fusesizeadequacy +
+                        ', "telemetrysensorfunctionalassessment" :' + telemetrysensorfunctionalassessment +
+                        ', "telemetrysensoradequacy" :' + telemetrysensoradequacy +
+                        ', "telemetrysensornotes" :' + telemetrysensornotes +
+                        ', "changedtopumpdownfunction" :' + changedtopumpdownfunction +
+                        ', "changedtopumpdownadequacy" :' + changedtopumpdownadequacy +
+                        ', "changedtopumpdownnotes" :' + changedtopumpdownnotes +
+                        ', "circutdiagramsavailable" :' + circutdiagramsavailable +
+                        ', "circutdiagramscorrect" :' + circutdiagramscorrect +
+                        ', "eawrrecords" :' + eawrrecords +
+                        ', "wetwellcleanrecord" :' + wetwellcleanrecord +
+                        ', "ultrasonicparameters" :' + ultrasonicparameters +
+                        ', "sitesignange" :' + sitesignange +
+                        ', "keybox" :' + keybox +
+                        ', "assetdataupdated" :' + assetdataupdated +
+                        ', "overflowlocationupdated" :' + overflowlocationupdated +
+                        ', "cosshrecords" :' + cosshrecords +
+                        ', "standardjobsarray" :' + standardjobsarray +
+                        ', "assesssuitabilityofservicefrequency" :' + assesssuitabilityofservicefrequency +
+                        ', "isrecorrect" :' + isrecorrect +
+                        ', "whatshouldREbe" :' + whatshouldREbe +
+                        ', "standardjobcomments" :' + standardjobcomments +
+                        ', "workorder" :' + workorder +
+                        ', "functionallocation" :' + functionallocation +
+                        ', "submitdatetime" :' + date + '} ] }';
+
+
+                    var emailBody = "Please can these calibration details be manaually entered into SAP \n \n " +
+                        "Work Order Number: " + workorder + "\n" +
+                        "Functional Location: " + functionallocation + "\n \n \n" +
+                        "Site Name: " + sitename + "\n" +
+                        "Short Code: " + shortcode + "\n" +
+                        "Site Owner: " + siteowner + "\n" +
+                        "Tech Electrical: " + mtelectirical + "\n" +
+                        "Tech Mechanical: " + mtmechanical + "\n" +
+                        "Date Visited: " + datevisited + "\n" +
+                        "Tanker Overpump: " + tankeroverpump + "\n" +
+                        "Tanker Overpump Size: " + tankeroverpumpsize + "\n" +
+                        "Tanker Overpump Location: " + tankeroverpumplocation + "\n \n" +
+                        "Generator Scoket: " + generatorsocket + "\n \n" +
+                        "Generator Scoket Size: " + generatorsocketsize + "\n" +
+                        "Generator Scoket Type: " + generatorsockettype + "\n" +
+                        "Wetwell Type: " + wetwelltype + "\n" +
+                        "Wetwell Time Recorded Back up: " + wetwelltypetimerecordedbackup + "\n" +
+                        "Wetwell Time Recorded High Well: " + wetwelltypetimerecordedhighwetwell + "\n" +
+                        "Wetwell Type Notes: " + wetwelltypenotes + "\n" +
+                        "External Panel Resets: " + externalpannelresets + "\n" +
+                        "Tanker Access: " + tankeraccess + "\n" +
+                        "Tanker Access Discharge Location: " + tankeraccessdischargelocation + "\n" +
+                        "Tanker Access Notes: " + tankeraccessnotes + "\n" +
+                        "Overflow Location Accessible: " + overflowlocationaccessible + "\n" +
+                        "Overflow Location Accessible Notes: " + overflowlocationaccessiblenotes + "\n" +
+                        "Pump Changeover: " + pumpchangeover + "\n" +
+                        "Pump Changeover Notes: " + pumpchangeovernotes + "\n" +
+                        "Main Level Controls: " + mainlevelcontrols + "\n" +
+                        "Main Level Controls (duty/assist/standby): " + mainlevelcontrolsdutyassiststandby + "\n" +
+                        "Main Level Controls Start Level: " + mainlevelcontrolsstartlevel + "\n" +
+                        "Main Level Controls Stop Level: " + mainlevelcontrolsstoplevel + "\n" +
+                        "Backup Controls: " + backupcontrols + "\n" +
+                        "Backup Controls Start Level: " + backupcontrolsstartlevel + "\n" +
+                        "Backup Controls Stop Level: " + backupcontrolsstoplevel + "\n" +
+                        "Wetwell Protection: " + wetwellprotection + "\n" +
+                        "Wetwell Protection Type: " + wetwellprotectiontype + "\n" +
+                        "Wetwell Protection Safety Notes: " + wetwellprotectionsefetynotes + "\n" +
+                        "Wetwell Protection Watercourse Details: " + wetwellprotectionwatercoursedetails + "\n" +
+                        "Chemical Dosing: " + chemicaldosing + "\n" +
+                        "Chemical Dosing Product Type: " + chemicaldosingproducttype + "\n" +
+                        "Chemical Dosing Notes: " + chemicaldosingnotes + "\n" +
+                        "Building Type: " + buildingtype + "\n" +
+                        "Diesel Bulk Tank: " + dieselbulktank + "\n" +
+                        "Diesel Bulk Tank Capacity: " + dieselbulktankcapacity + "\n" +
+                        "Diesel Bulk Tank Fuel Level: " + dieselbulktankfuellevel + "\n" +
+                        "Guide Rails: " + guiderails + "\n" +
+                        "Guide Rails Size: " + guiderailssize + "\n" +
+                        "Guide Rails Type: " + guiderailstype + "\n" +
+                        "Pump Lift Type: " + pumplifttype + "\n" +
+                        "Pump Lift: " + pumptype + "\n" +
+                        "Chemical Storage Tank: " + chemicalstoragetank + "\n" +
+                        "Chemical Storage Tank Capacity: " + chemicalstoragetankcapacity + "\n" +
+                        "Chemical Storage Tank Level: " + chemicalstoragetanklevel + "\n" +
+                        "date completed: " + conditionassessmentarray + "\n" +
+                        "date completed: " + insidelightfunctionassessment + "\n" +
+                        "date completed: " + insidelightadequacy + "\n" +
+                        "date completed: " + outsidelightfunctionassessment + "\n" +
+                        "date completed: " + outsidelightadequacy + "\n" +
+                        "date completed: " + generatorfunctionassessment + "\n" +
+                        "date completed: " + chemicaldosingfunctionalassessment + "\n" +
+                        "date completed: " + chemicaldosingadequacy + "\n" +
+                        "date completed: " + davitfunctionalassessment + "\n" +
+                        "date completed: " + davitadequacy + "\n" +
+                        "date completed: " + beamfunctionalassessment + "\n" +
+                        "date completed: " + beamadequacy + "\n" +
+                        "date completed: " + electrichoistfunctionalassessment + "\n" +
+                        "date completed: " + electrichoistadequacy + "\n" +
+                        "date completed: " + chainhoistfunctionalassessment + "\n" +
+                        "date completed: " + chainhoistadequacy + "\n" +
+                        "date completed: " + liftingchainfunctionalassessment + "\n" +
+                        "date completed: " + liftingchainadequacy + "\n" +
+                        "date completed: " + overlaodlevelfunctionalassessment + "\n" +
+                        "date completed: " + overlaodleveladequacy + "\n" +
+                        "date completed: " + fusesizefunctionalassessment + "\n" +
+                        "date completed: " + fusesizeadequacy + "\n" +
+                        "date completed: " + telemetrysensorfunctionalassessment + "\n" +
+                        "date completed: " + telemetrysensoradequacy + "\n" +
+                        "date completed: " + telemetrysensornotes + "\n" +
+                        "date completed: " + changedtopumpdownfunction + "\n" +
+                        "date completed: " + changedtopumpdownadequacy + "\n" +
+                        "date completed: " + changedtopumpdownnotes + "\n" +
+                        "date completed: " + circutdiagramsavailable + "\n" +
+                        "date completed: " + circutdiagramscorrect + "\n" +
+                        "date completed: " + eawrrecords + "\n" +
+                        "date completed: " + wetwellcleanrecord + "\n" +
+                        "date completed: " + ultrasonicparameters + "\n" +
+                        "date completed: " + sitesignange + "\n" +
+                        "date completed: " + keybox + "\n" +
+                        "date completed: " + assetdataupdated + "\n" +
+                        "date completed: " + overflowlocationupdated + "\n" +
+                        "date completed: " + cosshrecords + "\n" +
+                        "date completed: " + standardjobsarray + "\n" +
+                        "date completed: " + assesssuitabilityofservicefrequency + "\n" +
+                        "date completed: " + isrecorrect + "\n" +
+                        "date completed: " + whatshouldREbe + "\n" +
+                        "date completed: " + standardjobcomments + "\n";
+
+                   // window.location.href = "mailto:msadler@anglianwater.co.uk?subject=Maintenance_Serviceability_Form1_(Mobile POC)&body=" + encodeURIComponent(emailBody);
+                    window.open("mailto:msadler@anglianwater.co.uk?subject=Maintenance_Serviceability_Form1_(Mobile POC)&body=" + encodeURIComponent(emailBody),target="_system");
+                    window.location.href="formsindex.html"
+                    //console.log(JSON.stringify(formDetails));
+
+                    ////create email
+                    //var sMailto = "mailto:msadler@anglianwater.co.uk?subject=Maintenance_Serviceability_Form1_(Mobile POC)&body=" + encodeURIComponent(emailBody);
+
+                    //function doMailto() {
+                    //    window.open(sMailto);
+                    //}
+               
+                    //capture in local storage
+                    localStorage.setItem(id, formDetails);
+
+                
+                });
+
+            });
+        </script>
+</html>

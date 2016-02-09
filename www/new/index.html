@@ -1,0 +1,633 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<title>MyJobs - Login</title>
+<script src="resources/sap-ui-core.js" type="text/javascript"
+	id="sap-ui-bootstrap" data-sap-ui-libs="sap.m,sap.ui.commons"
+	data-sap-ui-theme="sap_bluecrystal">
+	
+</script>
+<script type="text/javascript" src="cordova.js"></script>
+<script src="myresources/js/aes.js"></script>  
+<script src="myresources/js/html5sql.js"></script>  
+<script src="myresources/js/bqsync.js"></script>
+<script src="myresources/js/MyJobsDB.js"></script>
+<script src="myresources/js/MyJobsUtils.js"></script>
+
+<style>
+.KeyPad .sapMBtn {
+	  margin: 5px;
+	  width: 60px !important;
+	}
+
+	.KeyPad .sapMVBox {
+	  border: 1px solid #aaa;
+	  background-color: rgba(200, 200, 200, 0.3);;
+	  width: 220px
+	}
+
+	.KeyPad .sapMHBox {
+	  margin-left: 5px;
+	}
+</style>
+<script type="text/javascript">
+var PinCodePos=1;
+sap.ui.core.Control.extend('KeyPad', {
+  metadata: {
+    events: {
+      press: {}
+    }
+  },
+
+  init: function() {
+    PinCodePos=1;
+
+    var that = this;
+    function createBtn(d) {
+       return new sap.m.Button({
+         text: d,
+         press: function() {
+           that.firePress({value: d});
+         }
+       });
+    }
+
+    this.vbox = new sap.m.VBox({
+    	 items: [	
+        new sap.m.HBox({ items: [ 
+          new sap.m.Input("NewPassword1",{type: sap.m.InputType.Password}), 
+          new sap.m.Input("NewPassword2",{type: sap.m.InputType.Password}), 
+          new sap.m.Input("NewPassword3",{type: sap.m.InputType.Password}), 
+          new sap.m.Input("NewPassword4",{type: sap.m.InputType.Password}),
+      ]
+    }),
+        new sap.m.HBox({ items: [ createBtn('1'), createBtn('2'), createBtn('3')] }),
+        new sap.m.HBox({ items: [ createBtn('4'), createBtn('5'), createBtn('6')] }),
+        new sap.m.HBox({ items: [ createBtn('7'), createBtn('8'), createBtn('9')] }),
+        new sap.m.HBox({ items: [ createBtn('CLR'), createBtn('0'), createBtn('OK')] }),
+      ]
+    });
+  },
+
+  exit: function() {
+    if (this.vbox) {
+      this.vbox.destroy();
+      delete this.vbox;
+    }
+  },
+
+  renderer: function(oRm, oControl) {
+    oRm.write('<div align="center"');
+    oRm.writeControlData(oControl);
+    oRm.addClass('KeyPad');
+    oRm.writeClasses();
+    oRm.write('>');
+    oRm.renderControl(oControl.vbox);
+    oRm.write('</div>');
+  }
+});
+
+var kp = new KeyPad({
+  press: function(e) {
+    //sap.m.MessageToast.show(e.getParameter('value'));
+    if (e.getParameter('value')=="CLR"){
+      sap.ui.getCore().getElementById("NewPassword1").setValue('');
+sap.ui.getCore().getElementById("NewPassword2").setValue('');
+sap.ui.getCore().getElementById("NewPassword3").setValue('');
+sap.ui.getCore().getElementById("NewPassword4").setValue('');
+      PinCodePos=1;
+    
+    }else if (e.getParameter('value')=="OK"){
+    	checkLogin(1)
+      
+
+    }else{
+    if(PinCodePos==1){
+      sap.ui.getCore().getElementById("NewPassword1").setValue(e.getParameter('value'));
+      PinCodePos++;
+    }else if(PinCodePos==2){
+      sap.ui.getCore().getElementById("NewPassword2").setValue(e.getParameter('value'));
+      PinCodePos++;
+    }else    if(PinCodePos==3){
+      sap.ui.getCore().getElementById("NewPassword3").setValue(e.getParameter('value'));
+      PinCodePos++;
+    }else    if(PinCodePos==4){
+      sap.ui.getCore().getElementById("NewPassword4").setValue(e.getParameter('value'));
+      PinCodePos++;
+    }
+    }
+  }
+});
+
+function checkLogin()
+{
+var SQLStatement=""
+var user=""
+var pw=""
+var pin=""
+
+	pin=sap.ui.getCore().getElementById("NewPassword1").getValue()+
+    sap.ui.getCore().getElementById("NewPassword2").getValue()+
+    sap.ui.getCore().getElementById("NewPassword3").getValue()+
+    sap.ui.getCore().getElementById("NewPassword4").getValue()
+    var encryptedPin=CryptoJS.AES.encrypt(pin,pin)
+ 
+	SQLStatement="SELECT * from MyUserDets"
+
+	var pingood = false;
+	html5sql.process(SQLStatement,
+	 function(transaction, results, rowsArray){
+		
+		if( rowsArray.length < 1) {
+			showMessage("User has not been created")
+			
+		}else{	
+			cnt = 0;
+			while (cnt<rowsArray.length){
+			
+				if(CryptoJS.AES.decrypt(rowsArray[cnt].pincode,pin).toString(CryptoJS.enc.Utf8)==pin)
+						{
+						pingood=true;
+						localStorage.setItem("MobileUser",CryptoJS.AES.decrypt(rowsArray[cnt].mobileuser,pin).toString(CryptoJS.enc.Utf8))	
+						localStorage.setItem("EmployeeID",rowsArray[cnt].employeeid)
+						localStorage.setItem("VehicleReg",rowsArray[cnt].vehiclereg)		
+						localStorage.setItem("PinCode",CryptoJS.AES.decrypt(rowsArray[cnt].pincode,pin).toString(CryptoJS.enc.Utf8))		
+						localStorage.setItem("UserRec",rowsArray[cnt].id)
+						
+						SetLocalStorageChangePage('VehicleCheck.html')
+						}
+
+			
+			cnt++;
+			}
+			if(!pingood){
+				showMessage("Incorrect Pin Code")
+			}
+		}	
+	 },
+	 function(error, statement){
+			
+	 }        
+	);			
+
+
+
+}
+jQuery.sap.require("sap.m.MessageBox");
+var LogState;
+
+var dispLog = 							new sap.m.Button("displayLog", {
+    text: "Display Log",
+    tap: [ function(oEvt) {		  
+		displayLog()
+		  } ]
+})
+
+function showMessage(msg){
+	sap.m.MessageToast.show(msg, {
+		type: Error,
+		duration: Number(3000),
+		width: "30em",
+		my: "center center",
+		at: "center center",		
+		autoClose: true,
+
+	});
+	  sap.m.MessageBox.show(msg, {
+		         icon: sap.m.MessageBox.Icon.ERROR ,
+		         title: "Login Error",
+		         actions: [sap.m.MessageBox.Action.RETRY]
+		       }
+		     );
+}
+var oMessagePopover = new sap.m.MessagePopover({
+	width: 400,
+	beforeOpen: function (oEvt) {
+		console.log("beforeOpen", oEvt.getParameters());
+	},
+	beforeClose: function (oEvt) {
+		console.log("beforeClose", oEvt.getParameters());
+	},
+	afterOpen: function (oEvt) {
+		console.log("afterOpen", oEvt.getParameters());
+	},
+	afterClose: function (oEvt) {
+		console.log("afterClose", oEvt.getParameters());
+	},
+	itemSelect: function (oEvt) {
+		console.log("itemSelected", oEvt.getParameters());
+	},
+	listSelect: function (oEvt) {
+		console.log("listSelected", oEvt.getParameters());
+	}
+})
+function addLogToDisplay(type, dt, message) {
+	var mess = new sap.m.MessagePopoverItem({
+		type: type,
+		title: dt,
+		description: message
+	});
+	oMessagePopover.addItem(mess)
+	
+
+	var oObjectMessage = {
+		type: mess.getType(),
+		title: mess.getTitle() || 'Empty',
+		description: mess.getDescription()
+	};
+
+
+}
+var formNewUser = new sap.m.Dialog("dlgNewUser",{
+    title:"New User",
+    modal: true,
+    contentWidth:"1em",
+    buttons: [
+				new sap.m.Button({
+				   text: "Save",
+				   type: sap.m.ButtonType.Accept,
+				   tap: [ function(oEvt) {	
+					  // alert(sap.ui.getCore().byId("NewPinCode").getValue()+"-"+CryptoJS.AES.encrypt(sap.ui.getCore().byId("NewPinCode").getValue(),sap.ui.getCore().byId("NewPinCode").getValue()))
+					    CreateUser(CryptoJS.AES.encrypt(sap.ui.getCore().byId("NewUser").getValue(),sap.ui.getCore().byId("NewPinCode").getValue()),"", CryptoJS.AES.encrypt(sap.ui.getCore().byId("NewUser").getValue(),sap.ui.getCore().byId("NewPinCode").getValue()),
+					    		CryptoJS.AES.encrypt(sap.ui.getCore().byId("NewPassword").getValue(),sap.ui.getCore().byId("NewPinCode").getValue()), "0", CryptoJS.AES.encrypt(sap.ui.getCore().byId("NewPinCode").getValue(),sap.ui.getCore().byId("NewPinCode").getValue()))
+					    		
+					    		formNewUser.close()
+					    		
+				  					 }
+					    ]
+					
+				}),   
+				new sap.m.Button({
+				    text: "Cancel",
+				    type: sap.m.ButtonType.Reject,
+				    tap: [ function(oEvt) {		  
+						
+				    	formNewUser.close()
+						  } ]
+				})
+				],					
+    content:[
+ 			new sap.ui.layout.form.SimpleForm({
+				minWidth : 1024,
+				maxContainerCols : 2,
+				content : 	[							
+			                new sap.m.Label({text:"User"}),
+							new sap.m.Input("NewUser",{type: sap.m.InputType.Input}),
+							new sap.m.Label({text:"Password"}),
+							new sap.m.Input("NewPassword",{type: sap.m.InputType.Password}),
+							new sap.m.Label({text:"Pin Code"}),
+							new sap.m.Input("NewPinCode",{type: sap.m.InputType.Password})      
+							]
+ 				})
+            ]
+ })
+var formChangePassword = new sap.m.Dialog("dlgChangePassword",{
+    title:"Change Password",
+    modal: true,
+    contentWidth:"1em",
+    buttons: [
+				new sap.m.Button({
+					type: sap.m.ButtonType.Accept,
+				   text: "Save",
+				   tap: [ function(oEvt) {		
+						alert("Save Password")
+					    formChangePassword.close()} ]
+				}),   
+				new sap.m.Button({
+					type: sap.m.ButtonType.Reject,
+				    text: "Cancel",
+				    tap: [ function(oEvt) {		  
+						alert("Cancel") 
+				    	formChangePassword.close()
+						  } ]
+				})
+				],					
+    content:[
+ 			new sap.ui.layout.form.SimpleForm({
+				minWidth : 1024,
+				maxContainerCols : 2,
+				content : 	[							
+			                new sap.m.Label({text:"User"}),
+							new sap.m.Input("CPUser",{type: sap.m.InputType.Input}),
+							new sap.m.Label({text:"Old Password"}),
+							new sap.m.Input("CPOldPassword",{type: sap.m.InputType.Password}),
+							new sap.m.Label({text:"New Password"}),
+							new sap.m.Input("CPNewPassword",{type: sap.m.InputType.Password})    ,
+							new sap.m.Label({text:"Confirm Password"}),
+							new sap.m.Input("CPNewPassword1",{type: sap.m.InputType.Password})    
+							]
+ 				})
+            ]
+ })
+var formSettings = new sap.m.Dialog("dlgSettings",{
+    title:"Settings",
+    modal: true,
+    contentWidth:"1em",
+    buttons: [
+				new sap.m.Button("Save", {
+				    text: "Save",
+				    type: sap.m.ButtonType.Accept,
+				   tap: [ function(oEvt) {		
+					   if(sap.ui.getCore().byId("LogState").getState()){
+						   LogState="ON"
+						   
+					   }else{
+						   LogState="OFF"
+					   }
+					   
+
+					   formSettings.close()} ]
+				}),   
+				new sap.m.Button("Cancel", {
+				    text: "Cancel",
+				    type: sap.m.ButtonType.Reject,
+				    tap: [ function(oEvt) {		  
+						 
+				    	formSettings.close()
+						  } ]
+				})
+				],					
+    content:[
+ 			new sap.ui.layout.form.SimpleForm({
+				minWidth : 1024,
+				maxContainerCols : 2,
+				content : [
+							
+
+							new sap.m.Label({text:""}),
+			                new sap.m.Button("DeleteAbsence", {
+							    text: "Delete All Absence Data",
+							    tap: [ function(oEvt) {		  
+									deleteAllAbsence(0) 
+							    	formSettings.close()
+									  } ]
+							}),
+							
+							new sap.m.Label({text:"Logging "}),
+							new sap.m.Switch('LogState',{
+								state: true,
+								type: sap.m.SwitchType.AcceptReject
+							}),
+							new sap.m.Button("deleteLog", {
+							    text: "Delete",
+							    tap: [ function(oEvt) {		  
+									deleteLog()
+									  } ]
+							})
+
+									 
+					
+			               
+			                 
+						]
+ 					})
+
+            ]
+ })
+var busycreateDB = new sap.m.BusyDialog('busycreateDB',{text:'Createing the Database', title: 'Database',
+	onAfterRendering:function(){
+		//alert("hello")
+	}
+})
+
+var formCreateDB = new sap.m.Dialog("dlgCreateDB",{
+    title:"Database",
+    modal: true,
+    contentWidth:"1em",
+    buttons: [
+	       		new sap.m.Button( {
+	       			 text: "Create",
+	       			 icon:"sap-icon://acceprt",
+	       				 press: [ function(){
+	       					//alert("Going to create the db");
+	       				formCreateDB.close();
+	       						}]
+	       			 })       			 
+				],					
+    content:[
+ 			new sap.ui.layout.form.SimpleForm({
+			
+				maxContainerCols : 2,
+				content : 	[							
+			                new sap.m.Label({text:"Create The Database"}),
+							
+
+							]
+ 				})
+            ]
+ })
+ function prepareLogin()
+ {
+	html5sql.process("SELECT * from MyUserDets",
+			 function(transaction, results, rowsArray){
+					
+					if(rowsArray.length > 0 ){
+						formLogin.destroyContent()
+						formLogin.addContent(
+						new sap.ui.layout.form.SimpleForm({
+							title: "Enter your Pincode",
+							maxContainerCols : 2,
+							alignItems:"Center",
+						     
+							content : 	[							
+										kp,
+/* 										new sap.m.Label({text:"Pin Code"}),
+										new sap.m.Input("Pin",{type: sap.m.InputType.Number}),
+										new sap.m.Label({text:""}),
+							       		new sap.m.Button( {
+							       			 text: "Login",
+							       			 type: 	sap.m.ButtonType.Accept,
+							       			 icon:"sap-icon://accept",
+							       				 press: [ 
+							       				          function(){
+							       							checkLogin(1)
+							       							}
+							       				        ]
+							       			 }) */
+										]
+		 						})
+						)
+						sap.ui.getCore().getElementById("NewPassword1").setValue('');
+						sap.ui.getCore().getElementById("NewPassword2").setValue('');
+						sap.ui.getCore().getElementById("NewPassword3").setValue('');
+						sap.ui.getCore().getElementById("NewPassword4").setValue('');
+					}else{
+						
+						
+						 formLogin.addContent(
+								 new sap.ui.layout.form.SimpleForm({
+										title: "Enter your User & Password",
+										maxContainerCols : 2,
+										content : 	[	
+								 	new sap.m.Label({text:"User"}),
+									new sap.m.Input("User",{type: sap.m.InputType.Input}),
+									new sap.m.Label({text:"Password"}),
+									new sap.m.Input("Password",{type: sap.m.InputType.Password}),
+									new sap.m.Label({text:""}),
+						       		new sap.m.Button( {
+						       			 text: "Login",
+						       			 type: 	sap.m.ButtonType.Accept,
+						       			 icon:"sap-icon://accept",
+						       				 press: [ function(){
+						       					checkLogin(2)
+						       						}]
+						       			 }) 
+									]
+			 						}))
+							
+					}
+				
+			 },
+			 function(error, statement){
+					$("#errorMessage").html("<font color='red'>Invalid User or Password</font>")
+					$("#popupError").popup('open',{positionTo: '#errorMessagePosition'});
+			 }        
+			);
+
+		
+ }
+var formLogin = new sap.m.Dialog("dlgLogin",{
+    title:"Login",
+    modal: true,
+    contentWidth:"1em",
+    buttons: [
+	       		new sap.m.Button( {
+	       			 
+	       			 icon:"sap-icon://add",
+	       				 press: [ function(){
+	       					 sap.ui.getCore().byId("dlgNewUser").open();
+	       				
+	       						}]
+	       			 }),
+	       		new sap.m.Button( {
+	       			 
+	       			 icon:"sap-icon://edit",
+	       				 press: [ function(){
+	       					 sap.ui.getCore().byId("dlgChangePassword").open();
+	       				
+	       						}]
+	       			 })	       			 
+				],					
+    content:[
+ 			
+            ],
+            beforeOpen:function(){
+            	prepareLogin()
+            }
+ })
+
+
+html5sql.openDatabase("com.pjo.myjobsbackfill","myjobsbackfill", 5*1024*1024);	
+//createDB();
+//outputLogToDB();
+
+
+
+var page  = new sap.m.Page('homePage',{
+	title:"MyJobs",    
+	footer:new sap.m.Bar (
+			{
+				id : 'master-footer',
+
+				contentRight : [
+
+				       		new sap.m.Button({
+				       			 
+				       			 icon:"sap-icon://edit",
+				       				 press: [ function(){
+				       					
+				       					 sap.ui.getCore().byId("dlgChangePassword").open(); ;
+				       						}]
+				       			 })
+					],
+			contentMiddle: [				       		new sap.m.Button({
+      			 
+      			 icon:"sap-icon://settings",
+      				 press: [ function(){
+      					
+      					 sap.ui.getCore().byId("dlgSettings").open(); ;
+      						}]
+      			 })],
+			contentLeft : [
+
+				       		new sap.m.Button( {
+				       			 
+				       			 icon:"sap-icon://add",
+				       				 press: [ function(){
+				       					 sap.ui.getCore().byId("dlgNewUser").open();
+				       				
+				       						}]
+				       			 })
+					]
+			}),
+    content: 	[
+      			new sap.ui.layout.form.SimpleForm({
+    				minWidth : 800,
+    				maxContainerCols : 1,
+    				content : 	[							
+								
+								
+    							]
+     				})
+             	 
+             	 
+             	 
+             	 
+             	 
+             	 
+             	 
+              	
+				],
+    enableScrolling:false,showNavButton: "{device>/isPhone}" });
+
+var app = new sap.m.App();
+
+app.setInitialPage(page.getId());	
+	
+
+
+page.placeAt("body");
+$(function() {
+	html5sql.process(
+			["SELECT * FROM sqlite_master WHERE type='table';"],
+			function(transaction, results, rowsArray){
+				
+				if( rowsArray.length <10) {
+
+					busycreateDB.open()
+
+					createDB(1)
+					
+/* 					sap.m.MessageBox.show("Database does not exist, Create?", {
+				         icon: sap.m.MessageBox.Icon.ERROR ,
+				         title: "Database Error",
+				         actions: [sap.m.MessageBox.Action.YES],
+				         onClose: function () {
+				        		 createDB(1)
+								formLogin.open()
+							}
+				       }
+				     ); */
+					
+					}else{
+						 
+						 formLogin.open()
+						
+					}
+				
+
+			},
+			 function(error, statement){
+				 
+			 }   
+		);
+	
+	});
+</script>
+</head>
+<body id="body" class="sapUiBody">
+<script></script>
+</body>
+<script></script>
+</html>

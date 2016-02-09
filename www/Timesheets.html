@@ -1,0 +1,768 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Access-Control-Allow-Origin" content="*"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<title>MyJobs - TimeSheet</title>
+<script src="resources/sap-ui-core.js" type="text/javascript"
+	id="sap-ui-bootstrap" data-sap-ui-libs="sap.m,sap.ui.commons"
+	data-sap-ui-theme="sap_bluecrystal">
+	
+</script>
+
+<script src="myresources/js/buildDetails.js"></script>
+<script src="myresources/js/html5sql.js"></script>  
+<script src="myresources/js/bgsync.js"></script>
+<script src="myresources/js/MyJobsDB.js"></script>
+<script src="myresources/js/MyJobsUtils.js"></script>
+
+<script type="text/javascript">
+jQuery.sap.require("sap.m.MessageBox");
+html5sql.openDatabase("com.pjo.myjobsbackfill","myjobsbackfill", 5*1024*1024);		
+var currentStatus;
+var firstNotification="";
+var selectedTimesheetDate;
+var selectedTsheetEntry;
+var selectedTimesheetId;
+var EmployeeID = localStorage.getItem("EmployeeID")
+var detailFooter = new sap.m.Bar({
+		id: 'detailFooter',
+		contentRight : [
+						
+						]
+		
+	})
+
+var standardList  = new sap.m.List(
+		  {
+			  //items:standardListItem,
+			  itemPress:[function(oEvt) {		  
+				  buildDetailsContent(oEvt.getParameter("listItem").getId());
+				 
+				  oSplitApp.to("detail")}],
+			  mode:sap.m.ListMode.SingleSelectMaster
+		  });
+	function handleChange(oEvent) {
+		var oDRS = oEvent.oSource;
+		var sFrom = oEvent.getParameter("from");
+		var sTo = oEvent.getParameter("to");
+		var bValid = oEvent.getParameter("valid");
+
+		
+
+		var oText = sap.ui.getCore().byId("TextEvent");
+		//oText.setText("Event " + iEvent + "\nId: " + oEvent.oSource.getId() + "\nFrom: " + sFrom + "\nTo: " + sTo + "\nvalid: " + bValid);
+		if (bValid) {
+			oDRS.setValueState(sap.ui.core.ValueState.None);
+		} else {
+			oDRS.setValueState(sap.ui.core.ValueState.Error);
+		}
+		
+		startDate=sFrom.getFullYear().toString()+zeroFill(sFrom.getMonth()+1)+zeroFill(sFrom.getDate())
+		endDate=sTo.getFullYear().toString()+zeroFill(sTo.getMonth()+1)+zeroFill(sTo.getDate())
+		
+	};
+	
+var firstEntry="none:-1";
+
+var formNewTimesheetEntry = new sap.m.Dialog("dlgTimesheetEntry",{
+    title:"Create Timesheet Entry",
+    modal: true,
+    contentWidth:"1em",
+    buttons: [
+					new sap.m.Button( {
+					    text: "Save",
+					    tap: [ function(oEvt) {		  
+					    	createTimesheetEntry(
+									sap.ui.getCore().byId("Job").getSelectedItem().getText(),
+
+									sap.ui.getCore().byId("Time").getValue(),
+						
+									sap.ui.getCore().byId("OT15").getValue(),
+									sap.ui.getCore().byId("OT20").getValue());  
+									formNewTimesheetEntry.close()
+									
+							  } ]
+					   
+					}),   
+					new sap.m.Button( {
+					    text: "Cancel",
+					    tap: [ function(oEvt) {		  
+							 
+					    	formNewTimesheetEntry.close()} ]   
+					})
+					],					
+    content:[
+ 			new sap.ui.layout.form.SimpleForm({
+				minWidth : 1024,
+				maxContainerCols : 2,
+				content : [
+								
+								
+								new sap.m.Label({text:"Job"}),
+								new sap.m.Select('Job',{
+									
+									items: [
+
+									],
+
+									change: function(oControlEvent) {
+										jQuery.sap.log.info("Event fired: 'change' value property to " + oControlEvent.getParameter("selectedItem") + " on " + this);
+									}
+								}),
+								
+								
+								new sap.m.Label({text:"Time"}),
+								new sap.m.Input("Time",{ type: sap.m.InputType.Number}),
+								
+								new sap.m.Label({text:"Overtime at 1.5"}),
+								new sap.m.Input("OT15",{ type: sap.m.InputType.Number}),
+						
+
+
+			
+			new sap.m.Label({text:"Overtime at 2.0"}),
+			new sap.m.Input("OT20",{ type: sap.m.InputType.Number}),								
+				                  
+							]
+ 					})
+
+            ],
+            afterOpen:function(){BuildJobsList()
+            	sap.ui.getCore().byId("Time").setValue("")
+				
+				sap.ui.getCore().byId("OT15").setValue("")
+				sap.ui.getCore().byId("OT20").setValue("")  
+            	},
+
+	 })
+var formNewTimesheet = new sap.m.Dialog("dlgNewTsheet",{
+    title:"Create Timesheet",
+    modal: true,
+    contentWidth:"1em",
+    buttons: [
+					new sap.m.Button( {
+					    text: "Save",
+					    tap: [ function(oEvt) {		  
+							createTimesheetHeader(sap.ui.getCore().byId("NewTimesheetDate").getValue(),sap.ui.getCore().byId("Comments").getValue());  
+									
+							  } ]
+					   
+					}),   
+					new sap.m.Button( {
+					    text: "Cancel",
+					    tap: [ function(oEvt) {		  
+							 
+					    	formNewTimesheet.close()} ]   
+					})
+					],					
+    content:[
+ 			new sap.ui.layout.form.SimpleForm({
+				minWidth : 1024,
+				maxContainerCols : 2,
+				content : [
+								
+
+								new sap.m.Label({text: "Date:"}),
+								
+								new sap.m.DateTimeInput('NewTimesheetDate',{
+									width : "99%",
+									type : "Date",
+									displayFormat : "yyyy/MM/dd",
+									dateValue : new Date()
+								}),
+								new sap.m.Label({text: "Comments:"}),
+								new sap.m.TextArea("Comments",{ rows: 3})
+							]
+ 					})
+
+            ],
+      
+	 })
+function buildTimeSheets(){
+var item;	
+var lStatus="";
+var Status=""
+var StatusState="";
+var StatusIcon="";
+var firstTsheet="";
+	SQLStatement="SELECT * from tsdata where activity='header'"
+html5sql.process(SQLStatement,
+		 function(transaction, results, rowsArray){
+
+			cnt = 0;
+			while (cnt<rowsArray.length){
+				item=rowsArray[cnt];
+				if(cnt==0){
+					firstTsheet="tsheet:"+item.date
+				}
+				 if(item.skill=="SUBMITTED"){
+					 StatusState="Error"
+					 Status="Submitted"
+				 }else{
+					 StatusState="Success"
+					 Status="Local"				 
+				 }			
+
+				 
+				standardList.addItem(
+						  new sap.m.ObjectListItem("tsheet:"+item.date,
+							  {
+						  title:formatDate(item.date),
+						 
+						  type:sap.m.ListType.Active,
+					
+						
+						    firstStatus: [
+						                new sap.m.ObjectStatus( {
+						                    text: Status,
+						                    state:StatusState
+						                })
+						                ]
+					
+							  })
+						  );
+					  cnt++;
+			 }
+			oMasterPage.destroyContent()
+			oMasterPage.addContent(standardList);
+			buildDetailsContent(firstTsheet)
+		 },
+		 function(error, statement){
+			
+		 }        
+		);	
+cnt = 0;
+
+
+
+
+}
+function buildDetails(){
+	
+		var objectHeader  = new sap.m.ObjectHeader('HEADER',
+{
+			
+	title:"",
+	number:'',
+	numberUnit:'',
+	           
+	            	    firstStatus: [
+	            	                new sap.m.ObjectStatus( 'State',{
+	            	                  
+	            	                   
+	            	                })
+	            	                ],
+	            	                attributes: [
+	         	               	                new sap.m.ObjectAttribute('TSComments',{
+	         	            	                   
+	         	            	                })
+	         	               	                ]
+
+});
+
+
+return objectHeader;
+
+}
+
+
+
+function buildDetailsContent(aid){
+
+var res = aid.split(":")
+var tsheet=res[1];
+
+var StatusState="Success";
+var StatusIcon="";
+var Status="";
+var NPTime=0;
+var NP15=0;
+var NP20=0;
+var PTime=0;
+var P15=0;
+var P20=0;
+var TTime=0;
+var T15=0;
+var T20=0;
+var opTable   =sap.ui.getCore().getElementById('TsheetTable');
+var opTotTable=sap.ui.getCore().getElementById('TsheetTotalTable');
+SQLStatement="SELECT * from tsdata where date = '"+tsheet+"' and activity = 'header'"
+
+opTable.destroyItems();	
+opTotTable.destroyItems();	
+html5sql.process(SQLStatement,
+	 function(transaction, results, rowsArray){
+		
+		 if (rowsArray.length>0){
+			 selectedTimesheetId=rowsArray[0].id
+			 if(rowsArray[0].skill=="SUBMITTED"){
+				 StatusState="Error"
+				 Status="Submitted"
+					 
+					 sap.ui.getCore().getElementById('SubmitTimeSheet').setVisible(false)
+			 }else{
+				 sap.ui.getCore().getElementById('SubmitTimeSheet').setVisible(true)
+				 StatusState="Success"
+				 Status="Local"				 
+			 }
+			 
+			 sap.ui.getCore().getElementById('HEADER').setTitle(formatDate(rowsArray[0].date))
+			  sap.ui.getCore().getElementById('TSComments').setTitle("Comments ")	
+			  sap.ui.getCore().getElementById('TSComments').setText(rowsArray[0].job)	
+						                
+						               
+			 selectedTimesheetDate=rowsArray[0].date;
+			 sap.ui.getCore().getElementById('HEADER').destroyStatuses()
+			 sap.ui.getCore().getElementById('HEADER').addStatus( new sap.m.ObjectStatus({
+					text : Status,
+					
+
+					state : StatusState
+			 }))
+			
+			  
+
+			 
+		 }
+
+			
+		 html5sql.process("SELECT * FROM tsdata where activity != 'header' and date = '"+tsheet+"' ;",
+				 function(transaction, results, rowsArray){
+			 
+					var n = 0;
+
+					while (n < rowsArray.length) {
+						
+						if(rowsArray[n].job.substring(0,1)=="U"){
+							NPTime+=parseFloat(rowsArray[n].time);
+							NP15+=parseFloat(rowsArray[n].ot15);
+							NP20+=parseFloat(rowsArray[n].ot20);
+						}else{
+							PTime+=parseFloat(rowsArray[n].time);
+							P15+=parseFloat(rowsArray[n].ot15);
+							P20+=parseFloat(rowsArray[n].ot20);
+						}
+						
+						opTable.addItem (new sap.m.ColumnListItem("TSD:"+rowsArray[n].id,{
+							cells : 
+								[
+					            new sap.m.Text({text: rowsArray[n].job+"-"+rowsArray[n].activity}),
+
+					            new sap.m.Text({text: parseFloat(rowsArray[n].time).toFixed(2)}),
+					            new sap.m.Text({text: parseFloat(rowsArray[n].ot15).toFixed(2)}),
+					            new sap.m.Text({text: parseFloat(rowsArray[n].ot20).toFixed(2)})
+						 		]
+							}));
+						n++;
+					 }
+	
+
+					opTotTable.addItem (new sap.m.ColumnListItem({
+						cells : 
+							[
+				            new sap.m.Text({text: "Productive"}),
+
+				            new sap.m.Text({text: PTime.toFixed(2)}),
+				            new sap.m.Text({text: P15.toFixed(2)}),
+				            new sap.m.Text({text: P20.toFixed(2)})   
+					 		]
+						}));
+					opTotTable.addItem (new sap.m.ColumnListItem({
+						cells : 
+							[
+				            new sap.m.Text({text: "Non Productive"}),
+
+				            new sap.m.Text({text: NPTime.toFixed(2)}),
+				            new sap.m.Text({text: NP15.toFixed(2)}),
+				            new sap.m.Text({text: NP20.toFixed(2)})   
+					 		]
+						}));
+					opTotTable.addItem (new sap.m.ColumnListItem({
+						cells : 
+							[
+				            new sap.m.Text({text: "Total"}),
+
+				            new sap.m.Text({text: (PTime+NPTime).toFixed(2)}),
+				            new sap.m.Text({text: (P15+NP15).toFixed(2)}),
+				            new sap.m.Text({text: (P20+NP20).toFixed(2)})   
+					 		]
+						}));
+				 },
+				 function(error, statement){
+					
+				 }        
+				);	
+	 },
+	 function(error, statement){
+		 //outputLogToDB(); 
+	 }        
+	);	
+
+ 
+
+
+
+
+
+
+
+
+}
+function createTimesheetHeader(d,c){
+	var x =d.split("/")
+	var SQLStatement="";
+	var tsdate= new Date(Number(x[2])+2000,x[0],x[1])
+	
+
+	TimesheetDate = zeroFill1(tsdate.getFullYear().toString()) + zeroFill1((tsdate.getMonth()).toString() ) +  zeroFill1(tsdate.getDate().toString());
+	SQLStatement="Select * from TSDATA where date = '"+TimesheetDate+"'"
+
+	html5sql.process(SQLStatement,
+		 function(transaction, results, rowsArray){
+			if(rowsArray.length>0){
+				formNewTimesheet.close()
+				
+				showErrorMessage("Timesheet Error","Timesheet already exists for "+d)
+			
+				}else{
+					SQLStatement='INSERT INTO TSData ( date , job , skill, activity, time, ot15, ot20) VALUES ( '+ 
+					  '"'+TimesheetDate+'",'+
+					  '"'+c+'",'+
+					  '"",'+
+					  '"header",'+
+					  '"",'+
+					  '"",'+
+					  '"");'
+					html5sql.process(SQLStatement,
+						 function(transaction, results, rowsArray){
+					
+							formNewTimesheet.close()
+							window.location.href="Timesheets.html"
+						 },
+						 function(error, statement){
+							 formNewTimesheet.close()
+								
+						 }        
+						);
+				}
+		},
+		 function(error, statement){
+			formNewTimesheet.close()
+			
+		 }        
+		);
+		
+	
+	}
+function submitTimesheet(){
+
+	
+
+
+	SQLStatement="update  TSDATA set skill = 'SUBMITTED' where id = '"+selectedTimesheetId+"'",
+
+			
+
+			html5sql.process(SQLStatement,
+				 function(transaction, results, rowsArray){
+						window.location.href="Timesheets.html"
+					
+				 },
+				 function(error, statement){
+					
+				 }        
+				);
+	}
+function deleteTimesheetEntry(){
+res=selectedTsheetEntry.split(":")
+	
+	
+
+		SQLStatement='Delete from TSData where id = "'+res[1]+'"'
+
+				
+
+				html5sql.process(SQLStatement,
+					 function(transaction, results, rowsArray){
+							sap.ui.getCore().getElementById('TsheetTable').removeItem(selectedTsheetEntry);
+							//window.location.href="Timesheets.html"
+						
+					 },
+					 function(error, statement){
+						
+					 }        
+					); 
+		}
+function deleteTimesheetData(){
+
+
+			SQLStatement='Delete from TSData where date = "'+selectedTimesheetDate+'"'
+
+					
+
+					html5sql.process(SQLStatement,
+						 function(transaction, results, rowsArray){
+								
+								window.location.href="Timesheets.html"
+							
+						 },
+						 function(error, statement){
+							
+						 }        
+						);  
+			}
+function createTimesheetEntry(job,time,ot15,ot20){
+	var res=job.split("-")
+
+	SQLStatement='INSERT INTO TSData ( date , job, activity, time, ot15, ot20) VALUES ( '+ 
+								  '"'+selectedTimesheetDate+'",'+
+								  '"'+res[0]+'",'+
+								  '"'+res[1]+'",'+
+								  '"'+'0'+time+'",'+
+								  '"'+'0'+ot15+'",'+
+								  '"'+'0'+ot20+'");'
+
+			
+
+			html5sql.process(SQLStatement,
+				 function(transaction, results, rowsArray){
+				buildDetailsContent("Added:"+selectedTimesheetDate)
+				
+				 },
+				 function(error, statement){
+					
+				 }        
+				);
+	}
+function buildDetailsTable(){
+	
+       
+     	     var TsheetData=          
+								new sap.m.Table("TsheetTable",{
+
+
+									columns:[
+									        
+									         new sap.m.Column({header: new sap.m.Label({text:"Job"}),
+									        	 hAlign: 'Left',width: '55%',minScreenWidth : "" , demandPopin: true}),
+									        
+									         new sap.m.Column({header: new sap.m.Label({text:"Time"}),
+									        	 hAlign: 'Right',width: '15%', minScreenWidth : "" , demandPopin: false}),
+										
+									         new sap.m.Column({header: new sap.m.Label({text:"OT15"}),
+									        	 hAlign: 'Right',width: '15%', minScreenWidth : "" , demandPopin: false}),
+									         new sap.m.Column({header: new sap.m.Label({text:"OT20"}),
+									        	 hAlign: 'Right',width: '15%',minScreenWidth : "" , demandPopin: true })       	                         
+							           	     ],
+							           	  mode: sap.m.ListMode.SingleSelectMaster
+								})
+     	    TsheetData.attachSelectionChange(function(oEvent) {
+	     	    	selectedTsheetEntry=oEvent.getParameter("listItem").getId();
+	     	    	})	  	    
+	return TsheetData;
+
+	}
+function buildDetailsTotalTable(){
+	
+    
+     var TsheetData=          
+						new sap.m.Table("TsheetTotalTable",{
+							columns:[
+							        
+							         new sap.m.Column({header: new sap.m.Label({text:"Totals"}),
+							        	 hAlign: 'Left',width: '55%',minScreenWidth : "" , demandPopin: true}),
+							        
+							         new sap.m.Column({header: new sap.m.Label({text:"Time"}),
+							        	 hAlign: 'Right',width: '15%', minScreenWidth : "" , demandPopin: false}),
+								
+							         new sap.m.Column({header: new sap.m.Label({text:"OT15"}),
+							        	 hAlign: 'Right',width: '15%', minScreenWidth : "" , demandPopin: false}),
+							         new sap.m.Column({header: new sap.m.Label({text:"OT20"}),
+							        	 hAlign: 'Right',width: '15%',minScreenWidth : "" , demandPopin: true })       	                         
+					           	     ]
+						})
+	
+return TsheetData;
+
+}
+function BuildJobsList(){
+
+
+		var SQLStatement="";
+		var FirstVal="";
+		SQLStatement="SELECT MyNotifications.pcode, MyNotifications.type as jobtype, MyOperations.orderno, MyOperationsSplit.assignedto as empid, MyOperations.opno, myuserstatus.statusdesc  as opstat, MyOrders.type, MyOperations.startdate, MyOperations.enddate, MyOrders.address,  MyOrders.postcode,MyOrders.notifno, MyOrders.gis, MyOperations.status, MyOrders.priority, MyOperations.apptstart, MyOperations.apptend, MyOrders.shorttext as orderdesc , MyOperations.shorttext as operationdesc , MyOrders.contact , MyOperationInfo.Type as infotype , MyOperationInfo.value1 as infovalue1, MyOperationInfo.value2 as infovalue2"
+			SQLStatement+=" From MyOperations "
+			SQLStatement+="left join myoperationinfo on myoperations.orderno = myoperationinfo.orderno "
+			SQLStatement+="	and myoperations.opno = myoperationinfo.opno "
+			SQLStatement+="left join myoperationssplit on myoperations.orderno = myoperationssplit.orderno "
+			SQLStatement+="	and myoperations.opno = myoperationssplit.opno "
+			SQLStatement+="left join myuserstatus on myoperations.orderno = myuserstatus.orderno "
+			SQLStatement+="	and myoperations.opno = myuserstatus.opno "
+			SQLStatement+="left join myorders on myoperations.orderno = myorders.orderno "
+			SQLStatement+="left join mynotifications on myorders.notifno = mynotifications.notifno "
+			SQLStatement+=" where myoperationssplit.assignedto = '"+EmployeeID+"'"
+			html5sql.process(SQLStatement,
+			 function(transaction, results, rowsArray){
+				
+				sap.ui.getCore().getElementById("Job").destroyItems();
+				
+					for (var n = 0; n < rowsArray.length; n++) {
+						item = rowsArray[n];
+						sap.ui.getCore().getElementById("Job").addItem(
+								new sap.ui.core.Item({
+									key: item.orderno+item.opno,
+									text: item.orderno+item.opno+"-"+item.operationdesc
+								}))
+					}
+					html5sql.process("Select * from tsnpJobs where subtype='0';",
+							 function(transaction, results, rowsArray){
+							
+								
+									for (var n = 0; n < rowsArray.length; n++) {
+										item = rowsArray[n];
+										sap.ui.getCore().getElementById("Job").addItem(
+												new sap.ui.core.Item({
+													key: item.jobno,
+													text: item.jobno+"-"+item.description
+												}))
+									}
+								
+									
+							 },
+							 function(error, statement){
+							
+							 }        
+							);
+					
+			 },
+			 function(error, statement){
+				
+			 }        
+			);
+
+		}
+
+
+
+	var oDetailPage = new sap.m.Page(
+			"detail",
+			{
+				title : "Entries",
+				content : [buildDetails(),buildDetailsTable(),
+				           new sap.m.Text(""),
+				           buildDetailsTotalTable()],
+				footer  : new sap.m.Bar (
+						{
+							id : 'master-footer',
+							contentLeft : [
+												new sap.m.Button("SubmitTimeSheet", {
+								   					 text: "Submit",
+								   					 type: 	sap.m.ButtonType.Accept,
+								   					 visible: true,
+								   					 icon: "sap-icon://accept",
+								  					 press: [ function(){
+								  						submitTimesheet(); 
+								  						
+								  							}]
+													 })
+											],
+							contentMiddle : [
+											new sap.m.Button("AddNewTimeSheet", {
+							   					 text: "Create",
+							   					 icon: "sap-icon://create-entry-time",
+							  					 press: [ function(){
+							  						formNewTimesheetEntry.open(); 
+							  						
+							  							}]
+												 })
+										],
+							contentRight : [
+									new sap.m.Button("DeleteNewTimeSheet", {
+					   					 text: "Delete",
+					   					 icon: "sap-icon://delete",
+					  					 press: [ function(){
+					  						deleteTimesheetEntry()
+					  						
+					  							}]
+										 })
+								]
+						}),
+				showNavButton: true,
+					 
+					 navButtonPress: function() {				                  
+						window.location.reload()
+					 }
+			}).addStyleClass("sapUiStdPage");
+
+
+	//create first master page
+
+	var oMasterPage = new sap.m.Page(
+			"master",
+			{
+				 headerContent : new sap.m.Button({
+                     icon: "sap-icon://home",
+                     press : function() {
+                    	 window.location.href="Home.html"
+                     }
+}),
+				title : "Timesheets",
+				
+				content : [ buildTimeSheets()],
+				showNavButton: "{device>/isPhone}" ,
+				footer  : new sap.m.Bar (
+						{
+							id : 'master-footer1',
+
+							contentLeft : [
+									new sap.m.Button("AddNewTimeSheetEntry", {
+					   					 text: "create",
+					   					 icon: "sap-icon://create",
+					  					 press: [ function(){
+					  						formNewTimesheet.open(); 
+					  						
+					  							}]
+										 })
+								],
+								contentRight : [
+												new sap.m.Button("DeleteTimeSheetEntry", {
+								   					 text: "Delete",
+								   					 icon: "sap-icon://delete",
+								  					 press: [ function(){
+								  						deleteTimesheetData()
+								  							
+								  							}]
+													 })
+											]
+						})			 
+
+			});
+	
+	
+	
+	
+	//create SplitApp()
+	var oSplitApp = new sap.m.SplitApp({
+		detailPages: [oDetailPage],
+		masterPages: [oMasterPage],
+		initialDetail: "detail",
+		initialMaster: "master",
+		afterMasterOpen: function(){
+			jQuery.sap.log.info("master is opened");
+		},
+		afterMasterClose: function(){
+			jQuery.sap.log.info("master is closed");
+		}
+	});
+
+	if(jQuery.device.is.tablet || jQuery.device.is.desktop){
+		oSplitApp.setDefaultTransitionNameDetail("fade");	
+	}
+
+	oSplitApp.placeAt("body");
+</script>
+</head>
+<body id="body" class="sapUiBody">
+</body>
+</html>

@@ -1,0 +1,225 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <link href="css/site.css" rel="stylesheet" />
+        <script src="js/jq.1.10.2.js"></script>
+        <script src="js/jqui.1.9.2.js"></script>
+        <script src="js/bs.3.1.1.js"></script>
+        <script src="js/functions.js"></script>
+        <link rel="stylesheet" href="css/bs.3.1.1.css" />
+        <link rel="stylesheet" href="css/jqui.1.9.2_smoothness.css" />
+        
+        <title>Pollution Feedback</title>
+    </head>
+<body>
+    <div class="container">
+        <div class="well row" style="margin-top: 10px">
+            <div class="col-md-6">
+                <div class="row">
+                    <a href="formsindex.html"><button class="btn btn-lg btn-info">Home</button></a>
+                </div>
+                <div class="row">
+                    <h1><b>Pollution Feedback Form</b></h1>
+                </div>
+            </div>
+            <form   id="MyJobsForm" action="ProcessForm.html">
+            <input id="FormName" name="FormName" value="PollutionFeedback" hidden>
+            <div class="col-md-6">
+                <div class="row">
+				<input class="form-control" id="workorder" merge="orderno" placeholder="Enter Work Order"/>
+                    <!--<label class="pull-right" id="workorderlabel"></label>-->
+                </div>
+                <div class="row">
+				<input class="form-control" id="functionallocation" merge="funcloc_desc" placeholder="Enter Functional Location"/>
+                    <!--<label class="pull-right"  value="~FunctionalLocation" id="functionallocationlabel"></label>-->
+                </div>
+            </div>
+
+        </div>
+        
+            <div class="form-group">
+                <div class="well row">
+                    <div class="col-md-6 col-sm-6">                       
+                        <select class="feedback-input" id="pollutionsitetype" name="pollutionsitetype">
+                            <option value="" selected>Pollution Site Type</option>
+                            <option value="AN">Area Name</option>
+                            <option value="AS">Asset Short Code</option>
+                            <option value="HI">Highway</option>
+                            <option value="SN">Site Name</option>
+
+                        </select>                     
+                        <select class="feedback-input" id="dischargetype" name="dischargetype">
+                            <option value="" selected>Discharge Type</option>
+                            <option value="1">STW outfall</option>
+                            <option value="2">CSO</option>
+                            <option value="3">SWO</option>
+                            <option value="4">Overland Flow</option>
+                            <option value="CS">Combined Sewer Overflow</option>
+                            <option value="FS">Foul Sewer</option>
+                            <option value="OW">Other Water Industry Premises</option>
+                            <option value="PS">Pumping Station</option>
+                            <option value="RM">Rising Main</option>
+                            <option value="WT">Water Treatement Works</option>
+                            <option value="WD">Water Distribution System</option>
+                            <option value="SW">Surface Water Outfall</option>
+                            <option value="ST">Storm Tank</option>
+                            <option value="SE">Sewage Treatment Works</option>
+                        </select>
+                        <select class="feedback-input" id="watercoursewidth" name="watercoursewidth">
+                            <option value="" selected>Watercourse Width</option>
+                            <option value="1"><1M</option>
+                            <option value="2">1 to 5M</option>
+                            <option value="3">>5M</option>
+                        </select>
+                        <select class="feedback-input" id="amenitiesimpact" name="amenitiesimpact">
+                            <option value="" selected>Amenities Impact</option>
+                            <option value="MA">Minor Access / Rear of Properties</option>
+                            <option value="PA">Public Access via footpath or highway</option>
+                            <option value="RE">Recreational area / park / watersports</option>
+                            <option value="PO">Potable abstraction point downstream</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-6 col-sm-6">
+                        <input name="pollutionsite" type="text" class="feedback-input" placeholder="Pollution Site" id="pollutionsite" />
+                        <select class="feedback-input" id="watercoursetype" name="watercoursetype">
+                            <option value=""  selected>Watercourse Type</option>
+                            <option value="DD">Dry Ditch</option>
+                            <option value="CA">Canal</option>
+                            <option value="LP">Lake/Pond</option>
+                            <option value="ST">Stream</option>
+                            <option value="FR">Flowing River</option>
+                        </select>
+                        <input name="sizeofimpact" type="text" class="feedback-input" placeholder="Size of Impact (m2)" id="sizeofimpact" />
+                        <select class="feedback-input" id="aestheticimpact" name="aestheticimpact">
+                            <option value=""  selected>Aesthetic Impact</option>
+                            <option value="FS">Faint Smell / Odour</option>
+                            <option value="SS">Strong Smell</option>
+                            <option value="GW">Grey Water</option>
+                            <option value="FO">Foam / Scum / Iridescence</option>
+                            <option value="FA">Fats / Oils / Greases</option>
+                            <option value="IN">Industrial Chemicals</option>
+                            <option value="LI">Litter / Rags</option>
+                            <option value="SE">Sewage Fungus</option>
+                            <option value="FA">Faeces / Gross Litter</option>
+                        </select>
+                    </div>
+                    
+
+                </div>
+
+                <div class="well row">
+                    <div class="row col-md-12 col-sm-12">
+
+      					 <input type="TEXT" id="formalsampletakenV" name="formalsampletakenV" HIDDEN value="NO">
+                        <div class="btn-group btn-toggle col-md-2 col-sm-3" id="formalsampletaken"  style="margin-left: 10px">
+                        	
+                           
+                            <button type="button" onclick = 'document.getElementById("formalsampletakenV").value="YES"' class="btn btn-lg btn-default">Yes</button>
+                            <button type="button" onclick = 'document.getElementById("formalsampletakenV").value="NO"' class="btn btn-lg btn-primary active">No</button>
+                        </div>
+
+                       
+
+                        <label type="text" class="feedback-input col-md-9 col-sm-8">Formal Sample Taken?</label>
+                    </div>
+                </div>
+                
+                <div class="well row">
+                    <table class="table table-bordered">
+                        <tr>
+                            <th style="min-width:114px">Sample Point</th>
+                            <th>Distance from POD (m)</th>
+                            <th>On Site NH3 (mgl)</th>
+                            <th style="min-width:174px">Sample Sent to Lab?</th>
+                        </tr>
+                        <tr>
+                            <th>Upstream</th>
+                            <td><input class="feedback-input-table" id="upstreamdistance" name="upstreamdistance"/></td>
+                            <td><input class="feedback-input-table" id="upstreamonsitenh3" name="upstreamonsitenh3"/></td>
+                            <td>
+                             <input type="TEXT" id="upstreamsenttolabV" name="upstreamsenttolabV" HIDDEN value="NO">
+                                <div class="btn-group btn-toggle" id="upstreamsenttolab" style="margin-left: 10px">
+                                
+                               
+                                    <button type="button" onclick = 'document.getElementById("upstreamsenttolabV").value="YES";this.active=true' class="btn btn-lg btn-default">Yes</button>
+                                    <button type="button" onclick = 'document.getElementById("upstreamsenttolabV").value="NO";this.active=true' class="btn btn-lg btn-primary active">No</button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Pt of Disc</th>
+                            <td><input class="feedback-input-table" id="ptofdiscdistance" name="ptofdiscdistance"/></td>
+                            <td><input class="feedback-input-table" id="ptofdisconsitenh3" name="ptofdisconsitenh3"/></td>
+                            <td>
+                             <input type="TEXT" id="ptofdiscsenttolabV" name="ptofdiscsenttolabV" HIDDEN value="NO">
+                                <div class="btn-group btn-toggle" id="ptofdiscsenttolab" style="margin-left: 10px">
+                               
+                                    <button type="button" onclick = 'document.getElementById("ptofdiscsenttolabV").value="YES"' class="btn btn-lg btn-default">Yes</button>
+                                    <button type="button" onclick = 'document.getElementById("ptofdiscsenttolabV").value="NO"' class="btn btn-lg btn-primary active">No</button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Downstream 1</th>
+                            <td><input class="feedback-input-table" id="downstream1distance" name="downstream1distance"/></td>
+                            <td><input class="feedback-input-table" id="downstream1onsitenh3" name="downstream1onsitenh3"/></td>
+                            <td>
+                            <input type="TEXT" id="downstream1senttolabV" name="downstream1senttolabV" HIDDEN value="NO">
+                                <div class="btn-group btn-toggle" id="downstream1senttolab" style="margin-left: 10px">
+                                
+                                    <button type="button" onclick = 'document.getElementById(""downstream1senttolabV"").value="YES"' class="btn btn-lg btn-default">Yes</button>
+                                    <button type="button" onclick = 'document.getElementById(""downstream1senttolabV"").value="NO"' class="btn btn-lg btn-primary active">No</button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Downstream 2</th>
+                            <td><input class="feedback-input-table" id="downstream2distance" name="downstream2distance"/></td>
+                            <td><input class="feedback-input-table" id="downstream2onsitenh3" name="downstream2onsitenh3"/></td>
+                            <td>
+                            <input type="TEXT" id="downstream2senttolabV" name="downstream2senttolabV" HIDDEN value="NO">
+                                <div class="btn-group btn-toggle" id="downstream2senttolab" style="margin-left: 10px">
+                                
+                                    <button type="button" onclick = 'document.getElementById("downstream2senttolabV").value="YES"' class="btn btn-lg btn-default">Yes</button>
+                                    <button type="button" onclick = 'document.getElementById("downstream2senttolabV").value="NO"' class="btn btn-lg btn-primary active">No</button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Downstream 3</th>
+                            <td><input class="feedback-input-table" id="downstream3distance" name="downstream3distance"/></td>
+                            <td><input class="feedback-input-table" id="downstream3onsitenh3" name="downstream3onsitenh3"/></td>
+                            <td>
+                             <input type="TEXT" id="downstream3senttolabV" name="downstream3senttolabV" HIDDEN value="NO">
+                                <div class="btn-group btn-toggle" id="downstream3senttolab" style="margin-left: 10px">
+                               
+                                    <button type="button" onclick = 'document.getElementById("downstream3senttolabV").value="YES"' class="btn btn-lg btn-default">Yes</button>
+                                    <button type="button" onclick = 'document.getElementById("downstream3senttolabV").value="NO"' class="btn btn-lg btn-primary active">No</button>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+
+                
+                        <input type="submit" name="Save" value="SEND"  id="Save" hidden />
+                      
+
+
+            </div>
+
+        </form>
+    </div>
+    
+	
+<script>
+$(".btn-group > .btn").click(function () {
+    $(this).addClass("active").siblings().removeClass("active");
+    $(this).addClass("btn-primary").siblings().removeClass("btn-primary").addClass("btn-default");
+});
+		
+	</script>
+	
+</body>
+</html>

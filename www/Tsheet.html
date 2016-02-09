@@ -1,0 +1,473 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<title>sap.m.Table</title>
+<script src="resources/sap-ui-core.js" type="text/javascript"
+	id="sap-ui-bootstrap" data-sap-ui-libs="sap.m,sap.ui.commons"
+	data-sap-ui-theme="sap_bluecrystal">
+	
+</script>
+<script>
+	var oApp = new sap.m.App;
+
+	jQuery.sap.require("sap.m.MessageToast");
+
+	var data = {
+		navigation : [{
+			Job : "Headphone",
+			Time : "1.00",
+			OT15 : "1.25r",
+			OT20 : "0.00"
+		}, {
+			Job : "Job1",
+			Time : "1.00",
+			OT15 : "1.25r",
+			OT20 : "0.00"
+		}, {
+			Job : "Job2",
+			Time : "1.00",
+			OT15 : "1.25r",
+			OT20 : "0.00"
+		}, {
+			Job : "Job3",
+			Time : "1.00",
+			OT15 : "1.25r",
+			OT20 : "0.00"
+		},{
+			Job : "Job1",
+			Time : "1.00",
+			OT15 : "1.25r",
+			OT20 : "0.00"
+		}, {
+			Job : "Job2",
+			Time : "1.00",
+			OT15 : "1.25r",
+			OT20 : "0.00"
+		}, {
+			Job : "Job3",
+			Time : "1.00",
+			OT15 : "1.25r",
+			OT20 : "0.00"
+		},{
+			Job : "Job1",
+			Time : "1.00",
+			OT15 : "1.25r",
+			OT20 : "0.00"
+		}, {
+			Job : "Job1",
+			Time : "1.00",
+			OT15 : "1.25r",
+			OT20 : "0.00"
+		}, {
+			Job : "Job2",
+			Time : "1.00",
+			OT15 : "1.25r",
+			OT20 : "0.00"
+		}, {
+			Job : "Job3",
+			Time : "1.00",
+			OT15 : "1.25r",
+			OT20 : "0.00"
+		},{
+			Job : "Job1",
+			Time : "1.00",
+			OT15 : "1.25r",
+			OT20 : "0.00"
+		}, {
+			Job : "Job2",
+			Time : "1.00",
+			OT15 : "1.25r",
+			OT20 : "0.00"
+		}, {
+			Job : "Job3",
+			Time : "1.00",
+			OT15 : "1.25r",
+			OT20 : "0.00"
+		},{
+			Job : "Job1",
+			Time : "1.00",
+			OT15 : "1.25r",
+			OT20 : "0.00"
+		}, {
+			Job : "Job2",
+			Time : "1.00",
+			OT15 : "1.25r",
+			OT20 : "0.00"
+		}, {
+			Job : "Job3",
+			Time : "1.00",
+			OT15 : "1.25r",
+			OT20 : "0.00"
+		},{
+			Job : "Job1",
+			Time : "1.00",
+			OT15 : "1.25r",
+			OT20 : "0.00"
+		}, {
+			Job : "Job2",
+			Time : "1.00",
+			OT15 : "1.25r",
+			OT20 : "0.00"
+		}, {
+			Job : "Job3",
+			Time : "1.00",
+			OT15 : "1.25r",
+			OT20 : "0.00"
+		},{
+			Job : "Job1",
+			Time : "1.00",
+			OT15 : "1.25r",
+			OT20 : "0.00"
+		}, {
+			Job : "Job2",
+			Time : "1.00",
+			OT15 : "1.25r",
+			OT20 : "0.00"
+		}, {
+			Job : "Job3",
+			Time : "1.00",
+			OT15 : "1.25r",
+			OT20 : "0.00"
+		},{
+			Job : "Job2",
+			Time : "1.00",
+			OT15 : "1.25r",
+			OT20 : "0.00"
+		}, {
+			Job : "Job3",
+			Time : "1.00",
+			OT15 : "1.25r",
+			OT20 : "0.00"
+		},{
+			Job : "Job1",
+			Time : "1.00",
+			OT15 : "1.25r",
+			OT20 : "0.00"
+		}, {
+			Job : "Job2",
+			Time : "1.00",
+			OT15 : "1.25r",
+			OT20 : "0.00"
+		}, {
+			Job : "Job3",
+			Time : "1.00",
+			OT15 : "1.25r",
+			OT20 : "0.00"
+		},{
+			Job : "Job1",
+			Time : "1.00",
+			OT15 : "1.25r",
+			OT20 : "0.00"
+		}, {
+			Job : "Job2",
+			Time : "1.00",
+			OT15 : "1.25r",
+			OT20 : "0.00"
+		}, {
+			Job : "Job3",
+			Time : "1.00",
+			OT15 : "1.25r",
+			OT20 : "0.00"
+		},{
+			Job : "Job1",
+			Time : "1.00",
+			OT15 : "1.25r",
+			OT20 : "0.00"
+		}, {
+			Job : "Job2",
+			Time : "1.00",
+			OT15 : "1.25r",
+			OT20 : "0.00"
+		}, {
+			Job : "Job3",
+			Time : "1.00",
+			OT15 : "1.25r",
+			OT20 : "0.00"
+		},{
+			Job : "Job1",
+			Time : "1.00",
+			OT15 : "1.25r",
+			OT20 : "0.00"
+		}, {
+			Job : "Job2",
+			Time : "1.00",
+			OT15 : "1.25r",
+			OT20 : "0.00"
+		}, {
+			Job : "Job3",
+			Time : "1.00",
+			OT15 : "1.25r",
+			OT20 : "0.00"
+		},{
+			Job : "Job1",
+			Time : "1.00",
+			OT15 : "1.25r",
+			OT20 : "0.00"
+		}, {
+			Job : "Job2",
+			Time : "1.00",
+			OT15 : "1.25r",
+			OT20 : "0.00"
+		}, {
+			Job : "Job3",
+			Time : "1.00",
+			OT15 : "1.25r",
+			OT20 : "0.00"
+		},{
+			Job : "Job1",
+			Time : "1.00",
+			OT15 : "1.25r",
+			OT20 : "0.00"
+		}, {
+			Job : "Job2",
+			Time : "1.00",
+			OT15 : "1.25r",
+			OT20 : "0.00"
+		}, {
+			Job : "Job3",
+			Time : "1.00",
+			OT15 : "1.25r",
+			OT20 : "0.00"
+		},{
+			Job : "Job1",
+			Time : "1.00",
+			OT15 : "1.25r",
+			OT20 : "0.00"
+		}, {
+			Job : "Job2",
+			Time : "1.00",
+			OT15 : "1.25r",
+			OT20 : "0.00"
+		}, {
+			Job : "Job3",
+			Time : "1.00",
+			OT15 : "1.25r",
+			OT20 : "0.00"
+		}, {
+			Job : "Job4",
+			Time : "1.00",
+			OT15 : "1.25r",
+			OT20 : "0.00"
+		}]
+	};
+
+	var o18n = new sap.ui.model.json.JSONModel();
+	o18n.setData({
+		Job : "Job",
+		Time : "Time",
+		OT15 : "OT15",
+		OT20 : "OT20",
+	});
+	sap.ui.getCore().setModel(o18n, "i18n");
+	
+	var oFooterToolbar = new sap.m.Toolbar({
+		content : [
+			new sap.m.Text({
+				text : "Items (25)",
+				wrapping : false
+			}),
+			new sap.m.ToolbarSpacer(),
+			new sap.m.Button({
+				icon: "sap-icon://drop-down-list",
+				press : function() {
+					sap.m.MessageToast.show("Sorting-Grouping-Filtering popup will be shown on press.");
+				}
+			}),
+			new sap.m.Button({
+				icon: "sap-icon://action-settings",
+				press : function() {
+					sap.m.MessageToast.show("Table personalization popup will be shown on press.");
+				}
+			})
+		]
+	});
+	
+	var oHeaderToolbar = new sap.m.Toolbar({
+		content : [
+			new sap.m.Text({
+				text : "Items (5)",
+				wrapping : false
+			}),
+			new sap.m.ToolbarSpacer(),
+			new sap.m.Button({
+				icon: "sap-icon://drop-down-list",
+				press : function() {
+					sap.m.MessageToast.show("Sorting-Grouping-Filtering popup will be shown on press.");
+				}
+			}),
+			new sap.m.Button({
+				icon: "sap-icon://action-settings",
+				press : function() {
+					sap.m.MessageToast.show("Table personalization popup will be shown on press.");
+				}
+			})
+		]
+	});
+	
+	var oInfoToolbar = new sap.m.Toolbar({
+		active : true,
+		content : [
+			new sap.m.Text({
+				text : "The quick brown fox jumps over the lazy dog.",
+				wrapping : false
+			}),
+			new sap.m.ToolbarSpacer(),
+			new sap.ui.core.Icon({
+				src : "sap-icon://add-filter"
+			})
+		]
+	}).attachPress(function() {
+		sap.m.MessageToast.show("InfoBar Pressed!");
+	});
+	
+	var oSwipeContent = new sap.m.Button({
+		text : "Swipe Button",
+		type : "Accept",
+		press : function(e) {
+			oTable.swipeOut();
+		}
+	});
+	
+	var aColumns = [
+		new sap.m.Column({
+			styleClass : "Job",
+			hAlign : "Left",
+			header : new sap.m.Label({
+				text : "{i18n>/Job}"
+			})
+		}),
+		new sap.m.Column({
+			hAlign : "Right",
+			styleClass : "Time",
+			popinDisplay : "Inline",
+			header : new sap.m.Label({
+				text : "{i18n>/Time}"
+			}),
+			footer : new sap.m.Label({
+				text : "100.00"
+			}),
+			minScreenWidth : "Tablet",
+			demandPopin : true
+		}),
+		new sap.m.Column({
+			hAlign : "Right",
+			styleClass : "OT 1.5",
+			width : "30%",
+			header : new sap.m.Label({
+				text : "{i18n>/OT15}"
+			}),
+			footer : new sap.m.Label({
+				text : "100.15"
+			}),
+			minScreenWidth : "XXSmall",
+			demandPopin : true
+		}),
+		new sap.m.Column({
+			hAlign : "Right",
+			styleClass : "OT 2.0",
+			width : "30%",
+			popinDisplay : "Inline",
+			header : new sap.m.Label({
+				text : "{i18n>/OT20}"
+			}),
+			footer : new sap.m.Label({
+				text : "100.20"
+			}),
+			minScreenWidth : "400px",
+			demandPopin : true
+		})
+	];
+	
+	var oTemplate = new sap.m.ColumnListItem({
+		type : "Navigation",
+		unread : false,
+		vAlign : "Middle",
+		cells : [
+			new sap.m.Text({
+				text : "{name}",
+				wrapping : true
+			}),
+			new sap.m.Text({
+				text: "{qty}",
+				wrapping : false
+			}),
+			new sap.m.Text({
+				text: "{limit}",
+				wrapping : false
+			}), 
+			new sap.m.Text({
+				text: "{price}",
+				wrapping : false
+			})
+		]
+	});
+	
+	var oTable = new sap.m.Table("items", {
+		growing : false,
+		growingThreshold: 2,
+		inset : false,
+		//mode: "MultiSelect",
+		//showUnread : true,
+		growingScrollToLoad : false,
+		selectionChange : function(e) {
+			jQuery.sap.log.info("selectionChanged", Date.now());
+		},
+		itemPress : function(e) {
+			jQuery.sap.log.info("itemPressed", e.getParameter("listItem").getId(), e.getParameter("srcControl").getId());
+		},
+		updateStarted : function(e) {
+			jQuery.sap.log.info("updateStarted ", JSON.stringify(e.getParameters()), Date.now());
+		},
+		updateFinished : function(e) {
+			jQuery.sap.log.info("updateFinished ", JSON.stringify(e.getParameters()), Date.now());
+		},
+		//footerText : "This is a table footer",
+		//headerToolbar : oHeaderToolbar,
+		//infoToolbar : oInfoToolbar,
+		swipeContent : oSwipeContent,
+		columns : aColumns
+	})
+	var oTableTotals = new sap.m.Table("Totals", {
+		growing : false,
+		growingThreshold: 2,
+		inset : false,
+		//mode: "MultiSelect",
+		//showUnread : true,
+		growingScrollToLoad : false,
+		selectionChange : function(e) {
+			jQuery.sap.log.info("selectionChanged", Date.now());
+		},
+		itemPress : function(e) {
+			jQuery.sap.log.info("itemPressed", e.getParameter("listItem").getId(), e.getParameter("srcControl").getId());
+		},
+		updateStarted : function(e) {
+			jQuery.sap.log.info("updateStarted ", JSON.stringify(e.getParameters()), Date.now());
+		},
+		updateFinished : function(e) {
+			jQuery.sap.log.info("updateFinished ", JSON.stringify(e.getParameters()), Date.now());
+		},
+		//footerText : "This is a table footer",
+		//headerToolbar : oHeaderToolbar,
+		//infoToolbar : oInfoToolbar,
+		swipeContent : oSwipeContent,
+		columns : aColumns
+	})
+	var oPage = new sap.m.Page({
+		title : "Table",
+		enableScrolling : true,
+		footer: oFooterToolbar,
+		content : [oTable]
+	});
+
+	var oModel = new sap.ui.model.json.JSONModel();
+	oModel.setData(data);
+	oTable.setModel(oModel);
+	oTable.bindAggregation("items", "/navigation", oTemplate);
+	
+	oApp.addPage(oPage).placeAt("body");
+</script>
+</head>
+<body id="body" class="sapUiBody">
+</body>
+</html>

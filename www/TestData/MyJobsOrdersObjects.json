@@ -1,0 +1,757 @@
+{"orderobjects":[
+
+{
+            "objid":"THETST-2G-SLD-PS05-SLP005",
+            "objtype": "FL",
+             "shorttext":"Sludge Pump - Import Pump A Tank 5",
+             "address":", Canterbury Way, THETFORD, IP24 1DT",
+             "swerk":"NSVW",
+             "installedquip":
+                  [
+                ],
+                "classval":
+                  [  ],
+                "measpoint":
+                  [  ]
+
+},
+
+{
+            "objid":"000000000002120472",
+            "objtype": "EQ",
+             "shorttext":"Centrifugal (Horiz Spindle)",
+             "address":", Canterbury Way, THETFORD, IP24 1DT",
+             "swerk":"00000000",
+
+                             "installedquip":
+                  [
+                ],
+                "classval":
+                  [  ],
+                "measpoint":
+                  [  ]
+
+},
+
+
+{
+            "objid":"WILTSP-2A-PUM-PS01-WEP001",
+            "objtype": "FL",
+             "shorttext":"Wet Well Pump 1",
+             "address":", WILBURTON - TWENTY PENCE ROAD, ELY, CB6 3PU",
+             "swerk":"NSVM",
+             "installedquip":
+                  [
+                ],
+                "classval":
+                  [  ],
+                "measpoint":
+                  [  ]
+
+},
+
+{
+            "objid":"000000000000092300",
+            "objtype": "EQ",
+             "shorttext":"Submersible Pump",
+             "address":", WILBURTON - TWENTY PENCE ROAD, ELY, CB6 3PU",
+             "swerk":"00000000",
+
+                             "installedquip":
+                  [
+                ],
+                "classval":
+                  [  ],
+                "measpoint":
+                  [  ]
+
+},
+
+
+{
+            "objid":"WILTSP-2A-PUM-PS01-WEP001",
+            "objtype": "FL",
+             "shorttext":"Wet Well Pump 1",
+             "address":", WILBURTON - TWENTY PENCE ROAD, ELY, CB6 3PU",
+             "swerk":"NSVM",
+             "installedquip":
+                  [
+                ],
+                "classval":
+                  [  ],
+                "measpoint":
+                  [  ]
+
+},
+
+
+{
+            "objid":"000000000000092300",
+            "objtype": "EQ",
+             "shorttext":"Submersible Pump",
+             "address":", WILBURTON - TWENTY PENCE ROAD, ELY, CB6 3PU",
+             "swerk":"00000000",
+
+              "installedquip":
+                  [
+                ],
+                "classval":
+                  [  ],
+                "measpoint":
+                  [  ]
+
+},
+
+
+
+{
+            "objid":"SOHNSP-2A-PUM-PS02-DWP002",
+            "objtype": "FL",
+             "shorttext":"Dry Well Pump 2",
+             "address":", Town Lots, ELY, CB7 5UZ",
+             "swerk":"NSVM",
+             "installedquip":
+                  [
+                ],
+                "classval":
+                  [  ],
+                "measpoint":
+                  [  ]
+
+},
+
+{
+            "objid":"000000000000079994",
+            "objtype": "EQ",
+             "shorttext":"Dry Well Submersible",
+             "address":", Town Lots, ELY, CB7 5UZ",
+             "swerk":"00000000",
+
+                             "installedquip":
+                  [
+                ],
+                "classval":
+                  [  ],
+                "measpoint":
+                  [  ]
+
+},
+
+
+{
+            "objid":"WILTSP-2A-PUM-PS01-WEP001",
+            "objtype": "FL",
+             "shorttext":"Wet Well Pump 1",
+             "address":", WILBURTON - TWENTY PENCE ROAD, ELY, CB6 3PU",
+             "swerk":"NSVM",
+             "installedquip":
+                  [
+                ],
+                "classval":
+                  [  ],
+                "measpoint":
+                  [  ]
+
+},
+
+
+{
+            "objid":"000000000000092300",
+            "objtype": "EQ",
+             "shorttext":"Submersible Pump",
+             "address":", WILBURTON - TWENTY PENCE ROAD, ELY, CB6 3PU",
+             "swerk":"00000000",
+
+              "installedquip":
+                  [
+                ],
+                "classval":
+                  [  ],
+                "measpoint":
+                  [  ]
+
+},
+
+
+
+{
+            "objid":"SOHNSP-2A-PUM-PS02-DWP002",
+            "objtype": "FL",
+             "shorttext":"Dry Well Pump 2",
+             "address":", Town Lots, ELY, CB7 5UZ",
+             "swerk":"NSVM",
+             "installedquip":
+                  [
+                ],
+                "classval":
+                  [  ],
+                "measpoint":
+                  [  ]
+
+},
+
+
+{
+            "objid":"000000000000079994",
+            "objtype": "EQ",
+             "shorttext":"Dry Well Submersible",
+             "address":", Town Lots, ELY, CB7 5UZ",
+             "swerk":"00000000",
+
+              "installedquip":
+                  [
+                ],
+                "classval":
+                  [  ],
+                "measpoint":
+                  [  ]
+
+},
+
+
+
+{
+            "objid":"ELYFSP-2A-PUM-PS02-GRL002",
+            "objtype": "FL",
+             "shorttext":"Guide Rails 2 Wet Well Pump 2",
+             "address":", Fieldside, ELY, CB6 3DA",
+             "swerk":"NSVM",
+             "installedquip":
+                  [
+                ],
+                "classval":
+                  [  ],
+                "measpoint":
+                  [  ]
+
+},
+
+{
+            "objid":"000000000001679475",
+            "objtype": "EQ",
+             "shorttext":"Guide Rails",
+             "address":", Fieldside, ELY, CB6 3DA",
+             "swerk":"00000000",
+
+                             "installedquip":
+                  [
+                ],
+                "classval":
+                  [  ],
+                "measpoint":
+                  [  ]
+
+},
+
+
+{
+            "objid":"WILTSP-2A-PUM-PS01-WEP001",
+            "objtype": "FL",
+             "shorttext":"Wet Well Pump 1",
+             "address":", WILBURTON - TWENTY PENCE ROAD, ELY, CB6 3PU",
+             "swerk":"NSVM",
+             "installedquip":
+                  [
+                ],
+                "classval":
+                  [  ],
+                "measpoint":
+                  [  ]
+
+},
+
+
+{
+            "objid":"000000000000092300",
+            "objtype": "EQ",
+             "shorttext":"Submersible Pump",
+             "address":", WILBURTON - TWENTY PENCE ROAD, ELY, CB6 3PU",
+             "swerk":"00000000",
+
+              "installedquip":
+                  [
+                ],
+                "classval":
+                  [  ],
+                "measpoint":
+                  [  ]
+
+},
+
+
+
+{
+            "objid":"SOHNSP-2A-PUM-PS02-DWP002",
+            "objtype": "FL",
+             "shorttext":"Dry Well Pump 2",
+             "address":", Town Lots, ELY, CB7 5UZ",
+             "swerk":"NSVM",
+             "installedquip":
+                  [
+                ],
+                "classval":
+                  [  ],
+                "measpoint":
+                  [  ]
+
+},
+
+
+{
+            "objid":"000000000000079994",
+            "objtype": "EQ",
+             "shorttext":"Dry Well Submersible",
+             "address":", Town Lots, ELY, CB7 5UZ",
+             "swerk":"00000000",
+
+              "installedquip":
+                  [
+                ],
+                "classval":
+                  [  ],
+                "measpoint":
+                  [  ]
+
+},
+
+
+
+{
+            "objid":"ELYFSP-2A-PUM-PS02-GRL002",
+            "objtype": "FL",
+             "shorttext":"Guide Rails 2 Wet Well Pump 2",
+             "address":", Fieldside, ELY, CB6 3DA",
+             "swerk":"NSVM",
+             "installedquip":
+                  [
+                ],
+                "classval":
+                  [  ],
+                "measpoint":
+                  [  ]
+
+},
+
+
+{
+            "objid":"000000000001679475",
+            "objtype": "EQ",
+             "shorttext":"Guide Rails",
+             "address":", Fieldside, ELY, CB6 3DA",
+             "swerk":"00000000",
+
+              "installedquip":
+                  [
+                ],
+                "classval":
+                  [  ],
+                "measpoint":
+                  [  ]
+
+},
+
+
+
+{
+            "objid":"ISLMSP-2A-PUM-TS01-WET001",
+            "objtype": "FL",
+             "shorttext":"Wet Well",
+             "address":", ISLEHAM - ROBINS CLOSE SP, ELY, CB7 5US",
+             "swerk":"NSVM",
+             "installedquip":
+                  [
+                ],
+                "classval":
+                  [  ],
+                "measpoint":
+                  [  ]
+
+},
+
+{
+            "objid":"000000000002110728",
+            "objtype": "EQ",
+             "shorttext":"Round Tank (Flat Floor)",
+             "address":", ISLEHAM - ROBINS CLOSE SP, ELY, CB7 5US",
+             "swerk":"00000000",
+
+                             "installedquip":
+                  [
+                ],
+                "classval":
+                  [  ],
+                "measpoint":
+                  [  ]
+
+},
+
+
+{
+            "objid":"WILTSP-2A-PUM-PS01-WEP001",
+            "objtype": "FL",
+             "shorttext":"Wet Well Pump 1",
+             "address":", WILBURTON - TWENTY PENCE ROAD, ELY, CB6 3PU",
+             "swerk":"NSVM",
+             "installedquip":
+                  [
+                ],
+                "classval":
+                  [  ],
+                "measpoint":
+                  [  ]
+
+},
+
+
+{
+            "objid":"000000000000092300",
+            "objtype": "EQ",
+             "shorttext":"Submersible Pump",
+             "address":", WILBURTON - TWENTY PENCE ROAD, ELY, CB6 3PU",
+             "swerk":"00000000",
+
+              "installedquip":
+                  [
+                ],
+                "classval":
+                  [  ],
+                "measpoint":
+                  [  ]
+
+},
+
+
+
+{
+            "objid":"SOHNSP-2A-PUM-PS02-DWP002",
+            "objtype": "FL",
+             "shorttext":"Dry Well Pump 2",
+             "address":", Town Lots, ELY, CB7 5UZ",
+             "swerk":"NSVM",
+             "installedquip":
+                  [
+                ],
+                "classval":
+                  [  ],
+                "measpoint":
+                  [  ]
+
+},
+
+
+{
+            "objid":"000000000000079994",
+            "objtype": "EQ",
+             "shorttext":"Dry Well Submersible",
+             "address":", Town Lots, ELY, CB7 5UZ",
+             "swerk":"00000000",
+
+              "installedquip":
+                  [
+                ],
+                "classval":
+                  [  ],
+                "measpoint":
+                  [  ]
+
+},
+
+
+
+{
+            "objid":"ELYFSP-2A-PUM-PS02-GRL002",
+            "objtype": "FL",
+             "shorttext":"Guide Rails 2 Wet Well Pump 2",
+             "address":", Fieldside, ELY, CB6 3DA",
+             "swerk":"NSVM",
+             "installedquip":
+                  [
+                ],
+                "classval":
+                  [  ],
+                "measpoint":
+                  [  ]
+
+},
+
+
+{
+            "objid":"000000000001679475",
+            "objtype": "EQ",
+             "shorttext":"Guide Rails",
+             "address":", Fieldside, ELY, CB6 3DA",
+             "swerk":"00000000",
+
+              "installedquip":
+                  [
+                ],
+                "classval":
+                  [  ],
+                "measpoint":
+                  [  ]
+
+},
+
+
+
+{
+            "objid":"ISLMSP-2A-PUM-TS01-WET001",
+            "objtype": "FL",
+             "shorttext":"Wet Well",
+             "address":", ISLEHAM - ROBINS CLOSE SP, ELY, CB7 5US",
+             "swerk":"NSVM",
+             "installedquip":
+                  [
+                ],
+                "classval":
+                  [  ],
+                "measpoint":
+                  [  ]
+
+},
+
+
+{
+            "objid":"000000000002110728",
+            "objtype": "EQ",
+             "shorttext":"Round Tank (Flat Floor)",
+             "address":", ISLEHAM - ROBINS CLOSE SP, ELY, CB7 5US",
+             "swerk":"00000000",
+
+              "installedquip":
+                  [
+                ],
+                "classval":
+                  [  ],
+                "measpoint":
+                  [  ]
+
+},
+
+
+
+{
+            "objid":"LPORST-2E-AES-TS01-ATA001",
+            "objtype": "FL",
+             "shorttext":"Aeration Tank - Ditch",
+             "address":", LITTLEPORT STW, ELY, CB6 1SE",
+             "swerk":"NSVW",
+             "installedquip":
+                  [
+                ],
+                "classval":
+                  [  ],
+                "measpoint":
+                  [  ]
+
+},
+
+{
+            "objid":"000000000001174485",
+            "objtype": "EQ",
+             "shorttext":"Rectangular Tank",
+             "address":", LITTLEPORT STW, ELY, CB6 1SE",
+             "swerk":"00000000",
+
+                             "installedquip":
+                  [
+                ],
+                "classval":
+                  [  ],
+                "measpoint":
+                  [  ]
+
+},
+
+
+{
+            "objid":"WILTSP-2A-PUM-PS01-WEP001",
+            "objtype": "FL",
+             "shorttext":"Wet Well Pump 1",
+             "address":", WILBURTON - TWENTY PENCE ROAD, ELY, CB6 3PU",
+             "swerk":"NSVM",
+             "installedquip":
+                  [
+                ],
+                "classval":
+                  [  ],
+                "measpoint":
+                  [  ]
+
+},
+
+
+{
+            "objid":"000000000000092300",
+            "objtype": "EQ",
+             "shorttext":"Submersible Pump",
+             "address":", WILBURTON - TWENTY PENCE ROAD, ELY, CB6 3PU",
+             "swerk":"00000000",
+
+              "installedquip":
+                  [
+                ],
+                "classval":
+                  [  ],
+                "measpoint":
+                  [  ]
+
+},
+
+
+
+{
+            "objid":"SOHNSP-2A-PUM-PS02-DWP002",
+            "objtype": "FL",
+             "shorttext":"Dry Well Pump 2",
+             "address":", Town Lots, ELY, CB7 5UZ",
+             "swerk":"NSVM",
+             "installedquip":
+                  [
+                ],
+                "classval":
+                  [  ],
+                "measpoint":
+                  [  ]
+
+},
+
+
+{
+            "objid":"000000000000079994",
+            "objtype": "EQ",
+             "shorttext":"Dry Well Submersible",
+             "address":", Town Lots, ELY, CB7 5UZ",
+             "swerk":"00000000",
+
+              "installedquip":
+                  [
+                ],
+                "classval":
+                  [  ],
+                "measpoint":
+                  [  ]
+
+},
+
+
+
+{
+            "objid":"ELYFSP-2A-PUM-PS02-GRL002",
+            "objtype": "FL",
+             "shorttext":"Guide Rails 2 Wet Well Pump 2",
+             "address":", Fieldside, ELY, CB6 3DA",
+             "swerk":"NSVM",
+             "installedquip":
+                  [
+                ],
+                "classval":
+                  [  ],
+                "measpoint":
+                  [  ]
+
+},
+
+
+{
+            "objid":"000000000001679475",
+            "objtype": "EQ",
+             "shorttext":"Guide Rails",
+             "address":", Fieldside, ELY, CB6 3DA",
+             "swerk":"00000000",
+
+              "installedquip":
+                  [
+                ],
+                "classval":
+                  [  ],
+                "measpoint":
+                  [  ]
+
+},
+
+
+
+{
+            "objid":"ISLMSP-2A-PUM-TS01-WET001",
+            "objtype": "FL",
+             "shorttext":"Wet Well",
+             "address":", ISLEHAM - ROBINS CLOSE SP, ELY, CB7 5US",
+             "swerk":"NSVM",
+             "installedquip":
+                  [
+                ],
+                "classval":
+                  [  ],
+                "measpoint":
+                  [  ]
+
+},
+
+
+{
+            "objid":"000000000002110728",
+            "objtype": "EQ",
+             "shorttext":"Round Tank (Flat Floor)",
+             "address":", ISLEHAM - ROBINS CLOSE SP, ELY, CB7 5US",
+             "swerk":"00000000",
+
+              "installedquip":
+                  [
+                ],
+                "classval":
+                  [  ],
+                "measpoint":
+                  [  ]
+
+},
+
+
+
+{
+            "objid":"LPORST-2E-AES-TS01-ATA001",
+            "objtype": "FL",
+             "shorttext":"Aeration Tank - Ditch",
+             "address":", LITTLEPORT STW, ELY, CB6 1SE",
+             "swerk":"NSVW",
+             "installedquip":
+                  [
+                ],
+                "classval":
+                  [  ],
+                "measpoint":
+                  [  ]
+
+},
+
+
+{
+            "objid":"000000000001174485",
+            "objtype": "EQ",
+             "shorttext":"Rectangular Tank",
+             "address":", LITTLEPORT STW, ELY, CB6 1SE",
+             "swerk":"00000000",
+
+              "installedquip":
+                  [
+                ],
+                "classval":
+                  [  ],
+                "measpoint":
+                  [  ]
+
+},
+
+
+
+{"objid": "1", "objtype": "1", "shorttext":"1", "address":"1", "swerk":"1",
+
+"installedquip":
+                  [
+                ],
+                "classval":
+                  [  ],
+                "measpoint":
+                  [  ]}
+]
+}

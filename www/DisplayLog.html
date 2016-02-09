@@ -1,0 +1,211 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<title>MyJobs - Display Log</title>
+<script src="resources/sap-ui-core.js" type="text/javascript"
+	id="sap-ui-bootstrap" data-sap-ui-libs="sap.m,sap.ui.commons"
+	data-sap-ui-theme="sap_bluecrystal">
+	
+</script>
+<script src="myresources/js/html5sql.js"></script>  
+<script src="myresources/js/bqsync.js"></script>
+<script src="myresources/js/MyJobsDB.js"></script>
+<script src="myresources/js/MyJobsUtils.js"></script>
+<script type="text/javascript">
+
+jQuery.sap.require("sap.m.MessageBox");
+
+
+html5sql.openDatabase("com.pjo.myjobsbackfill","myjobsbackfill", 5*1024*1024);	
+var currentPage=1;
+var rowsPerPage=20;
+var totalRecords=0;
+
+var totalPages=1;
+
+function nextPage(){
+	if (currentPage<totalPages){
+		currentPage+=1;
+		buildTrace();
+		}
+		
+}
+function prevPage(){
+	if (currentPage>1){
+		currentPage-=1;
+				buildTrace();
+		}
+
+}
+function lastPage(){
+	if (currentPage<totalPages){
+		currentPage=totalPages;
+		buildTrace();
+		}
+
+}
+function firstPage(){
+	
+		currentPage=1;
+		buildTrace();
+
+
+}
+function getTotalTraceRecords()
+{
+	totalRecords=0;
+	html5sql.process(
+		['SELECT * FROM LogFile '],
+		function(transaction, results, rowsArray){
+
+			totalRecords = rowsArray.length;
+			totalPages=Math.floor(totalRecords/rowsPerPage);
+			if (totalRecords%rowsPerPage>0){
+				totalPages+=1;
+			}
+			buildTrace()
+		},
+		function(error, statement){
+		}
+		
+	);
+
+
+
+
+
+}
+function buildTrace(){
+var n = 0;
+var opTable = sap.ui.getCore().getElementById('LogTable');
+var startRec=(currentPage-1)*rowsPerPage;
+	sap.ui.getCore().getElementById('pageDetails').setText(currentPage+" of "+totalPages)
+
+	html5sql.process('SELECT * FROM LogFile LIMIT '+startRec+', '+rowsPerPage+";",
+			 function(transaction, results, rowsArray){
+				opTable.removeAllItems();
+				while (n < rowsArray.length) {
+					
+			
+					opTable.addItem (new sap.m.ColumnListItem({
+						cells : 
+							[
+							new sap.m.Text({text: rowsArray[n].id}),
+				            new sap.m.Text({text: rowsArray[n].datestamp}),
+							new sap.m.Text({text: rowsArray[n].type}),
+				            new sap.m.Text({text: rowsArray[n].message})   
+					 		]
+						}));
+					n++;
+				 }
+
+			 },
+			 function(error, statement){
+				alert(error)
+			 }        
+			);	
+
+	
+}
+
+
+var page  = new sap.m.Page('displayLog',{
+	title:"Display Log",  
+
+
+	headerContent: new sap.m.Button({
+		
+		icon: "sap-icon://home",
+		press : function(){ window.location.href="Home.html"}
+		
+	}),
+	footer:
+	    new sap.m.Bar (
+			{
+
+				contentLeft : [
+
+				       		new sap.m.Button({
+				       			 
+				       			 icon:"sap-icon://sys-first-page",
+				       				 press: [ function(){
+				       					
+				       					firstPage()
+				       						}]
+				       			 }),
+						       		new sap.m.Button({
+						       			 
+						       			 icon:"sap-icon://sys-prev-page",
+						       				 press: [ function(){
+						       					
+						       					 prevPage()
+						       						}]
+						       			 })
+					],
+					contentMiddle: [new sap.m.Label("pageDetails",{text:"xx of xx"})] 	,
+			contentRight : [
+
+				       		new sap.m.Button({
+				       			 
+				       			 icon:"sap-icon://sys-next-page",
+				       				 press: [ function(){
+				       					
+				       					 nextPage()
+				       						}]
+				       			 }),
+						       		new sap.m.Button({
+						       			 
+						       			 icon:"sap-icon://sys-last-page",
+						       				 press: [ function(){
+						       					
+						       					 lastPage()
+						       						}]
+						       			 })
+					]
+		
+	}),
+
+    content: 	
+    	[
+    	new sap.m.ScrollContainer("sc1", {
+    	horizontal: true,
+    	vertical: true,
+    	content:[
+      			new sap.m.Table("LogTable",{
+									columns:[
+									         new sap.m.Column({header: new sap.m.Label({text:"Id"}),
+									        	 hAlign: 'Left',width: '50px', minScreenWidth : "" , demandPopin: false}),
+									         new sap.m.Column({header: new sap.m.Label({text:"DateStamp"}),
+									        	 hAlign: 'Left',width: '120px',minScreenWidth : "" , demandPopin: false}),
+									         new sap.m.Column({header: new sap.m.Label({text:"Type"}),
+									        	 hAlign: 'Left',width: '35px',minScreenWidth : "" , demandPopin: true}),			
+								        	 new sap.m.Column({header: new sap.m.Label({text:"Name"}),
+									        	 hAlign: 'Left',width: '',minScreenWidth : "" , demandPopin: true })       	                         
+							           	     ]
+								})
+              	
+				]
+    	})
+		],
+    enableScrolling:true,showNavButton: "{device>/isPhone}" });
+
+var app = new sap.m.App();
+
+app.setInitialPage(page.getId());	
+	
+
+
+page.placeAt("body");
+$(function() {
+	getTotalTraceRecords()
+	buildTrace()
+	
+	});
+</script>
+</head>
+<body id="body" class="sapUiBody">
+<script></script>
+</body>
+<script></script>
+</html>
